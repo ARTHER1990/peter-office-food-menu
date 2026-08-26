@@ -437,19 +437,10 @@ class MenuManager: ObservableObject {
             
             if let decoded = try? JSONDecoder().decode(MenuSchedule.self, from: data) {
                 DispatchQueue.main.async {
-                    var mergedMenus = self.schedule.menus
-                    for (k, v) in decoded.menus {
-                        mergedMenus[k] = v
-                    }
-                    var updated = decoded
-                    updated.menus = mergedMenus
-                    self.schedule = updated
+                    self.schedule = decoded
                     self.statusMessage = "ซิงค์สำเร็จ"
                     self.updateTodayAndTomorrow()
-                    
-                    if let mergedData = try? JSONEncoder().encode(updated) {
-                        try? mergedData.write(to: URL(fileURLWithPath: self.localCachePath))
-                    }
+                    try? data.write(to: URL(fileURLWithPath: self.localCachePath))
                 }
             }
         }.resume()
