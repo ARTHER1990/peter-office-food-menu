@@ -1,189 +1,423 @@
 {
-  "updatedAt": "2026-08-26T13:49:00+07:00",
+  "updatedAt": "2026-08-26T14:52:00+07:00",
   "monthTitle": "สิงหาคม - กันยายน 2569",
-  "announcement": "รายการอาหารพนักงาน",
+  "announcement": "รายการอาหารพนักงาน (พร้อมข้อมูลโภชนาการ)",
   "menus": {
     "2026-08-26": {
       "dayName": "พุธ 26 ส.ค.",
       "dish1": "น้ำพริกอ่อง + ไข่ต้ม + ผัก",
       "dish2": "ต้มจืดเต้าหู้",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 405,
+        "protein": 24,
+        "carbs": 32,
+        "fat": 18,
+        "runningMinutes": 40,
+        "walkingMinutes": 70,
+        "healthTip": "ไฟเบอร์สูงจากผักสด โปรตีนดีจากไข่ต้มและเต้าหู้ อิ่มสบายท้อง"
+      }
     },
     "2026-08-27": {
       "dayName": "พฤหัสบดี 27 ส.ค.",
       "dish1": "สุกี้หมู",
       "dish2": "-",
       "dessert": "ของหวานประจำวัน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 590,
+        "protein": 28,
+        "carbs": 68,
+        "fat": 16,
+        "runningMinutes": 58,
+        "walkingMinutes": 100,
+        "healthTip": "ผักเยอะวิตามินสูง ระวังน้ำจิ้มสุกี้และของหวานน้ำตาล/โซเดียม"
+      }
     },
     "2026-08-28": {
       "dayName": "ศุกร์ 28 ส.ค.",
       "dish1": "ก๋วยจั๊บ",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 520,
+        "protein": 24,
+        "carbs": 56,
+        "fat": 22,
+        "runningMinutes": 52,
+        "walkingMinutes": 90,
+        "healthTip": "อิ่มอร่อยซดคล่องคอ ลดซดน้ำซุปเพื่อเลี่ยงโซเดียมส่วนเกิน"
+      }
     },
     "2026-08-31": {
       "dayName": "จันทร์ 31 ส.ค.",
       "dish1": "หมูมะนาว + BEER",
       "dish2": "ต้มจืดไข่น้ำ",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 420,
+        "protein": 28,
+        "carbs": 26,
+        "fat": 18,
+        "runningMinutes": 42,
+        "walkingMinutes": 72,
+        "healthTip": "รสแซ่บโปรตีนแน่น ไขมันต่ำ ช่วยกระตุ้นระบบเผาผลาญ"
+      }
     },
     "2026-09-01": {
       "dayName": "อังคาร 1 ก.ย.",
       "dish1": "ยำวุ้นเส้น",
       "dish2": "แกงแพนงหมู",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 620,
+        "protein": 26,
+        "carbs": 65,
+        "fat": 24,
+        "runningMinutes": 62,
+        "walkingMinutes": 110,
+        "healthTip": "แพนงหอมกะทิ ทานคู่ยำวุ้นเส้นรสแซ่บตัดเลี่ยนได้ดี"
+      }
     },
     "2026-09-02": {
       "dayName": "พุธ 2 ก.ย.",
       "dish1": "ข้าวยำไก่แซ่บ + ไข่ดาว",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 610,
+        "protein": 28,
+        "carbs": 58,
+        "fat": 26,
+        "runningMinutes": 60,
+        "walkingMinutes": 105,
+        "healthTip": "โปรตีนจากไก่และไข่ดาวเน้นๆ วิ่งเบิร์นสักชั่วโมงฟิตแน่นอน"
+      }
     },
     "2026-09-03": {
       "dayName": "พฤหัสบดี 3 ก.ย.",
       "dish1": "ผัดซีอิ๊วหมู / ผัดมาม่าหมู",
       "dish2": "-",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 620,
+        "protein": 22,
+        "carbs": 72,
+        "fat": 24,
+        "runningMinutes": 62,
+        "walkingMinutes": 110,
+        "healthTip": "คาร์บและพลังงานเต็มเปี่ยม เหมาะกับวันที่ต้องใช้พลังงานเยอะ"
+      }
     },
     "2026-09-04": {
       "dayName": "ศุกร์ 4 ก.ย.",
       "dish1": "ก๋วยเตี๋ยวไก่ฉีก",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 380,
+        "protein": 26,
+        "carbs": 48,
+        "fat": 8,
+        "runningMinutes": 38,
+        "walkingMinutes": 65,
+        "healthTip": "ไขมันต่ำ ย่อยง่าย อิ่มสบายท้อง ไม่ง่วงตอนบ่าย"
+      }
     },
     "2026-09-07": {
       "dayName": "จันทร์ 7 ก.ย.",
       "dish1": "ไข่ลูกเขย",
       "dish2": "ต้มจับฉ่ายใส่ซี่โครงหมู",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 480,
+        "protein": 24,
+        "carbs": 42,
+        "fat": 22,
+        "runningMinutes": 48,
+        "walkingMinutes": 82,
+        "healthTip": "จับฉ่ายผักเปื่อยวิตามินสูง ทานคู่ไข่ลูกเขยรสเปรี้ยวหวานกลมกล่อม"
+      }
     },
     "2026-09-08": {
       "dayName": "อังคาร 8 ก.ย.",
       "dish1": "ผัดแตงกวาใส่ไข่ใส่หมูสับ",
       "dish2": "ต้มยำไก่",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 520,
+        "protein": 26,
+        "carbs": 50,
+        "fat": 18,
+        "runningMinutes": 52,
+        "walkingMinutes": 90,
+        "healthTip": "ผัดแตงกวาน้ำฉ่ำๆ คู่ต้มยำรสจัดจ้าน สมดุลพลังงานกำลังดี"
+      }
     },
     "2026-09-09": {
       "dayName": "พุธ 9 ก.ย.",
       "dish1": "ปิ้งงบ",
       "dish2": "ไข่พะโล้ใส่น่องไก่เล็ก",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 480,
+        "protein": 30,
+        "carbs": 32,
+        "fat": 22,
+        "runningMinutes": 48,
+        "walkingMinutes": 82,
+        "healthTip": "โปรตีนเน้นๆ จากปลา น่องไก่ และไข่พะโล้ ปิ้งงบหอมสมุนไพร"
+      }
     },
     "2026-09-10": {
       "dayName": "พฤหัสบดี 10 ก.ย.",
       "dish1": "ขนมจีนน้ำยาไก่ โคราช",
       "dish2": "-",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 520,
+        "protein": 22,
+        "carbs": 64,
+        "fat": 16,
+        "runningMinutes": 52,
+        "walkingMinutes": 90,
+        "healthTip": "เติมผักสดเคียงขนมจีนเยอะๆ ช่วยเพิ่มกากใยอาหาร"
+      }
     },
     "2026-09-11": {
       "dayName": "ศุกร์ 11 ก.ย.",
       "dish1": "ก๋วยเตี๋ยวหมูตุ๋น",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 460,
+        "protein": 25,
+        "carbs": 52,
+        "fat": 15,
+        "runningMinutes": 46,
+        "walkingMinutes": 78,
+        "healthTip": "หมูตุ๋นเปื่อยนุ่ม น้ำซุปกลิ่นเครื่องเทศหอมกรุ่น"
+      }
     },
     "2026-09-14": {
       "dayName": "จันทร์ 14 ก.ย.",
       "dish1": "ผัดผักกาดขาวหมูกรอบ",
       "dish2": "ต้มเล้งซี่โครงหมู",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 520,
+        "protein": 26,
+        "carbs": 30,
+        "fat": 28,
+        "runningMinutes": 52,
+        "walkingMinutes": 90,
+        "healthTip": "ต้มเล้งรสแซ่บซดคล่องคอ ตัดเลี่ยนหมูกรอบได้ดีเยี่ยม"
+      }
     },
     "2026-09-15": {
       "dayName": "อังคาร 15 ก.ย.",
       "dish1": "ข้าวผัดน้ำพริกลงเรือ",
       "dish2": "-",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 600,
+        "protein": 20,
+        "carbs": 74,
+        "fat": 22,
+        "runningMinutes": 60,
+        "walkingMinutes": 105,
+        "healthTip": "รสชาติไทยโบราณครบรส มีผักเคียงช่วยชะลอการดูดซึมน้ำตาล"
+      }
     },
     "2026-09-16": {
       "dayName": "พุธ 16 ก.ย.",
       "dish1": "ผัดพริกแกงหมูใส่ถั่วฝักยาว",
       "dish2": "ไข่เจียว",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 480,
+        "protein": 24,
+        "carbs": 32,
+        "fat": 26,
+        "runningMinutes": 48,
+        "walkingMinutes": 82,
+        "healthTip": "พริกแกงรสเผ็ดร้อนช่วยเผาผลาญ ถั่วฝักยาวไฟเบอร์สูง"
+      }
     },
     "2026-09-17": {
       "dayName": "พฤหัสบดี 17 ก.ย.",
       "dish1": "ส้มตำ + ข้าวเหนียว + ไก่ย่าง",
       "dish2": "-",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 620,
+        "protein": 32,
+        "carbs": 68,
+        "fat": 18,
+        "runningMinutes": 62,
+        "walkingMinutes": 110,
+        "healthTip": "เมนูยอดฮิตโปรตีนสูงจากไก่ย่าง ส้มตำมะละกอดิบไฟเบอร์แน่น"
+      }
     },
     "2026-09-18": {
       "dayName": "ศุกร์ 18 ก.ย.",
       "dish1": "ราดหน้าหมู",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 460,
+        "protein": 22,
+        "carbs": 58,
+        "fat": 14,
+        "runningMinutes": 46,
+        "walkingMinutes": 78,
+        "healthTip": "ผักคะน้าแคลเซียมสูง น้ำราดหน้านุ่มละมุน ย่อยง่าย"
+      }
     },
     "2026-09-21": {
       "dayName": "จันทร์ 21 ก.ย.",
       "dish1": "ไก่ผัดเม็ดมะม่วง",
       "dish2": "ตุ๋นมะระยัดไส้",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 510,
+        "protein": 28,
+        "carbs": 36,
+        "fat": 24,
+        "runningMinutes": 50,
+        "walkingMinutes": 88,
+        "healthTip": "ไขมันดีจากเม็ดมะม่วงหิมพานต์ มะระช่วยลดระดับน้ำตาลในเลือด"
+      }
     },
     "2026-09-22": {
       "dayName": "อังคาร 22 ก.ย.",
       "dish1": "ผัดผักรวม",
       "dish2": "ต้มข่าไก่",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 600,
+        "protein": 24,
+        "carbs": 52,
+        "fat": 28,
+        "runningMinutes": 60,
+        "walkingMinutes": 105,
+        "healthTip": "ต้มข่าสมุนไพรหอมกะทิ ทานคู่ผัดผักรวมวิตามินครบถ้วน"
+      }
     },
     "2026-09-23": {
       "dayName": "พุธ 23 ก.ย.",
       "dish1": "น้ำพริกกะปิ + ไข่ชะอม + ผักสด",
       "dish2": "ต้มจืดวุ้นเส้นหมูสับ",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 580,
+        "protein": 26,
+        "carbs": 54,
+        "fat": 24,
+        "runningMinutes": 58,
+        "walkingMinutes": 100,
+        "healthTip": "สุดยอดเมนูสุขภาพชะลอวัย สารต้านอนุมูลอิสระจากกะปิและผักสด"
+      }
     },
     "2026-09-24": {
       "dayName": "พฤหัสบดี 24 ก.ย.",
       "dish1": "ข้าวผัดหมูชิ้น + ไข่ดาว",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 580,
+        "protein": 24,
+        "carbs": 62,
+        "fat": 24,
+        "runningMinutes": 58,
+        "walkingMinutes": 100,
+        "healthTip": "อาหารจานด่วนอิ่มอยู่ท้อง ควรบีบมะนาวและแกล้มแตงกวาเยอะๆ"
+      }
     },
     "2026-09-25": {
       "dayName": "ศุกร์ 25 ก.ย.",
       "dish1": "ก๋วยจั๊บ",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 480,
+        "protein": 22,
+        "carbs": 54,
+        "fat": 18,
+        "runningMinutes": 48,
+        "walkingMinutes": 82,
+        "healthTip": "น้ำซุปพริกไทยร้อนแรง ช่วยขับลมและกระตุ้นการย่อย"
+      }
     },
     "2026-09-28": {
       "dayName": "จันทร์ 28 ก.ย.",
       "dish1": "ปลาทอด",
       "dish2": "แกงเลียงผักรวม",
       "dessert": "ของหวาน",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 540,
+        "protein": 30,
+        "carbs": 46,
+        "fat": 18,
+        "runningMinutes": 54,
+        "walkingMinutes": 92,
+        "healthTip": "ปลาทอดโปรตีนย่อยง่าย แกงเลียงสมุนไพรไทยพริกไทยใบแมงลักสุดยอดอาหารคลีน"
+      }
     },
     "2026-09-29": {
       "dayName": "อังคาร 29 ก.ย.",
       "dish1": "ผัดกะเพราไก่ + ไข่ดาว + น้ำซุป",
       "dish2": "-",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 580,
+        "protein": 30,
+        "carbs": 52,
+        "fat": 24,
+        "runningMinutes": 58,
+        "walkingMinutes": 100,
+        "healthTip": "ใบกะเพราช่วยลดไขมันและน้ำตาลในเลือด เพิ่มพลังงานช่วงบ่าย"
+      }
     },
     "2026-09-30": {
       "dayName": "พุธ 30 ก.ย.",
       "dish1": "ผัดเผ็ดไก่ใส่มะเขือเปาะ",
       "dish2": "ต้มจืดสาหร่ายหมูสับ",
       "dessert": "",
-      "special": ""
+      "special": "",
+      "nutrition": {
+        "calories": 420,
+        "protein": 28,
+        "carbs": 28,
+        "fat": 18,
+        "runningMinutes": 42,
+        "walkingMinutes": 72,
+        "healthTip": "สาหร่ายมีไอโอดีนและแร่ธาตุสูง ผัดเผ็ดเครื่องแกงช่วยเบิร์นไขมัน"
+      }
     }
   }
 }
