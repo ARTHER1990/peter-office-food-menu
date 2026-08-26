@@ -1,6 +1,6 @@
 {
-  "version": "1.0.6",
-  "build": 106,
-  "updatedAt": "2026-08-26T15:03:00+07:00",
-  "notes": "Feature: Star favorites, Custom settings, and Smart Nutrition facts with burn times"
+  "version": "1.0.7",
+  "build": 107,
+  "updatedAt": "2026-08-26T15:09:00+07:00",
+  "notes": "Feature: Rotating dessert breakdown line with fruits and sweets energy ranges"
 }

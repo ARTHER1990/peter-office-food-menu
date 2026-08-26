@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.6"
-let APP_BUILD = 106
+let APP_VERSION = "1.0.7"
+let APP_BUILD = 107
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -1342,6 +1342,18 @@ struct MinimalCardView: View {
                     Text("🚶‍♂️ เดิน ~\(n.walkingMinutes) นาที")
                         .font(.system(size: 8.5, weight: .medium))
                         .foregroundColor(.white.opacity(0.65))
+                }
+                
+                if item.hasDessert {
+                    HStack(spacing: 3) {
+                        Text("🍧 รวมของหวานหมุนเวียน ~130 kcal")
+                            .font(.system(size: 8.5, weight: .semibold))
+                            .foregroundColor(Color.pink.opacity(0.85))
+                        Text("(ผลไม้ 60-80 / ขนม 150-180 kcal)")
+                            .font(.system(size: 8))
+                            .foregroundColor(Color.white.opacity(0.45))
+                    }
+                    .padding(.top, 1)
                 }
                 
                 if let tip = n.healthTip, !tip.isEmpty {
