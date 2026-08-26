@@ -1,6 +1,6 @@
 {
-  "version": "1.0.3",
-  "build": 103,
-  "updatedAt": "2026-08-26T13:48:00+07:00",
-  "notes": "Feature: Multi-month separation and universal binary support"
+  "version": "1.0.4",
+  "build": 104,
+  "updatedAt": "2026-08-26T13:51:00+07:00",
+  "notes": "Fix: Remove auto popup on startup/update. Only alert at 10:50 AM."
 }

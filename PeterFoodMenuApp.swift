@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.3"
-let APP_BUILD = 103
+let APP_VERSION = "1.0.4"
+let APP_BUILD = 104
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -1032,11 +1032,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Start Silent Self-Updater
         AppUpdateManager.shared.startCheckingForUpdates()
-        
-        // Auto preview once with audio
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
-            MenuManager.shared.triggerCenterAlert()
-        }
     }
 }
 
