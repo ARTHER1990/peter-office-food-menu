@@ -1,6 +1,6 @@
 {
-  "version": "1.0.7",
-  "build": 107,
-  "updatedAt": "2026-08-26T15:09:00+07:00",
-  "notes": "Feature: Rotating dessert breakdown line with fruits and sweets energy ranges"
+  "version": "1.0.8",
+  "build": 108,
+  "updatedAt": "2026-08-26T15:11:00+07:00",
+  "notes": "Feature: Direct comparison of calories with vs without dessert"
 }

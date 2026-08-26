@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.7"
-let APP_BUILD = 107
+let APP_VERSION = "1.0.8"
+let APP_BUILD = 108
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -1345,13 +1345,29 @@ struct MinimalCardView: View {
                 }
                 
                 if item.hasDessert {
-                    HStack(spacing: 3) {
-                        Text("🍧 รวมของหวานหมุนเวียน ~130 kcal")
-                            .font(.system(size: 8.5, weight: .semibold))
+                    let calWithoutDessert = max(280, n.calories - 130)
+                    let runWithoutDessert = max(25, Int(Double(calWithoutDessert) / 10.0))
+                    
+                    HStack(spacing: 5) {
+                        Text("🍨 กินของหวาน:")
+                            .font(.system(size: 8.5, weight: .medium))
                             .foregroundColor(Color.pink.opacity(0.85))
-                        Text("(ผลไม้ 60-80 / ขนม 150-180 kcal)")
-                            .font(.system(size: 8))
-                            .foregroundColor(Color.white.opacity(0.45))
+                        Text("~\(n.calories) kcal")
+                            .font(.system(size: 8.5, weight: .bold))
+                            .foregroundColor(.white)
+                        
+                        Text("•")
+                            .foregroundColor(.white.opacity(0.25))
+                        
+                        Text("🥗 ไม่กินของหวาน:")
+                            .font(.system(size: 8.5, weight: .medium))
+                            .foregroundColor(Color.green.opacity(0.85))
+                        Text("~\(calWithoutDessert) kcal")
+                            .font(.system(size: 8.5, weight: .bold))
+                            .foregroundColor(Color.green)
+                        Text("(วิ่งเพียง \(runWithoutDessert) น.)")
+                            .font(.system(size: 7.5))
+                            .foregroundColor(.white.opacity(0.45))
                     }
                     .padding(.top, 1)
                 }
