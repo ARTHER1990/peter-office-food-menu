@@ -1,6 +1,6 @@
 {
-  "version": "1.0.5",
-  "build": 105,
-  "updatedAt": "2026-08-26T13:57:00+07:00",
-  "notes": "Feature: Single-instance lock to prevent duplicate menu bar icons"
+  "version": "1.0.6",
+  "build": 106,
+  "updatedAt": "2026-08-26T15:03:00+07:00",
+  "notes": "Feature: Star favorites, Custom settings, and Smart Nutrition facts with burn times"
 }

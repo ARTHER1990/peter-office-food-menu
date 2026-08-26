@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.5"
-let APP_BUILD = 105
+let APP_VERSION = "1.0.6"
+let APP_BUILD = 106
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -316,8 +316,18 @@ struct AnimatedEatingMascot: View {
 }
 
 // ─────────────────────────────────────────────
-// MARK: - Data Models
+// MARK: - Data Models & Nutrition
 // ─────────────────────────────────────────────
+struct NutritionInfo: Codable {
+    var calories: Int
+    var protein: Int
+    var carbs: Int
+    var fat: Int
+    var runningMinutes: Int
+    var walkingMinutes: Int
+    var healthTip: String?
+}
+
 struct MenuItem: Codable {
     var dayName: String
     var dish1: String?
@@ -326,6 +336,7 @@ struct MenuItem: Codable {
     var soup: String?
     var dessert: String?
     var special: String?
+    var nutrition: NutritionInfo?
     
     var firstDish: String {
         return dish1 ?? main ?? "-"
@@ -348,6 +359,33 @@ struct MenuItem: Codable {
         }
         return true
     }
+    
+    var resolvedNutrition: NutritionInfo {
+        if let n = nutrition { return n }
+        var cal = 450
+        var p = 24
+        var c = 42
+        var f = 16
+        var tip = "สารอาหารครบถ้วน อิ่มพอดีสำหรับ 1 เสิร์ฟ"
+        
+        let allDishes = (firstDish + " " + secondDish + " " + (dessert ?? "")).lowercased()
+        if hasDessert {
+            cal += 130
+            c += 24
+            f += 4
+        }
+        if allDishes.contains("ทอด") || allDishes.contains("กะทิ") || allDishes.contains("แกง") {
+            f += 6
+            cal += 60
+        }
+        if allDishes.contains("ผัก") || allDishes.contains("ต้มจืด") || allDishes.contains("น้ำพริก") {
+            tip = "ไฟเบอร์สูงจากผักและน้ำซุป ช่วยให้อิ่มสบายท้อง"
+        }
+        
+        let runMin = max(35, Int(Double(cal) / 10.0))
+        let walkMin = max(60, Int(Double(cal) / 5.8))
+        return NutritionInfo(calories: cal, protein: p, carbs: c, fat: f, runningMinutes: runMin, walkingMinutes: walkMin, healthTip: tip)
+    }
 }
 
 struct MenuSchedule: Codable {
@@ -358,12 +396,100 @@ struct MenuSchedule: Codable {
 }
 
 // ─────────────────────────────────────────────
+// MARK: - User Preferences & Favorites Manager (Local Storage)
+// ─────────────────────────────────────────────
+class UserPreferencesManager: ObservableObject {
+    static let shared = UserPreferencesManager()
+    
+    private let kFavoriteDates = "peter_food_favorite_dates"
+    private let kAlertHour = "peter_food_alert_hour"
+    private let kAlertMinute = "peter_food_alert_minute"
+    private let kSoundEnabled = "peter_food_sound_enabled"
+    private let kPopupEnabled = "peter_food_popup_enabled"
+    
+    @Published var favoriteDates: Set<String> = []
+    @Published var alertHour: Int = 10
+    @Published var alertMinute: Int = 50
+    @Published var isSoundEnabled: Bool = true
+    @Published var isPopupEnabled: Bool = true
+    
+    init() {
+        loadPreferences()
+    }
+    
+    func loadPreferences() {
+        let defaults = UserDefaults.standard
+        if let savedDates = defaults.array(forKey: kFavoriteDates) as? [String] {
+            self.favoriteDates = Set(savedDates)
+        }
+        
+        if defaults.object(forKey: kAlertHour) != nil {
+            self.alertHour = defaults.integer(forKey: kAlertHour)
+        } else {
+            self.alertHour = 10
+        }
+        
+        if defaults.object(forKey: kAlertMinute) != nil {
+            self.alertMinute = defaults.integer(forKey: kAlertMinute)
+        } else {
+            self.alertMinute = 50
+        }
+        
+        if defaults.object(forKey: kSoundEnabled) != nil {
+            self.isSoundEnabled = defaults.bool(forKey: kSoundEnabled)
+        } else {
+            self.isSoundEnabled = true
+        }
+        
+        if defaults.object(forKey: kPopupEnabled) != nil {
+            self.isPopupEnabled = defaults.bool(forKey: kPopupEnabled)
+        } else {
+            self.isPopupEnabled = true
+        }
+    }
+    
+    func toggleFavorite(_ dateKey: String) {
+        if favoriteDates.contains(dateKey) {
+            favoriteDates.remove(dateKey)
+        } else {
+            favoriteDates.insert(dateKey)
+        }
+        UserDefaults.standard.set(Array(favoriteDates), forKey: kFavoriteDates)
+    }
+    
+    func isFavorite(_ dateKey: String) -> Bool {
+        return favoriteDates.contains(dateKey)
+    }
+    
+    func setAlertTime(hour: Int, minute: Int) {
+        self.alertHour = hour
+        self.alertMinute = minute
+        UserDefaults.standard.set(hour, forKey: kAlertHour)
+        UserDefaults.standard.set(minute, forKey: kAlertMinute)
+    }
+    
+    func setSoundEnabled(_ enabled: Bool) {
+        self.isSoundEnabled = enabled
+        UserDefaults.standard.set(enabled, forKey: kSoundEnabled)
+    }
+    
+    func setPopupEnabled(_ enabled: Bool) {
+        self.isPopupEnabled = enabled
+        UserDefaults.standard.set(enabled, forKey: kPopupEnabled)
+    }
+    
+    var timeString: String {
+        return String(format: "%02d:%02d", alertHour, alertMinute)
+    }
+}
+
+// ─────────────────────────────────────────────
 // MARK: - Menu State Manager
 // ─────────────────────────────────────────────
 class MenuManager: ObservableObject {
     static let shared = MenuManager()
     
-    @Published var schedule: MenuSchedule = MenuSchedule(updatedAt: nil, monthTitle: "สิงหาคม 2569", announcement: "รายการอาหารพนักงาน", menus: [:])
+    @Published var schedule: MenuSchedule = MenuSchedule(updatedAt: nil, monthTitle: "สิงหาคม - กันยายน 2569", announcement: "รายการอาหารพนักงาน", menus: [:])
     @Published var todayItem: MenuItem?
     @Published var tomorrowItem: MenuItem?
     @Published var todayDateStr: String = ""
@@ -415,7 +541,7 @@ class MenuManager: ObservableObject {
         if let data = dataToRead, let decoded = try? JSONDecoder().decode(MenuSchedule.self, from: data) {
             DispatchQueue.main.async {
                 self.schedule = decoded
-                self.statusMessage = "\(decoded.monthTitle ?? "สิงหาคม 2569")"
+                self.statusMessage = "\(decoded.monthTitle ?? "สิงหาคม - กันยายน 2569")"
                 self.updateTodayAndTomorrow()
             }
         }
@@ -481,6 +607,7 @@ class MenuManager: ObservableObject {
     }
     
     private func checkTimeAndTrigger(_ date: Date) {
+        let prefs = UserPreferencesManager.shared
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: date)
         let minute = calendar.component(.minute, from: date)
@@ -490,8 +617,8 @@ class MenuManager: ObservableObject {
         formatter.dateFormat = "yyyy-MM-dd"
         let todayStr = formatter.string(from: date)
         
-        // Target: 10:50:00 AM
-        if hour == 10 && minute == 50 && second == 0 {
+        // Target: Custom time from User Preferences (Default 10:50:00 AM)
+        if hour == prefs.alertHour && minute == prefs.alertMinute && second == 0 {
             if lastFiredDate != todayStr {
                 lastFiredDate = todayStr
                 triggerCenterAlert()
@@ -501,7 +628,13 @@ class MenuManager: ObservableObject {
     
     func triggerCenterAlert() {
         updateTodayAndTomorrow()
-        SoundManager.shared.playCharmingChime()
+        let prefs = UserPreferencesManager.shared
+        
+        if prefs.isSoundEnabled {
+            SoundManager.shared.playCharmingChime()
+        }
+        
+        guard prefs.isPopupEnabled else { return }
         
         DispatchQueue.main.async {
             self.countdownSeconds = 5.0
@@ -532,31 +665,46 @@ class MenuManager: ObservableObject {
 }
 
 // ─────────────────────────────────────────────
-// MARK: - UI: Center 10:50 AM Alert (With Subtle Tomorrow Preview)
+// MARK: - UI: Center Alert (With Favorite Badge & Subtle Tomorrow Preview)
 // ─────────────────────────────────────────────
 struct CenterAlertView: View {
     @ObservedObject var manager = MenuManager.shared
+    @ObservedObject var prefs = UserPreferencesManager.shared
+    
+    var isTodayFav: Bool {
+        return prefs.isFavorite(manager.todayDateStr)
+    }
     
     var body: some View {
         HStack(spacing: 16) {
-            // Minimal Circle Icon
+            // Circle Icon
             ZStack {
                 Circle()
-                    .fill(Color.white.opacity(0.12))
+                    .fill(isTodayFav ? Color.yellow.opacity(0.22) : Color.white.opacity(0.12))
                     .frame(width: 48, height: 48)
                 
-                Image(systemName: "fork.knife")
+                Image(systemName: isTodayFav ? "star.fill" : "fork.knife")
                     .font(.system(size: 21, weight: .semibold))
-                    .foregroundColor(.white)
+                    .foregroundColor(isTodayFav ? .yellow : .white)
             }
             
             // Text Content (Today + Subtle Tomorrow Preview)
             VStack(alignment: .leading, spacing: 3) {
                 // Top Header Row
                 HStack(alignment: .center, spacing: 8) {
-                    Text("10:50 น. • เมนูอาหารวันนี้")
+                    Text("\(prefs.timeString) น. • เมนูอาหารวันนี้")
                         .font(.system(size: 11.5, weight: .bold))
                         .foregroundColor(Color.white.opacity(0.65))
+                    
+                    if isTodayFav {
+                        Text("⭐ เมนูโปรดของคุณ!")
+                            .font(.system(size: 10.5, weight: .bold))
+                            .foregroundColor(.yellow)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 1.5)
+                            .background(Color.yellow.opacity(0.18))
+                            .cornerRadius(4)
+                    }
                     
                     if let item = manager.todayItem, item.hasDessert {
                         Text("• 🍧 มีของหวาน")
@@ -618,6 +766,12 @@ struct CenterAlertView: View {
                                 .foregroundColor(Color.white.opacity(0.55))
                         }
                         
+                        if prefs.isFavorite(manager.tomorrowDateStr) {
+                            Text("⭐ เมนูโปรด")
+                                .font(.system(size: 9.5, weight: .bold))
+                                .foregroundColor(.yellow.opacity(0.85))
+                        }
+                        
                         if tomorrow.hasDessert {
                             Text("(🍧 มีของหวาน)")
                                 .font(.system(size: 10, weight: .medium))
@@ -637,7 +791,7 @@ struct CenterAlertView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 22, style: .continuous)
-                .stroke(Color.white.opacity(0.18), lineWidth: 1.2)
+                .stroke(isTodayFav ? Color.yellow.opacity(0.4) : Color.white.opacity(0.18), lineWidth: 1.2)
         )
         .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .contentShape(Rectangle())
@@ -648,11 +802,176 @@ struct CenterAlertView: View {
 }
 
 // ─────────────────────────────────────────────
+// MARK: - UI: Settings View
+// ─────────────────────────────────────────────
+struct SettingsView: View {
+    @ObservedObject var prefs = UserPreferencesManager.shared
+    @Binding var isShowingSettings: Bool
+    
+    let timePresets: [(hour: Int, minute: Int, label: String)] = [
+        (10, 30, "10:30"),
+        (10, 45, "10:45"),
+        (10, 50, "10:50"),
+        (11, 00, "11:00"),
+        (11, 30, "11:30")
+    ]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Settings Header
+            HStack {
+                Text("⚙️ ตั้งค่าการแจ้งเตือน")
+                    .font(.system(size: 12.5, weight: .bold))
+                    .foregroundColor(.white)
+                
+                Spacer()
+                
+                Button(action: {
+                    withAnimation(.easeInOut(duration: 0.18)) {
+                        isShowingSettings = false
+                    }
+                }) {
+                    HStack(spacing: 3) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 10, weight: .bold))
+                        Text("กลับหน้าเมนู")
+                            .font(.system(size: 11, weight: .semibold))
+                    }
+                    .foregroundColor(.orange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(Color.orange.opacity(0.15))
+                    .cornerRadius(5)
+                }
+                .buttonStyle(PlainButtonStyle())
+            }
+            
+            Divider().background(Color.white.opacity(0.1))
+            
+            // Alert Time Section
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text("⏰ เวลาแจ้งเตือนมื้อเที่ยง:")
+                        .font(.system(size: 11, weight: .medium))
+                        .foregroundColor(.white.opacity(0.8))
+                    
+                    Spacer()
+                    
+                    Text("\(prefs.timeString) น.")
+                        .font(.system(size: 11.5, weight: .bold))
+                        .foregroundColor(.orange)
+                }
+                
+                HStack(spacing: 5) {
+                    ForEach(timePresets, id: \.label) { preset in
+                        let isSelected = prefs.alertHour == preset.hour && prefs.alertMinute == preset.minute
+                        Button(action: {
+                            prefs.setAlertTime(hour: preset.hour, minute: preset.minute)
+                        }) {
+                            Text(preset.label)
+                                .font(.system(size: 10, weight: isSelected ? .bold : .regular))
+                                .foregroundColor(isSelected ? .black : .white)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(isSelected ? Color.orange : Color.white.opacity(0.1))
+                                .cornerRadius(5)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                }
+            }
+            
+            Divider().background(Color.white.opacity(0.1))
+            
+            // Sound & Alert Toggles
+            VStack(spacing: 8) {
+                HStack {
+                    Image(systemName: prefs.isSoundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                        .font(.system(size: 11))
+                        .foregroundColor(prefs.isSoundEnabled ? .orange : .white.opacity(0.4))
+                        .frame(width: 16)
+                    
+                    Text("เปิดเสียงเตือน Chime")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        SoundManager.shared.playCharmingChime()
+                    }) {
+                        Text("🔊 ทดลองฟัง")
+                            .font(.system(size: 9.5))
+                            .foregroundColor(.white.opacity(0.8))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2.5)
+                            .background(Color.white.opacity(0.1))
+                            .cornerRadius(4)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    Toggle("", isOn: Binding(
+                        get: { prefs.isSoundEnabled },
+                        set: { prefs.setSoundEnabled($0) }
+                    ))
+                    .toggleStyle(SwitchToggleStyle())
+                    .scaleEffect(0.7)
+                }
+                
+                HStack {
+                    Image(systemName: prefs.isPopupEnabled ? "bell.badge.fill" : "bell.slash.fill")
+                        .font(.system(size: 11))
+                        .foregroundColor(prefs.isPopupEnabled ? .orange : .white.opacity(0.4))
+                        .frame(width: 16)
+                    
+                    Text("แสดงหน้าต่างป็อปอัปเตือน")
+                        .font(.system(size: 11))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Toggle("", isOn: Binding(
+                        get: { prefs.isPopupEnabled },
+                        set: { prefs.setPopupEnabled($0) }
+                    ))
+                    .toggleStyle(SwitchToggleStyle())
+                    .scaleEffect(0.7)
+                }
+            }
+            
+            Divider().background(Color.white.opacity(0.1))
+            
+            // Favorites Summary
+            HStack {
+                Image(systemName: "star.fill")
+                    .font(.system(size: 11))
+                    .foregroundColor(.yellow)
+                
+                Text("เมนูโปรดที่คุณกด ⭐ ไว้:")
+                    .font(.system(size: 10.5))
+                    .foregroundColor(.white.opacity(0.8))
+                
+                Spacer()
+                
+                Text("\(prefs.favoriteDates.count) วัน")
+                    .font(.system(size: 11, weight: .bold))
+                    .foregroundColor(.yellow)
+            }
+        }
+        .padding(12)
+        .background(Color.white.opacity(0.04))
+        .cornerRadius(8)
+    }
+}
+
+// ─────────────────────────────────────────────
 // MARK: - UI: Menu Bar Popover Detail View
 // ─────────────────────────────────────────────
 struct MenuBarDetailPopoverView: View {
     @ObservedObject var manager = MenuManager.shared
+    @ObservedObject var prefs = UserPreferencesManager.shared
     @State private var selectedTab: Int = 0
+    @State private var isShowingSettings: Bool = false
     
     private func monthTitleForDate(_ dateStr: String) -> String {
         let parts = dateStr.split(separator: "-")
@@ -681,7 +1000,7 @@ struct MenuBarDetailPopoverView: View {
                 .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 10) {
-                // Top Header: CRAZY FACTORY Logo + Title
+                // Top Header: Logo + Title + Settings + Refresh
                 HStack(spacing: 10) {
                     if let logo = LogoManager.shared.logoImage {
                         Image(nsImage: logo)
@@ -700,13 +1019,29 @@ struct MenuBarDetailPopoverView: View {
                     
                     Spacer()
                     
+                    // Settings Toggle Button (Gear)
+                    Button(action: {
+                        withAnimation(.easeInOut(duration: 0.18)) {
+                            isShowingSettings.toggle()
+                        }
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(isShowingSettings ? .orange : .white.opacity(0.65))
+                            .padding(3)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .help("ตั้งค่าเวลาและเสียงแจ้งเตือน")
+                    
+                    // Refresh Button
                     Button(action: {
                         manager.fetchFromRemoteCloud()
                         AppUpdateManager.shared.checkForNewAppVersion()
                     }) {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 11, weight: .semibold))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.white.opacity(0.65))
+                            .padding(3)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .help("ซิงค์ข้อมูลและตรวจอัปเดต")
@@ -716,91 +1051,126 @@ struct MenuBarDetailPopoverView: View {
                 
                 Divider().background(Color.white.opacity(0.1))
                 
-                // Tabs: วันนี้ / พรุ่งนี้ / ทั้งเดือน
-                Picker("", selection: $selectedTab) {
-                    Text("วันนี้").tag(0)
-                    Text("พรุ่งนี้").tag(1)
-                    Text("ทั้งเดือน").tag(2)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.horizontal, 14)
-                
-                // Content
-                ScrollView {
+                if isShowingSettings {
+                    // Settings Screen
+                    SettingsView(isShowingSettings: $isShowingSettings)
+                        .padding(.horizontal, 14)
+                        .frame(maxHeight: 220)
+                } else {
+                    // Main Menu Screen
                     VStack(spacing: 8) {
-                        if selectedTab == 0 {
-                            if let item = manager.todayItem {
-                                MinimalCardView(
-                                    item: item,
-                                    label: "วันนี้ • \(item.dayName)",
-                                    monthBadge: monthTitleForDate(manager.todayDateStr)
-                                )
-                            } else {
-                                EmptyStateView(dateStr: manager.todayDateStr, label: "วันนี้")
-                            }
-                        } else if selectedTab == 1 {
-                            if let item = manager.tomorrowItem {
-                                MinimalCardView(
-                                    item: item,
-                                    label: "พรุ่งนี้ • \(item.dayName)",
-                                    monthBadge: monthTitleForDate(manager.tomorrowDateStr)
-                                )
-                            } else {
-                                EmptyStateView(dateStr: manager.tomorrowDateStr, label: "พรุ่งนี้")
-                            }
-                        } else {
-                            // Full Month Overview with dynamic Month Section headers
-                            VStack(alignment: .leading, spacing: 12) {
-                                ForEach(monthGroups, id: \.monthKey) { group in
-                                    VStack(alignment: .leading, spacing: 6) {
-                                        HStack(spacing: 4) {
-                                            Text("📅 เดือน: \(monthTitleForDate(group.monthKey + "-01"))")
-                                                .font(.system(size: 11, weight: .bold))
-                                                .foregroundColor(Color.orange.opacity(0.95))
-                                            Spacer()
-                                        }
-                                        .padding(.horizontal, 4)
-                                        .padding(.top, 2)
-                                        
-                                        ForEach(group.keys, id: \.self) { key in
-                                            if let item = manager.schedule.menus[key] {
-                                                HStack(alignment: .top, spacing: 8) {
-                                                    Text(item.dayName)
-                                                        .font(.system(size: 9.5, weight: .bold))
-                                                        .foregroundColor(key == manager.todayDateStr ? .orange : .white)
-                                                        .frame(width: 80, alignment: .leading)
-                                                    
-                                                    VStack(alignment: .leading, spacing: 2) {
-                                                        Text("1. " + item.firstDish)
-                                                            .font(.system(size: 10.5, weight: .medium))
-                                                            .foregroundColor(.white)
-                                                        if item.secondDish != "-" && !item.secondDish.isEmpty {
-                                                            Text("2. " + item.secondDish)
-                                                                .font(.system(size: 10.5, weight: .medium))
-                                                                .foregroundColor(.white.opacity(0.85))
-                                                        }
-                                                        if item.hasDessert, let d = item.dessert {
-                                                            Text("🍧 " + d)
-                                                                .font(.system(size: 9.5))
-                                                                .foregroundColor(.pink)
-                                                        }
-                                                    }
+                        // Tabs: วันนี้ / พรุ่งนี้ / ทั้งเดือน
+                        Picker("", selection: $selectedTab) {
+                            Text("วันนี้").tag(0)
+                            Text("พรุ่งนี้").tag(1)
+                            Text("ทั้งเดือน").tag(2)
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .padding(.horizontal, 14)
+                        
+                        // Content ScrollView
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                if selectedTab == 0 {
+                                    if let item = manager.todayItem {
+                                        MinimalCardView(
+                                            item: item,
+                                            dateKey: manager.todayDateStr,
+                                            label: "วันนี้ • \(item.dayName)",
+                                            monthBadge: monthTitleForDate(manager.todayDateStr)
+                                        )
+                                    } else {
+                                        EmptyStateView(dateStr: manager.todayDateStr, label: "วันนี้")
+                                    }
+                                } else if selectedTab == 1 {
+                                    if let item = manager.tomorrowItem {
+                                        MinimalCardView(
+                                            item: item,
+                                            dateKey: manager.tomorrowDateStr,
+                                            label: "พรุ่งนี้ • \(item.dayName)",
+                                            monthBadge: monthTitleForDate(manager.tomorrowDateStr)
+                                        )
+                                    } else {
+                                        EmptyStateView(dateStr: manager.tomorrowDateStr, label: "พรุ่งนี้")
+                                    }
+                                } else {
+                                    // Full Month Overview with dynamic Month Section headers
+                                    VStack(alignment: .leading, spacing: 12) {
+                                        ForEach(monthGroups, id: \.monthKey) { group in
+                                            VStack(alignment: .leading, spacing: 6) {
+                                                HStack(spacing: 4) {
+                                                    Text("📅 เดือน: \(monthTitleForDate(group.monthKey + "-01"))")
+                                                        .font(.system(size: 11, weight: .bold))
+                                                        .foregroundColor(Color.orange.opacity(0.95))
                                                     Spacer()
                                                 }
-                                                .padding(7)
-                                                .background(key == manager.todayDateStr ? Color.white.opacity(0.12) : Color.white.opacity(0.03))
-                                                .cornerRadius(6)
+                                                .padding(.horizontal, 4)
+                                                .padding(.top, 2)
+                                                
+                                                ForEach(group.keys, id: \.self) { key in
+                                                    if let item = manager.schedule.menus[key] {
+                                                        let isFav = prefs.isFavorite(key)
+                                                        HStack(alignment: .top, spacing: 8) {
+                                                            Text(item.dayName)
+                                                                .font(.system(size: 9.5, weight: .bold))
+                                                                .foregroundColor(key == manager.todayDateStr ? .orange : .white)
+                                                                .frame(width: 78, alignment: .leading)
+                                                            
+                                                            VStack(alignment: .leading, spacing: 2) {
+                                                                Text("1. " + item.firstDish)
+                                                                    .font(.system(size: 10.5, weight: .medium))
+                                                                    .foregroundColor(.white)
+                                                                if item.secondDish != "-" && !item.secondDish.isEmpty {
+                                                                    Text("2. " + item.secondDish)
+                                                                        .font(.system(size: 10.5, weight: .medium))
+                                                                        .foregroundColor(.white.opacity(0.85))
+                                                                }
+                                                                if item.hasDessert, let d = item.dessert {
+                                                                    Text("🍧 " + d)
+                                                                        .font(.system(size: 9.5))
+                                                                        .foregroundColor(.pink)
+                                                                }
+                                                                let n = item.resolvedNutrition
+                                                                Text("🔥 ~\(n.calories) kcal")
+                                                                    .font(.system(size: 8.5, weight: .medium))
+                                                                    .foregroundColor(.orange.opacity(0.8))
+                                                                    .padding(.top, 1)
+                                                            }
+                                                            
+                                                            Spacer()
+                                                            
+                                                            // Star Favorite Button
+                                                            Button(action: {
+                                                                prefs.toggleFavorite(key)
+                                                            }) {
+                                                                Image(systemName: isFav ? "star.fill" : "star")
+                                                                    .font(.system(size: 11, weight: .semibold))
+                                                                    .foregroundColor(isFav ? .yellow : .white.opacity(0.28))
+                                                                    .padding(3)
+                                                            }
+                                                            .buttonStyle(PlainButtonStyle())
+                                                            .help(isFav ? "ยกเลิกติดดาวเมนูโปรด" : "ติดดาวเป็นเมนูโปรด")
+                                                        }
+                                                        .padding(7)
+                                                        .background(isFav ? Color.yellow.opacity(0.08) : (key == manager.todayDateStr ? Color.white.opacity(0.12) : Color.white.opacity(0.03)))
+                                                        .cornerRadius(6)
+                                                        .overlay(
+                                                            RoundedRectangle(cornerRadius: 6)
+                                                                .stroke(isFav ? Color.yellow.opacity(0.3) : Color.clear, lineWidth: 1)
+                                                        )
+                                                    }
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 4)
                         }
+                        .frame(maxHeight: 250)
                     }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 4)
                 }
-                .frame(maxHeight: 220)
                 
                 Divider().background(Color.white.opacity(0.1))
                 
@@ -815,7 +1185,7 @@ struct MenuBarDetailPopoverView: View {
                         HStack(spacing: 4) {
                             Image(systemName: "bell")
                                 .font(.system(size: 9))
-                            Text("ทดสอบเด้ง 10:50")
+                            Text("ทดสอบเด้ง \(prefs.timeString)")
                                 .font(.system(size: 9.5, weight: .semibold))
                         }
                         .padding(.horizontal, 8)
@@ -841,7 +1211,7 @@ struct MenuBarDetailPopoverView: View {
                 .padding(.bottom, 10)
             }
         }
-        .frame(width: 340, height: 335)
+        .frame(width: 350, height: 380)
     }
 }
 
@@ -850,11 +1220,18 @@ struct MenuBarDetailPopoverView: View {
 // ─────────────────────────────────────────────
 struct MinimalCardView: View {
     var item: MenuItem
+    var dateKey: String
     var label: String
     var monthBadge: String
+    @ObservedObject var prefs = UserPreferencesManager.shared
+    
+    var isFav: Bool {
+        return prefs.isFavorite(dateKey)
+    }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 7) {
+            // Header Row: Day Label + Star + Dessert
             HStack(spacing: 6) {
                 Text(label)
                     .font(.system(size: 11.5, weight: .bold))
@@ -871,15 +1248,28 @@ struct MinimalCardView: View {
                         .font(.system(size: 9.5, weight: .bold))
                         .foregroundColor(.pink)
                 }
+                
+                // Star Favorite Button
+                Button(action: {
+                    prefs.toggleFavorite(dateKey)
+                }) {
+                    Image(systemName: isFav ? "star.fill" : "star")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(isFav ? .yellow : .white.opacity(0.35))
+                        .padding(2)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .help(isFav ? "ยกเลิกติดดาวเมนูโปรด" : "ติดดาวเป็นเมนูโปรด")
             }
             
-            VStack(alignment: .leading, spacing: 5) {
+            // Dishes List
+            VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 8) {
                     Text("1.")
                         .font(.system(size: 11, weight: .bold))
                         .foregroundColor(Color.white.opacity(0.5))
                     Text(item.firstDish)
-                        .font(.system(size: 13, weight: .medium))
+                        .font(.system(size: 12.5, weight: .medium))
                         .foregroundColor(.white)
                 }
                 
@@ -889,15 +1279,87 @@ struct MinimalCardView: View {
                             .font(.system(size: 11, weight: .bold))
                             .foregroundColor(Color.white.opacity(0.5))
                         Text(item.secondDish)
-                            .font(.system(size: 13, weight: .medium))
+                            .font(.system(size: 12.5, weight: .medium))
                             .foregroundColor(.white)
                     }
                 }
             }
+            
+            // Nutrition & Calorie Burn Breakdown
+            let n = item.resolvedNutrition
+            VStack(alignment: .leading, spacing: 4) {
+                Divider().background(Color.white.opacity(0.08))
+                    .padding(.vertical, 1)
+                
+                // Macro Pills
+                HStack(spacing: 6) {
+                    HStack(spacing: 2.5) {
+                        Text("🔥")
+                            .font(.system(size: 10.5))
+                        Text("\(n.calories)")
+                            .font(.system(size: 12, weight: .bold))
+                            .foregroundColor(.orange)
+                        Text("kcal")
+                            .font(.system(size: 9))
+                            .foregroundColor(.white.opacity(0.45))
+                    }
+                    
+                    Text("•")
+                        .foregroundColor(.white.opacity(0.2))
+                    
+                    Text("🥩 โปรตีน: \(n.protein)g")
+                        .font(.system(size: 9.5, weight: .semibold))
+                        .foregroundColor(Color(red: 1.0, green: 0.55, blue: 0.55))
+                    
+                    Text("🍚 คาร์บ: \(n.carbs)g")
+                        .font(.system(size: 9.5, weight: .semibold))
+                        .foregroundColor(Color(red: 0.55, green: 0.85, blue: 1.0))
+                    
+                    Text("🥑 ไขมัน: \(n.fat)g")
+                        .font(.system(size: 9.5, weight: .semibold))
+                        .foregroundColor(Color(red: 0.65, green: 0.95, blue: 0.65))
+                    
+                    Spacer()
+                }
+                
+                // Serving size basis & Burn Exercise Minutes
+                HStack(spacing: 4) {
+                    Text("🍚 ข้าว 1 ทัพพี")
+                        .font(.system(size: 8.5))
+                        .foregroundColor(.white.opacity(0.4))
+                    
+                    Text("•")
+                        .foregroundColor(.white.opacity(0.2))
+                    
+                    Text("🏃‍♂️ วิ่ง ~\(n.runningMinutes) นาที")
+                        .font(.system(size: 8.5, weight: .medium))
+                        .foregroundColor(.white.opacity(0.65))
+                    
+                    Text("หรือ")
+                        .font(.system(size: 8))
+                        .foregroundColor(.white.opacity(0.35))
+                    
+                    Text("🚶‍♂️ เดิน ~\(n.walkingMinutes) นาที")
+                        .font(.system(size: 8.5, weight: .medium))
+                        .foregroundColor(.white.opacity(0.65))
+                }
+                
+                if let tip = n.healthTip, !tip.isEmpty {
+                    Text("💡 \(tip)")
+                        .font(.system(size: 8.5))
+                        .foregroundColor(.white.opacity(0.48))
+                        .lineLimit(2)
+                        .padding(.top, 1)
+                }
+            }
         }
         .padding(10)
-        .background(Color.white.opacity(0.06))
+        .background(isFav ? Color.yellow.opacity(0.08) : Color.white.opacity(0.06))
         .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(isFav ? Color.yellow.opacity(0.35) : Color.clear, lineWidth: 1)
+        )
     }
 }
 
@@ -951,7 +1413,7 @@ class WindowManager: NSObject {
         }
         
         popover = NSPopover()
-        popover?.contentSize = NSSize(width: 340, height: 335)
+        popover?.contentSize = NSSize(width: 350, height: 380)
         popover?.behavior = .transient
         popover?.contentViewController = NSHostingController(rootView: MenuBarDetailPopoverView())
     }
