@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.2"
-let APP_BUILD = 102
+let APP_VERSION = "1.0.3"
+let APP_BUILD = 103
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -663,9 +663,31 @@ struct MenuBarDetailPopoverView: View {
     @ObservedObject var manager = MenuManager.shared
     @State private var selectedTab: Int = 0
     
+    private func monthTitleForDate(_ dateStr: String) -> String {
+        let parts = dateStr.split(separator: "-")
+        guard parts.count >= 2, let year = Int(parts[0]), let month = Int(parts[1]) else {
+            return manager.schedule.monthTitle ?? "2569"
+        }
+        let thaiMonths = ["", "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"]
+        let thaiYear = year + 543
+        let monthName = (month >= 1 && month <= 12) ? thaiMonths[month] : "\(month)"
+        return "\(monthName) \(thaiYear)"
+    }
+    
+    private var monthGroups: [(monthKey: String, keys: [String])] {
+        let allKeys = manager.schedule.menus.keys.sorted()
+        var grouped: [String: [String]] = [:]
+        for k in allKeys {
+            let prefix = String(k.prefix(7))
+            grouped[prefix, default: []].append(k)
+        }
+        return grouped.keys.sorted().map { ($0, grouped[$0]!) }
+    }
+    
     var body: some View {
         ZStack {
-            Color(white: 0.12).ignoresSafeArea()
+            Color(red: 0.12, green: 0.12, blue: 0.14)
+                .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 10) {
                 // Top Header: CRAZY FACTORY Logo + Title
@@ -673,12 +695,8 @@ struct MenuBarDetailPopoverView: View {
                     if let logo = LogoManager.shared.logoImage {
                         Image(nsImage: logo)
                             .resizable()
-                            .scaledToFit()
-                            .frame(height: 22)
-                            .padding(.horizontal, 4)
-                            .padding(.vertical, 2)
-                            .background(Color.white.opacity(0.95))
-                            .cornerRadius(4)
+                            .aspectRatio(contentMode: .fit)
+                            .frame(height: 24)
                     } else {
                         Image(systemName: "fork.knife")
                             .font(.system(size: 14, weight: .semibold))
@@ -686,7 +704,7 @@ struct MenuBarDetailPopoverView: View {
                     }
                     
                     Text("รายการอาหารพนักงาน")
-                        .font(.system(size: 13.5, weight: .bold))
+                        .font(.system(size: 13, weight: .bold))
                         .foregroundColor(.white)
                     
                     Spacer()
@@ -696,7 +714,7 @@ struct MenuBarDetailPopoverView: View {
                         AppUpdateManager.shared.checkForNewAppVersion()
                     }) {
                         Image(systemName: "arrow.clockwise")
-                            .font(.system(size: 11, weight: .medium))
+                            .font(.system(size: 11, weight: .semibold))
                             .foregroundColor(.white.opacity(0.6))
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -724,7 +742,7 @@ struct MenuBarDetailPopoverView: View {
                                 MinimalCardView(
                                     item: item,
                                     label: "วันนี้ • \(item.dayName)",
-                                    monthBadge: manager.schedule.monthTitle ?? "สิงหาคม 2569"
+                                    monthBadge: monthTitleForDate(manager.todayDateStr)
                                 )
                             } else {
                                 EmptyStateView(dateStr: manager.todayDateStr, label: "วันนี้")
@@ -734,51 +752,55 @@ struct MenuBarDetailPopoverView: View {
                                 MinimalCardView(
                                     item: item,
                                     label: "พรุ่งนี้ • \(item.dayName)",
-                                    monthBadge: manager.schedule.monthTitle ?? "สิงหาคม 2569"
+                                    monthBadge: monthTitleForDate(manager.tomorrowDateStr)
                                 )
                             } else {
                                 EmptyStateView(dateStr: manager.tomorrowDateStr, label: "พรุ่งนี้")
                             }
                         } else {
-                            // Full Month Overview
-                            VStack(alignment: .leading, spacing: 6) {
-                                HStack {
-                                    Text("📅 เดือน: \(manager.schedule.monthTitle ?? "สิงหาคม 2569")")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundColor(.white.opacity(0.7))
-                                    Spacer()
-                                }
-                                .padding(.horizontal, 4)
-                                .padding(.top, 2)
-                                
-                                ForEach(manager.schedule.menus.keys.sorted(), id: \.self) { key in
-                                    if let item = manager.schedule.menus[key] {
-                                        HStack(alignment: .top, spacing: 8) {
-                                            Text(item.dayName)
-                                                .font(.system(size: 9.5, weight: .bold))
-                                                .foregroundColor(key == manager.todayDateStr ? .orange : .white)
-                                                .frame(width: 80, alignment: .leading)
-                                            
-                                            VStack(alignment: .leading, spacing: 2) {
-                                                Text("1. " + item.firstDish)
-                                                    .font(.system(size: 10.5, weight: .medium))
-                                                    .foregroundColor(.white)
-                                                if item.secondDish != "-" && !item.secondDish.isEmpty {
-                                                    Text("2. " + item.secondDish)
-                                                        .font(.system(size: 10.5, weight: .medium))
-                                                        .foregroundColor(.white.opacity(0.85))
-                                                }
-                                                if item.hasDessert, let d = item.dessert {
-                                                    Text("🍧 " + d)
-                                                        .font(.system(size: 9.5))
-                                                        .foregroundColor(.pink)
-                                                }
-                                            }
+                            // Full Month Overview with dynamic Month Section headers
+                            VStack(alignment: .leading, spacing: 12) {
+                                ForEach(monthGroups, id: \.monthKey) { group in
+                                    VStack(alignment: .leading, spacing: 6) {
+                                        HStack(spacing: 4) {
+                                            Text("📅 เดือน: \(monthTitleForDate(group.monthKey + "-01"))")
+                                                .font(.system(size: 11, weight: .bold))
+                                                .foregroundColor(Color.orange.opacity(0.95))
                                             Spacer()
                                         }
-                                        .padding(7)
-                                        .background(key == manager.todayDateStr ? Color.white.opacity(0.12) : Color.white.opacity(0.03))
-                                        .cornerRadius(6)
+                                        .padding(.horizontal, 4)
+                                        .padding(.top, 2)
+                                        
+                                        ForEach(group.keys, id: \.self) { key in
+                                            if let item = manager.schedule.menus[key] {
+                                                HStack(alignment: .top, spacing: 8) {
+                                                    Text(item.dayName)
+                                                        .font(.system(size: 9.5, weight: .bold))
+                                                        .foregroundColor(key == manager.todayDateStr ? .orange : .white)
+                                                        .frame(width: 80, alignment: .leading)
+                                                    
+                                                    VStack(alignment: .leading, spacing: 2) {
+                                                        Text("1. " + item.firstDish)
+                                                            .font(.system(size: 10.5, weight: .medium))
+                                                            .foregroundColor(.white)
+                                                        if item.secondDish != "-" && !item.secondDish.isEmpty {
+                                                            Text("2. " + item.secondDish)
+                                                                .font(.system(size: 10.5, weight: .medium))
+                                                                .foregroundColor(.white.opacity(0.85))
+                                                        }
+                                                        if item.hasDessert, let d = item.dessert {
+                                                            Text("🍧 " + d)
+                                                                .font(.system(size: 9.5))
+                                                                .foregroundColor(.pink)
+                                                        }
+                                                    }
+                                                    Spacer()
+                                                }
+                                                .padding(7)
+                                                .background(key == manager.todayDateStr ? Color.white.opacity(0.12) : Color.white.opacity(0.03))
+                                                .cornerRadius(6)
+                                            }
+                                        }
                                     }
                                 }
                             }
