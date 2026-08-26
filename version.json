@@ -1,6 +1,6 @@
 {
-  "version": "1.0.8",
-  "build": 108,
-  "updatedAt": "2026-08-26T15:11:00+07:00",
-  "notes": "Feature: Direct comparison of calories with vs without dessert"
+  "version": "1.0.9",
+  "build": 109,
+  "updatedAt": "2026-08-26T15:19:00+07:00",
+  "notes": "Feature: Combined dessert comparison and fruits/sweets energy range"
 }
