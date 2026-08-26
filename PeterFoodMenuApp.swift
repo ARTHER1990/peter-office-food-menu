@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.4"
-let APP_BUILD = 104
+let APP_VERSION = "1.0.5"
+let APP_BUILD = 105
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -1033,6 +1033,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Start Silent Self-Updater
         AppUpdateManager.shared.startCheckingForUpdates()
     }
+}
+
+// Single-instance lock to ensure only 1 icon on menu bar
+let lockFd = open("/tmp/peter_food_menu.lock", O_CREAT | O_RDWR, 0o666)
+if lockFd >= 0 && lockf(lockFd, F_TLOCK, 0) < 0 {
+    exit(0)
 }
 
 let app = NSApplication.shared

@@ -1,6 +1,6 @@
 {
-  "version": "1.0.4",
-  "build": 104,
-  "updatedAt": "2026-08-26T13:51:00+07:00",
-  "notes": "Fix: Remove auto popup on startup/update. Only alert at 10:50 AM."
+  "version": "1.0.5",
+  "build": 105,
+  "updatedAt": "2026-08-26T13:57:00+07:00",
+  "notes": "Feature: Single-instance lock to prevent duplicate menu bar icons"
 }
