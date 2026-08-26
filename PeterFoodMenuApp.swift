@@ -422,7 +422,8 @@ class MenuManager: ObservableObject {
     }
     
     func fetchFromRemoteCloud() {
-        var request = URLRequest(url: remoteURL)
+        let cacheBustURL = URL(string: "\(remoteURL.absoluteString)?t=\(Int(Date().timeIntervalSince1970))") ?? remoteURL
+        var request = URLRequest(url: cacheBustURL)
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         request.timeoutInterval = 10.0
         
@@ -435,11 +436,20 @@ class MenuManager: ObservableObject {
             }
             
             if let decoded = try? JSONDecoder().decode(MenuSchedule.self, from: data) {
-                try? data.write(to: URL(fileURLWithPath: self.localCachePath))
                 DispatchQueue.main.async {
-                    self.schedule = decoded
+                    var mergedMenus = self.schedule.menus
+                    for (k, v) in decoded.menus {
+                        mergedMenus[k] = v
+                    }
+                    var updated = decoded
+                    updated.menus = mergedMenus
+                    self.schedule = updated
                     self.statusMessage = "ซิงค์สำเร็จ"
                     self.updateTodayAndTomorrow()
+                    
+                    if let mergedData = try? JSONEncoder().encode(updated) {
+                        try? mergedData.write(to: URL(fileURLWithPath: self.localCachePath))
+                    }
                 }
             }
         }.resume()
