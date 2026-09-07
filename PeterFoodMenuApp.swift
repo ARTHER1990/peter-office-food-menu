@@ -6,8 +6,8 @@ import AVFoundation
 // ─────────────────────────────────────────────
 // MARK: - App Version Constants
 // ─────────────────────────────────────────────
-let APP_VERSION = "1.0.9"
-let APP_BUILD = 109
+let APP_VERSION = "1.1.0"
+let APP_BUILD = 110
 
 // ─────────────────────────────────────────────
 // MARK: - Logo Manager
@@ -21,14 +21,16 @@ class LogoManager {
     }
     
     func loadLogo() {
+        if self.logoImage != nil { return }
+        
+        let appSupportLogo = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?
+            .appendingPathComponent("PeterFoodMenu/company_logo.png").path ?? ""
         let possiblePaths = [
-            (FileManager.default.currentDirectoryPath as NSString).appendingPathComponent("05_Research_and_Development/PETER_FOOD_MENU_ALERT/company_logo.png"),
-            ("~/Desktop/ART_JOB/05_Research_and_Development/PETER_FOOD_MENU_ALERT/company_logo.png" as NSString).expandingTildeInPath,
-            ("~/Desktop/ART_JOB/05_Research_and_Development/PETER_FOOD_MENU_ALERT/Standalone_Repo/company_logo.png" as NSString).expandingTildeInPath,
-            ("~/.peter_food_menu/company_logo.png" as NSString).expandingTildeInPath
+            ("~/.peter_food_menu/company_logo.png" as NSString).expandingTildeInPath,
+            appSupportLogo
         ]
         
-        for path in possiblePaths {
+        for path in possiblePaths where !path.isEmpty {
             if FileManager.default.fileExists(atPath: path),
                let img = NSImage(contentsOfFile: path) {
                 self.logoImage = img
@@ -512,14 +514,8 @@ class MenuManager: ObservableObject {
         return appDir.appendingPathComponent("menu_schedule.json").path
     }
     
-    var projectLocalPath: String {
-        let currentDir = FileManager.default.currentDirectoryPath
-        let defaultPath = (currentDir as NSString).appendingPathComponent("05_Research_and_Development/PETER_FOOD_MENU_ALERT/menu_schedule.json")
-        if FileManager.default.fileExists(atPath: defaultPath) {
-            return defaultPath
-        }
-        let fallback = ("~/Desktop/ART_JOB/05_Research_and_Development/PETER_FOOD_MENU_ALERT/menu_schedule.json" as NSString).expandingTildeInPath
-        return fallback
+    var localFallbackPath: String {
+        return ("~/.peter_food_menu/menu_schedule.json" as NSString).expandingTildeInPath
     }
     
     init() {
@@ -534,8 +530,8 @@ class MenuManager: ObservableObject {
         var dataToRead: Data?
         if FileManager.default.fileExists(atPath: localCachePath) {
             dataToRead = try? Data(contentsOf: URL(fileURLWithPath: localCachePath))
-        } else if FileManager.default.fileExists(atPath: projectLocalPath) {
-            dataToRead = try? Data(contentsOf: URL(fileURLWithPath: projectLocalPath))
+        } else if FileManager.default.fileExists(atPath: localFallbackPath) {
+            dataToRead = try? Data(contentsOf: URL(fileURLWithPath: localFallbackPath))
         }
         
         if let data = dataToRead, let decoded = try? JSONDecoder().decode(MenuSchedule.self, from: data) {
