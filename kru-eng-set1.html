@@ -1109,7 +1109,11 @@ function copyAnswerCode() {
   });
 }
 
-window.addEventListener("DOMContentLoaded", initExam);
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initExam);
+} else {
+  initExam();
+}
 </script>
 </body>
 </html>
