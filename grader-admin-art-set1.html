@@ -129,6 +129,66 @@
       padding-top: 8px;
       border-top: 1px dashed var(--border);
     }
+    .live-box {
+      background: #ffffff;
+      border: 2px solid #2563eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+    .live-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .live-header h2 {
+      color: #1d4ed8;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+    .live-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin-top: 10px;
+    }
+    .live-table th, .live-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: left;
+    }
+    .live-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status-pill.submitted {
+      background: #dcfce7;
+      color: #166534;
+    }
   </style>
 </head>
 <body>
@@ -141,6 +201,20 @@
 </header>
 
 <div class="container">
+  <div class="live-box">
+    <div class="live-header">
+      <h2><span class="pulse-dot"></span> 📡 กระดานเช็คความเคลื่อนไหวผู้เข้าสอบแบบเรียลไทม์ (Live Activity Monitor)</h2>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span id="lastSyncTime" style="font-size:0.82rem; color:var(--muted);">กำลังซิงค์ข้อมูล...</span>
+        <button class="btn" style="background:#2563eb; padding:7px 14px; font-size:0.86rem;" onclick="fetchLiveSessions()">🔄 เช็คความเคลื่อนไหวเดี๋ยวนี้</button>
+      </div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--muted);">แม้ผู้เข้าสอบจะไม่ได้ส่งรหัสคำตอบมาทาง LINE ทันทีที่มีคนกดเปิดลิงก์ข้อสอบหรือกดติ๊กคำตอบ ข้อมูลความคืบหน้าและคำตอบจะเด้งขึ้นมาในตารางนี้โดยอัตโนมัติ (อัปเดตทุก 8 วินาที)</p>
+    <div id="liveSessionsContainer" style="overflow-x:auto;">
+      <p style="padding:14px 0; color:var(--muted); font-size:0.9rem;">⏳ กำลังดึงข้อมูลผู้เข้าสอบจากระบบ Cloud...</p>
+    </div>
+  </div>
+
   <div class="grader-box">
     <h2>⚡ ระบบตรวจรหัสคำตอบอัตโนมัติ (Auto-Grader)</h2>
     <p style="font-size:0.9rem; color:var(--muted);">นำรหัสคำตอบที่ผู้เข้าสอบกดคัดลอกจากหน้าข้อสอบ (เช่น <code>SET1-BEGINNER|ชื่อ|1:B,2:A,...</code>) มาวางที่นี่เพื่อตรวจคะแนนทันที:</p>
@@ -219,6 +293,10 @@ const ANSWER_KEYS = [
   { id: 50, ans: "C", cat: "ELT Pedagogy", exp: "<strong>C. C1 – C2</strong> ตามกรอบมาตรฐาน CEFR แบ่งเป็น 3 กลุ่มหลัก: <strong>A1–A2 (Basic User)</strong>, <strong>B1–B2 (Independent User)</strong>, และ <strong>C1–C2 (Proficient User)</strong>" }
 ];
 
+const CLOUD_TOPIC = "kru_eng_art_tracker_2026_set1";
+const ADMIN_HISTORY_KEY = "kru_eng_admin_sessions_history_v1";
+let savedSessions = {};
+
 function initKeyPage() {
   const quickGrid = document.getElementById("quickKeyGrid");
   quickGrid.innerHTML = ANSWER_KEYS.map(item => `
@@ -228,7 +306,115 @@ function initKeyPage() {
     </div>
   `).join("");
 
+  try {
+    const localHist = localStorage.getItem(ADMIN_HISTORY_KEY);
+    if (localHist) savedSessions = JSON.parse(localHist) || {};
+  } catch (e) {}
+
   renderDetailedList({});
+  renderLiveTable();
+  fetchLiveSessions();
+  setInterval(fetchLiveSessions, 8000);
+}
+
+function calcInstantScore(codeStr) {
+  if (!codeStr) return 0;
+  const parts = codeStr.split("|");
+  const ansPart = parts[parts.length - 1] || "";
+  const map = {};
+  ansPart.split(",").forEach(pair => {
+    const [q, c] = pair.split(":");
+    if (q && c) map[parseInt(q, 10)] = c.trim().toUpperCase();
+  });
+  let sc = 0;
+  ANSWER_KEYS.forEach(k => {
+    if (map[k.id] === k.ans) sc++;
+  });
+  return sc;
+}
+
+async function fetchLiveSessions() {
+  try {
+    const res = await fetch(`https://ntfy.sh/${CLOUD_TOPIC}/json?poll=1&since=all`);
+    if (res.ok) {
+      const text = await res.text();
+      const lines = text.trim().split("\n").filter(Boolean);
+      lines.forEach(line => {
+        try {
+          const env = JSON.parse(line);
+          if (env && env.message) {
+            const data = JSON.parse(env.message);
+            if (data && data.sessionId) {
+              savedSessions[data.sessionId] = data;
+            }
+          }
+        } catch (err) {}
+      });
+      localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(savedSessions));
+    }
+    const nowStr = new Date().toLocaleTimeString("th-TH");
+    document.getElementById("lastSyncTime").textContent = `อัปเดตล่าสุด: ${nowStr}`;
+    renderLiveTable();
+  } catch (e) {
+    document.getElementById("lastSyncTime").textContent = `โหมดออฟไลน์ (แสดงข้อมูลล่าสุดที่บันทึกไว้)`;
+    renderLiveTable();
+  }
+}
+
+function renderLiveTable() {
+  const container = document.getElementById("liveSessionsContainer");
+  const list = Object.values(savedSessions).sort((a, b) => {
+    return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+  });
+
+  if (list.length === 0) {
+    container.innerHTML = `<p style="padding:14px 0; color:var(--muted); font-size:0.92rem;">📭 ยังไม่มีผู้เข้าสอบกดเปิดลิงก์ข้อสอบในขณะนี้ (เมื่อมีคนเปิดลิงก์ รายชื่อจะปรากฏที่นี่อัตโนมัติ)</p>`;
+    return;
+  }
+
+  let rows = list.map((s, idx) => {
+    const isSub = (s.event || "").includes("ส่งกระดาษคำตอบ");
+    const pillClass = isSub ? "status-pill submitted" : "status-pill";
+    const timeStr = s.updatedAt ? new Date(s.updatedAt).toLocaleString("th-TH") : "-";
+    const liveScore = calcInstantScore(s.code);
+    const safeCode = (s.code || "").replace(/'/g, "\\'");
+    return `
+      <tr>
+        <td><strong>${s.name || "ไม่ระบุชื่อ"}</strong><br><small style="color:var(--muted);">รหัสเครื่อง: ${s.sessionId} (${s.device || "Browser"})</small></td>
+        <td><span class="${pillClass}">${s.event || "เปิดข้อสอบ"}</span></td>
+        <td><strong>${s.answeredCount || 0} / 50 ข้อ</strong></td>
+        <td><strong style="color:#0f766e;">${liveScore} / 50 คะแนน</strong></td>
+        <td style="font-size:0.84rem; color:var(--muted);">${timeStr}</td>
+        <td>
+          <button class="btn" style="padding:6px 12px; font-size:0.82rem;" onclick="loadSessionToGrader('${safeCode}')">
+            🔍 ดูคำตอบรายข้อ
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <table class="live-table">
+      <thead>
+        <tr>
+          <th>ชื่อผู้เข้าสอบ / อุปกรณ์</th>
+          <th>สถานะล่าสุด</th>
+          <th>ทำไปแล้ว</th>
+          <th>คะแนนรวมตอนนี้</th>
+          <th>เวลาล่าสุด</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function loadSessionToGrader(codeStr) {
+  document.getElementById("codeInput").value = codeStr;
+  gradeSubmission();
+  document.getElementById("scoreResultBox").scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 function renderDetailedList(userMap) {

@@ -913,10 +913,62 @@ const EXAM_DATA = [
 ];
 
 const STORAGE_KEY = "kru_eng_exam_set1_beginner_v1";
+const CLOUD_TOPIC = "kru_eng_art_tracker_2026_set1";
 let userAnswers = {};
 let secondsLeft = 60 * 60;
 let timerRunning = true;
 let timerInterval = null;
+let sessionId = "";
+let syncTimeout = null;
+
+function getDeviceName() {
+  const ua = navigator.userAgent || "";
+  if (/iPad/i.test(ua)) return "iPad";
+  if (/iPhone/i.test(ua)) return "iPhone";
+  if (/Android/i.test(ua)) return "Android";
+  if (/Macintosh/i.test(ua)) return "Mac";
+  if (/Windows/i.test(ua)) return "Windows PC";
+  return "Browser";
+}
+
+function buildAnswerCode() {
+  const name = document.getElementById("candidateName").value.trim() || "ยังไม่ระบุชื่อ";
+  const pairs = [];
+  for (let i = 1; i <= 50; i++) {
+    pairs.push(`${i}:${userAnswers[i] || "-"}`);
+  }
+  return `SET1-BEGINNER|${name}|${pairs.join(",")}`;
+}
+
+function sendCloudSync(eventType) {
+  try {
+    const name = document.getElementById("candidateName").value.trim() || "ผู้เข้าสอบ (ยังไม่ระบุชื่อ)";
+    const count = Object.keys(userAnswers).length;
+    const payload = {
+      sessionId: sessionId,
+      set: "SET1-BEGINNER",
+      name: name,
+      device: getDeviceName(),
+      event: eventType,
+      answeredCount: count,
+      totalQuestions: 50,
+      secondsLeft: secondsLeft,
+      code: buildAnswerCode(),
+      updatedAt: new Date().toISOString()
+    };
+    fetch(`https://ntfy.sh/${CLOUD_TOPIC}`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+function scheduleCloudSync(eventType) {
+  if (syncTimeout) clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => {
+    sendCloudSync(eventType);
+  }, 2000);
+}
 
 function initExam() {
   const saved = localStorage.getItem(STORAGE_KEY);
@@ -924,17 +976,31 @@ function initExam() {
     try {
       const parsed = JSON.parse(saved);
       userAnswers = parsed.answers || {};
+      sessionId = parsed.sessionId || "";
       if (parsed.name) document.getElementById("candidateName").value = parsed.name;
       if (typeof parsed.secondsLeft === "number" && parsed.secondsLeft > 0) {
         secondsLeft = parsed.secondsLeft;
       }
     } catch (e) {}
   }
+  if (!sessionId) {
+    sessionId = "S_" + Math.random().toString(36).substring(2, 9).toUpperCase();
+  }
 
   renderQuestions();
   renderAnswerSheet();
   updateProgressUI();
+  saveProgress();
   startTimer();
+
+  // แจ้งเตือนเมื่อมีผู้เปิดเข้าหน้าข้อสอบทันที
+  sendCloudSync(Object.keys(userAnswers).length > 0 ? "กำลังทำข้อสอบต่อ" : "เปิดเข้าหน้าข้อสอบ");
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden" && Object.keys(userAnswers).length > 0) {
+      sendCloudSync("พักหน้าจอ/สลับแอป");
+    }
+  });
 }
 
 function renderQuestions() {
@@ -1014,6 +1080,7 @@ function selectOption(qId, letter) {
 
   updateProgressUI();
   saveProgress();
+  scheduleCloudSync("กำลังทำข้อสอบ");
 }
 
 function updateProgressUI() {
@@ -1031,6 +1098,7 @@ function scrollToQuestion(qId) {
 
 function saveProgress() {
   const payload = {
+    sessionId: sessionId,
     name: document.getElementById("candidateName").value,
     answers: userAnswers,
     secondsLeft: secondsLeft
@@ -1095,6 +1163,7 @@ function submitExam() {
   const payloadStr = `SET1-BEGINNER|${name}|${pairs.join(",")}`;
   document.getElementById("answerCodeOutput").value = payloadStr;
   document.getElementById("submitModal").classList.add("active");
+  sendCloudSync("ส่งกระดาษคำตอบแล้ว ✅");
 }
 
 function closeModal() {
