@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อสอบครูผู้ช่วย วิชาเอกภาษาอังกฤษ (ชุดที่ 1: ระดับเริ่มต้น 50 ข้อ)</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #dbeafe;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      accent-color: var(--primary);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      color: white;
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .title-group h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .title-group p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(255,255,255,0.18);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .timer-box {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+    .btn-white { background: white; color: var(--primary); }
+    .btn-white:hover { background: #eff6ff; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .container { grid-template-columns: 1fr; }
+      .sidebar { position: static !important; }
+    }
+
+    .candidate-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .candidate-card input {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      min-width: 260px;
+    }
+
+    .section-banner {
+      background: #eff6ff;
+      border-left: 5px solid var(--primary);
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 24px 0 16px;
+    }
+    .section-banner h2 {
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    .section-banner p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .passage-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      padding: 18px 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 0.96rem;
+      line-height: 1.75;
+    }
+    .passage-box h4 {
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: border-color 0.2s;
+    }
+    .question-card.answered {
+      border-left: 4px solid var(--primary);
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .q-num {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      height: fit-content;
+      white-space: nowrap;
+    }
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      flex: 1;
+      white-space: pre-line;
+    }
+
+    .options-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.95rem;
+    }
+    .option-label:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .option-label:has(input:checked) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+    .option-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-sheet {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .sheet-cell {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.15s;
+    }
+    .sheet-cell:hover {
+      border-color: var(--primary);
+    }
+    .sheet-cell.done {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal-box {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+    }
+    .modal-box h3 {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .code-area {
+      width: 100%;
+      height: 110px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 12px 0;
+      resize: none;
+    }
+
+    @media print {
+      header, .sidebar, .btn, .modal-backdrop { display: none !important; }
+      .container { display: block; max-width: 100%; margin: 0; }
+      .question-card { break-inside: avoid; border: 1px solid #ccc; margin-bottom: 12px; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-group">
+      <h1>📝 แบบทดสอบวิชาเอกภาษาอังกฤษ (การสอบแข่งขันเพื่อบรรจุและแต่งตั้งบุคคลเข้ารับราชการเป็นข้าราชการครูและบุคลากรทางการศึกษา ตำแหน่งครูผู้ช่วย)</h1>
+      <p>ชุดที่ 1 : ระดับเริ่มต้น (Foundation & Core Basics) • จำนวน 50 ข้อ (4 ตัวเลือก A, B, C, D) • เวลาแนะนำ 60 นาที</p>
+    </div>
+    <div class="status-bar">
+      <div class="badge-pill" id="progressText">ทำแล้ว 0 / 50 ข้อ</div>
+      <div class="timer-box">⏱️ <span id="timerDisplay">60:00</span></div>
+      <button class="btn btn-white" onclick="toggleTimer()" id="timerBtn">หยุดเวลาชั่วคราว</button>
+      <button class="btn btn-white" onclick="window.print()">🖨️ พิมพ์เป็นกระดาษ</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <main>
+    <div class="candidate-card">
+      <div>
+        <label style="font-weight:700; display:block; margin-bottom:4px;">👤 ชื่อ-นามสกุล ผู้เข้าสอบ (Candidate Name):</label>
+        <input type="text" id="candidateName" placeholder="กรอกชื่อของคุณก่อนเริ่มทำข้อสอบ..." oninput="saveProgress()">
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="clearAllAnswers()">🔄 ล้างคำตอบทั้งหมด</button>
+        <button class="btn btn-success" onclick="submitExam()">✅ ส่งกระดาษคำตอบ (สร้างรหัสส่งตรวจ)</button>
+      </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+  </main>
+
+  <aside class="sidebar">
+    <h3>
+      <span>📋 กระดาษคำตอบ (Answer Sheet)</span>
+      <span id="sideCount" style="font-size:0.85rem; color:var(--muted);">0/50</span>
+    </h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:12px;">คลิกที่หมายเลขข้อเพื่อข้ามไปยังข้อนั้นได้ทันที ระบบบันทึกคำตอบอัตโนมัติ</p>
+    <div class="grid-sheet" id="answerSheetGrid"></div>
+    <button class="btn btn-success" style="width:100%; padding:12px; font-size:1rem;" onclick="submitExam()">
+      📩 ส่งกระดาษคำตอบ
+    </button>
+  </aside>
+</div>
+
+<!-- Modal สำหรับส่งรหัสคำตอบให้ผู้ตรวจ -->
+<div class="modal-backdrop" id="submitModal">
+  <div class="modal-box">
+    <h3>🎉 สรุปกระดาษคำตอบของคุณ</h3>
+    <p id="modalSummaryText" style="font-size:0.92rem; color:var(--muted);"></p>
+    <p style="font-size:0.88rem; margin-top:8px; font-weight:600;">คัดลอกรหัสคำตอบด้านล่างนี้ส่งให้ผู้คุมสอบเพื่อตรวจคะแนนและรับเฉลยละเอียด:</p>
+    <textarea class="code-area" id="answerCodeOutput" readonly></textarea>
+    <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="closeModal()">กลับไปทบทวน</button>
+      <button class="btn btn-success" onclick="copyAnswerCode()">📋 คัดลอกรหัสคำตอบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EXAM_DATA = [
+  // PART 1: Conversation & Situational Dialogues (1-10)
+  {
+    id: 1,
+    part: "Part 1: Conversation & Situational Dialogues (ข้อ 1–10)",
+    partDesc: "Choose the most appropriate expression to complete each dialogue.",
+    q: "Situation: In the school staff room\nMalee: Hi, Somsak. You look exhausted today. _______________?\nSomsak: I stayed up late grading my students' essays last night.",
+    options: [
+      "A. What do you do for a living",
+      "B. What seems to be the matter",
+      "C. How do you like your new class",
+      "D. Where were you going last night"
+    ]
+  },
+  {
+    id: 2,
+    q: "Situation: A student is knocking on the classroom door 15 minutes after the class started.\nStudent: Excuse me, Ms. Jane. _______________?\nTeacher: Yes, please come in, but try to be on time tomorrow.",
+    options: [
+      "A. May I come in, please",
+      "B. Shall we leave now",
+      "C. Could you repeat that",
+      "D. Would you mind opening the window"
+    ]
+  },
+  {
+    id: 3,
+    q: "Situation: At the library desk\nStudent: I'd like to return these two English grammar books.\nLibrarian: They were due last Friday. _______________.\nStudent: Oh, I'm sorry. How much do I owe?",
+    options: [
+      "A. You can borrow them for free",
+      "B. I'm afraid you'll have to pay a small fine",
+      "C. You should buy a new library card",
+      "D. Please keep them as long as you want"
+    ]
+  },
+  {
+    id: 4,
+    q: "Situation: Two teachers are talking about a new teaching app.\nDavid: Have you tried using the new vocabulary quiz app with your Grade 7 students?\nNicha: Yes, I tried it yesterday, and _______________. The students loved it!",
+    options: [
+      "A. it was a total waste of time",
+      "B. it worked like a charm",
+      "C. it got out of hand",
+      "D. it cost an arm and a leg"
+    ]
+  },
+  {
+    id: 5,
+    q: "Situation: On the telephone\nReceptionist: Good morning, Bright Star School. How may I help you?\nCaller: Good morning. _______________, please?\nReceptionist: Hold the line, please. I'll put you through.",
+    options: [
+      "A. Could I speak to the head of the English department",
+      "B. Who are you talking to right now",
+      "C. Did you call me five minutes ago",
+      "D. Would you like to leave a message"
+    ]
+  },
+  {
+    id: 6,
+    q: "Situation: In an English speaking class\nTeacher: Could anyone tell me the main idea of this paragraph?\nStudent: I'm not completely sure, but _______________. Is it about global warming?\nTeacher: Spot on! Well done.",
+    options: [
+      "A. I have no idea at all",
+      "B. I'd rather not say anything",
+      "C. I'll give it a shot",
+      "D. I couldn't care less"
+    ]
+  },
+  {
+    id: 7,
+    q: "Situation: Pim is nervous before her teaching demonstration.\nPim: My teaching demo starts in ten minutes. My hands are shaking!\nKwan: Take a deep breath. You've prepared so well. _______________!",
+    options: [
+      "A. Break a leg",
+      "B. Spill the beans",
+      "C. Hit the sack",
+      "D. Bite the bullet"
+    ]
+  },
+  {
+    id: 8,
+    q: "Situation: Asking for directions at school\nVisitor: Excuse me, could you tell me how to get to the auditorium?\nTeacher: Sure. Walk straight down this hall and turn left. _______________.",
+    options: [
+      "A. You can't miss it",
+      "B. Don't mention it",
+      "C. It's out of the question",
+      "D. You're welcome"
+    ]
+  },
+  {
+    id: 9,
+    q: "Situation: Inviting a colleague to lunch\nMark: We're ordering Thai food for lunch today. Would you like to join us?\nPloy: _______________, but I brought my own lunch box from home today.",
+    options: [
+      "A. I'd love to",
+      "B. Never mind",
+      "C. Yes, definitely",
+      "D. That's a terrible idea"
+    ]
+  },
+  {
+    id: 10,
+    q: "Situation: A student didn't hear the teacher's instruction clearly.\nTeacher: For homework, complete exercises 3 and 4 on page 42.\nStudent: I beg your pardon? _______________?\nTeacher: Exercises 3 and 4 on page 42.",
+    options: [
+      "A. Why do we have so much homework",
+      "B. Could you say that again, please",
+      "C. When will the exam take place",
+      "D. What does this word mean"
+    ]
+  },
+
+  // PART 2: Vocabulary & Word Usage (11-20)
+  {
+    id: 11,
+    part: "Part 2: Vocabulary & Word Usage (ข้อ 11–20)",
+    partDesc: "Choose the best word or phrase to complete each sentence or match the meaning of the underlined word.",
+    q: "Good teachers always _______________ their students to ask questions and express their ideas freely in the classroom.",
+    options: [
+      "A. discourage",
+      "B. encourage",
+      "C. prevent",
+      "D. interrupt"
+    ]
+  },
+  {
+    id: 12,
+    q: "Attendance at the orientation workshop is _______________ for all newly appointed teachers; everyone must be present.",
+    options: [
+      "A. optional",
+      "B. temporary",
+      "C. compulsory",
+      "D. voluntary"
+    ]
+  },
+  {
+    id: 13,
+    q: "Because the instructions on the worksheet were **ambiguous**, many students did not know what to do.\nWhich word is closest in meaning to **ambiguous**?",
+    options: [
+      "A. unclear",
+      "B. simple",
+      "C. accurate",
+      "D. polite"
+    ]
+  },
+  {
+    id: 14,
+    q: "Reading English storybooks regularly helps learners _______________ their vocabulary naturally over time.",
+    options: [
+      "A. shrink",
+      "B. expand",
+      "C. reduce",
+      "D. ignore"
+    ]
+  },
+  {
+    id: 15,
+    q: "The school principal decided to **postpone** the sports day until next month due to heavy rain.\nThe word **postpone** means to _______________.",
+    options: [
+      "A. call off",
+      "B. put off",
+      "C. look after",
+      "D. bring up"
+    ]
+  },
+  {
+    id: 16,
+    q: "Children usually _______________ a second language faster when they have plenty of opportunities to use it in daily life.",
+    options: [
+      "A. acquire",
+      "B. inquire",
+      "C. require",
+      "D. admire"
+    ]
+  },
+  {
+    id: 17,
+    q: "Ms. Suda is a very _______________ teacher; she always checks every detail of the lesson plan carefully before class.",
+    options: [
+      "A. careless",
+      "B. thorough",
+      "C. reluctant",
+      "D. clumsy"
+    ]
+  },
+  {
+    id: 18,
+    q: "Please _______________ your mobile phones during the examination to avoid disturbing other candidates.",
+    options: [
+      "A. turn on",
+      "B. switch off",
+      "C. look for",
+      "D. take after"
+    ]
+  },
+  {
+    id: 19,
+    q: "Regular physical exercise is **beneficial** to both mental and physical health.\nWhich word is the OPPOSITE of **beneficial**?",
+    options: [
+      "A. helpful",
+      "B. harmful",
+      "C. useful",
+      "D. valuable"
+    ]
+  },
+  {
+    id: 20,
+    q: "The students worked together in small groups to _______________ a solution to the environmental problem in their community.",
+    options: [
+      "A. come up with",
+      "B. run out of",
+      "C. look down on",
+      "D. keep away from"
+    ]
+  },
+
+  // PART 3: Grammar & Structure (21-35)
+  {
+    id: 21,
+    part: "Part 3: Grammar & Sentence Structure (ข้อ 21–35)",
+    partDesc: "Choose the grammatically correct answer to complete each sentence.",
+    q: "Neither the teacher nor the students _______________ aware of the schedule change yesterday.",
+    options: [
+      "A. is",
+      "B. are",
+      "C. was",
+      "D. were"
+    ]
+  },
+  {
+    id: 22,
+    q: "While the students _______________ in groups, the principal walked into the classroom to observe the lesson.",
+    options: [
+      "A. work",
+      "B. were working",
+      "C. have worked",
+      "D. will work"
+    ]
+  },
+  {
+    id: 23,
+    q: "Mr. Wichai _______________ English at this secondary school since he graduated from university in 2018.",
+    options: [
+      "A. teaches",
+      "B. taught",
+      "C. has been teaching",
+      "D. is teaching"
+    ]
+  },
+  {
+    id: 24,
+    q: "If I _______________ enough time this weekend, I will prepare some extra flashcards for my primary students.",
+    options: [
+      "A. have",
+      "B. had",
+      "C. would have",
+      "D. had had"
+    ]
+  },
+  {
+    id: 25,
+    q: "If she had studied harder for the proficiency test, she _______________ it on her first attempt.",
+    options: [
+      "A. will pass",
+      "B. would pass",
+      "C. would have passed",
+      "D. passed"
+    ]
+  },
+  {
+    id: 26,
+    q: "All examination papers must _______________ to the academic office before 4:00 p.m. on Friday.",
+    options: [
+      "A. submit",
+      "B. be submitted",
+      "C. submitting",
+      "D. have submitted"
+    ]
+  },
+  {
+    id: 27,
+    q: "The young boy _______________ mother is our school nurse won first prize in the English storytelling competition.",
+    options: [
+      "A. who",
+      "B. whom",
+      "C. whose",
+      "D. which"
+    ]
+  },
+  {
+    id: 28,
+    q: "Many students enjoy _______________ English songs because it helps them improve their pronunciation.",
+    options: [
+      "A. listen to",
+      "B. to listen to",
+      "C. listening to",
+      "D. listened to"
+    ]
+  },
+  {
+    id: 29,
+    q: "Each of the participants in the English camp _______________ given a certificate of completion at the end of the program.",
+    options: [
+      "A. was",
+      "B. were",
+      "C. have",
+      "D. are"
+    ]
+  },
+  {
+    id: 30,
+    q: "You rarely forget to bring your teaching materials to class, _______________?",
+    options: [
+      "A. don't you",
+      "B. do you",
+      "C. didn't you",
+      "D. aren't you"
+    ]
+  },
+  {
+    id: 31,
+    q: "The new language laboratory is equipped _______________ thirty computers and high-speed internet.",
+    options: [
+      "A. by",
+      "B. in",
+      "C. with",
+      "D. for"
+    ]
+  },
+  {
+    id: 32,
+    q: "The teacher made the students _______________ their essays again because there were too many spelling mistakes.",
+    options: [
+      "A. check",
+      "B. to check",
+      "C. checking",
+      "D. checked"
+    ]
+  },
+  {
+    id: 33,
+    q: "_______________ heavy traffic in the morning, Ms. Naree arrived at school twenty minutes before the bell rang.",
+    options: [
+      "A. Because of",
+      "B. Although",
+      "C. Despite",
+      "D. However"
+    ]
+  },
+  {
+    id: 34,
+    q: "This grammar exercise is much _______________ than the one we did last week.",
+    options: [
+      "A. easy",
+      "B. easier",
+      "C. easiest",
+      "D. more easier"
+    ]
+  },
+  {
+    id: 35,
+    q: "By the time the school bus arrived at the museum, the rain _______________ completely.",
+    options: [
+      "A. stops",
+      "B. has stopped",
+      "C. had stopped",
+      "D. was stopping"
+    ]
+  },
+
+  // PART 4: Reading Comprehension (36-43)
+  {
+    id: 36,
+    part: "Part 4: Reading Comprehension (ข้อ 36–43)",
+    partDesc: "Read the passages carefully and choose the best answer for each question.",
+    passageTitle: "Passage 1 (Questions 36–39)",
+    passageText: "Reading aloud to young children is one of the most effective ways to build early literacy skills. When teachers or parents read stories with expressive voices, children learn how words sound and how sentences flow. Moreover, storybooks introduce children to new vocabulary that they might not hear in everyday conversation. Even after children learn to read on their own, continuing to read aloud to them helps strengthen their listening comprehension and sparks their imagination. Instead of treating reading solely as a test of decoding words, educators should make story time an enjoyable shared experience.",
+    q: "What is the main idea of Passage 1?",
+    options: [
+      "A. Children should stop listening to stories once they can read by themselves.",
+      "B. Reading aloud to children plays a vital role in developing their language and literacy skills.",
+      "C. Everyday conversation contains more difficult vocabulary than storybooks.",
+      "D. Teachers should test students' spelling after every storybook session."
+    ]
+  },
+  {
+    id: 37,
+    q: "According to the passage, how do children benefit from storybooks?",
+    options: [
+      "A. They memorize grammar rules without needing a teacher.",
+      "B. They are exposed to vocabulary beyond daily conversation.",
+      "C. They no longer need to practice listening skills in class.",
+      "D. They learn how to write long academic essays immediately."
+    ]
+  },
+  {
+    id: 38,
+    q: "What does the word \"them\" in the sentence \"...continuing to read aloud to them helps strengthen...\" refer to?",
+    options: [
+      "A. teachers",
+      "B. parents",
+      "C. storybooks",
+      "D. children"
+    ]
+  },
+  {
+    id: 39,
+    q: "What does the author suggest educators should do?",
+    options: [
+      "A. Focus only on testing how fast students decode words.",
+      "B. Make reading stories together a pleasant and engaging activity.",
+      "C. Avoid using expressive voices when reading in class.",
+      "D. Assign students to read silently at all times."
+    ]
+  },
+  {
+    id: 40,
+    passageTitle: "Passage 2 (Questions 40–43)",
+    passageText: "Sunlight Elementary School recently launched a \"Zero-Waste Lunch\" campaign to teach students about environmental responsibility. Prior to the campaign, the school cafeteria generated over forty large bags of plastic waste every week, mostly from single-use water bottles and plastic food wrappers. Under the new initiative, students are encouraged to bring reusable water bottles and cloth lunch bags. In addition, leftover food is collected in special green bins to be turned into compost for the school vegetable garden. Within just two months, the school reduced its plastic trash by more than seventy percent.",
+    q: "Why did Sunlight Elementary School start the \"Zero-Waste Lunch\" campaign?",
+    options: [
+      "A. To raise money for building a new school cafeteria",
+      "B. To reduce plastic waste and promote environmental awareness among students",
+      "C. To replace all hot lunches with cold sandwiches",
+      "D. To close down the school vegetable garden"
+    ]
+  },
+  {
+    id: 41,
+    q: "What was the main source of waste in the cafeteria before the campaign?",
+    options: [
+      "A. Old textbooks and notebook paper",
+      "B. Glass bottles and metal cans",
+      "C. Single-use water bottles and plastic wrappers",
+      "D. Cloth bags and reusable containers"
+    ]
+  },
+  {
+    id: 42,
+    q: "What happens to the leftover food under the new campaign?",
+    options: [
+      "A. It is thrown into plastic bags with other trash.",
+      "B. It is used to make compost for the school garden.",
+      "C. It is sold to local supermarkets.",
+      "D. It is burned behind the cafeteria every Friday."
+    ]
+  },
+  {
+    id: 43,
+    q: "How successful was the campaign after two months?",
+    options: [
+      "A. Plastic waste decreased by over 70 percent.",
+      "B. Cafeteria waste increased to forty bags a day.",
+      "C. Students stopped bringing water to school.",
+      "D. Only ten percent of students joined the program."
+    ]
+  },
+
+  // PART 5: English Language Teaching Methodology (ELT & Pedagogy) (44-50)
+  {
+    id: 44,
+    part: "Part 5: English Language Teaching Methodology (ELT & Pedagogy) (ข้อ 44–50)",
+    partDesc: "Choose the most appropriate principle or practice in English Language Teaching (ELT).",
+    q: "When a teacher asks students to read a short article quickly just to find the general idea or gist without worrying about every unknown word, which reading skill is being practiced?",
+    options: [
+      "A. Scanning",
+      "B. Skimming",
+      "C. Proofreading",
+      "D. Intensive reading"
+    ]
+  },
+  {
+    id: 45,
+    q: "In the classic **PPP (Presentation – Practice – Production)** lesson framework, in which stage do students use the target language freely and creatively in role-plays or real-life tasks with minimal teacher control?",
+    options: [
+      "A. Warm-up stage",
+      "B. Presentation stage",
+      "C. Practice stage",
+      "D. Production stage"
+    ]
+  },
+  {
+    id: 46,
+    q: "Which of the following is a key characteristic of **Communicative Language Teaching (CLT)**?",
+    options: [
+      "A. Memorizing long lists of vocabulary and translating texts word for word",
+      "B. Emphasizing meaningful interaction and using authentic language in real-life contexts",
+      "C. Prohibiting students from speaking until their grammar is 100% error-free",
+      "D. Explaining all grammar rules exclusively in the students' native language"
+    ]
+  },
+  {
+    id: 47,
+    q: "Which pair of language skills is categorized as **Receptive Skills**?",
+    options: [
+      "A. Speaking and Writing",
+      "B. Listening and Speaking",
+      "C. Listening and Reading",
+      "D. Reading and Writing"
+    ]
+  },
+  {
+    id: 48,
+    q: "A primary school English teacher says, \"Stand up, touch your nose, and jump three times!\" and the students physically perform the actions. Which teaching method is the teacher using?",
+    options: [
+      "A. Grammar-Translation Method (GTM)",
+      "B. Total Physical Response (TPR)",
+      "C. Audio-Lingual Method (ALM)",
+      "D. Silent Way"
+    ]
+  },
+  {
+    id: 49,
+    q: "During a semester, a teacher uses exit tickets, classroom observations, and short quizzes to check students' understanding and adjust future lessons. What type of assessment is this?",
+    options: [
+      "A. Formative assessment",
+      "B. Summative assessment",
+      "C. Standardized national testing",
+      "D. Placement testing"
+    ]
+  },
+  {
+    id: 50,
+    q: "According to the **CEFR (Common European Framework of Reference for Languages)**, which level represents a **Proficient User** of English?",
+    options: [
+      "A. A1 – A2",
+      "B. B1 – B2",
+      "C. C1 – C2",
+      "D. D1 – D2"
+    ]
+  }
+];
+
+const STORAGE_KEY = "kru_eng_exam_set1_beginner_v1";
+let userAnswers = {};
+let secondsLeft = 60 * 60;
+let timerRunning = true;
+let timerInterval = null;
+
+function initExam() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      userAnswers = parsed.answers || {};
+      if (parsed.name) document.getElementById("candidateName").value = parsed.name;
+      if (typeof parsed.secondsLeft === "number" && parsed.secondsLeft > 0) {
+        secondsLeft = parsed.secondsLeft;
+      }
+    } catch (e) {}
+  }
+
+  renderQuestions();
+  renderAnswerSheet();
+  updateProgressUI();
+  startTimer();
+}
+
+function renderQuestions() {
+  const container = document.getElementById("questionsContainer");
+  let html = "";
+
+  EXAM_DATA.forEach((item) => {
+    if (item.part) {
+      html += `
+        <div class="section-banner">
+          <h2>${item.part}</h2>
+          <p>${item.partDesc || ""}</p>
+        </div>
+      `;
+    }
+    if (item.passageTitle) {
+      html += `
+        <div class="passage-box">
+          <h4>📖 ${item.passageTitle}</h4>
+          <div>${item.passageText}</div>
+        </div>
+      `;
+    }
+
+    const selected = userAnswers[item.id] || "";
+    html += `
+      <div class="question-card ${selected ? "answered" : ""}" id="q-card-${item.id}">
+        <div class="q-header">
+          <span class="q-num">ข้อที่ ${item.id}</span>
+          <div class="q-text">${item.q}</div>
+        </div>
+        <div class="options-list">
+          ${item.options.map((opt) => {
+            const letter = opt.charAt(0);
+            const isChecked = selected === letter ? "checked" : "";
+            return `
+              <label class="option-label">
+                <input type="radio" name="q_${item.id}" value="${letter}" ${isChecked}
+                  onchange="selectOption(${item.id}, '${letter}')">
+                <span>${opt}</span>
+              </label>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderAnswerSheet() {
+  const grid = document.getElementById("answerSheetGrid");
+  let html = "";
+  for (let i = 1; i <= 50; i++) {
+    const ans = userAnswers[i] || "-";
+    const doneClass = userAnswers[i] ? "done" : "";
+    html += `
+      <div class="sheet-cell ${doneClass}" id="sheet-cell-${i}" onclick="scrollToQuestion(${i})">
+        <div>${i}</div>
+        <div id="sheet-val-${i}">${ans}</div>
+      </div>
+    `;
+  }
+  grid.innerHTML = html;
+}
+
+function selectOption(qId, letter) {
+  userAnswers[qId] = letter;
+  const card = document.getElementById(`q-card-${qId}`);
+  if (card) card.classList.add("answered");
+
+  const cell = document.getElementById(`sheet-cell-${qId}`);
+  const val = document.getElementById(`sheet-val-${qId}`);
+  if (cell) cell.classList.add("done");
+  if (val) val.textContent = letter;
+
+  updateProgressUI();
+  saveProgress();
+}
+
+function updateProgressUI() {
+  const count = Object.keys(userAnswers).length;
+  document.getElementById("progressText").textContent = `ทำแล้ว ${count} / 50 ข้อ`;
+  document.getElementById("sideCount").textContent = `${count}/50`;
+}
+
+function scrollToQuestion(qId) {
+  const el = document.getElementById(`q-card-${qId}`);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function saveProgress() {
+  const payload = {
+    name: document.getElementById("candidateName").value,
+    answers: userAnswers,
+    secondsLeft: secondsLeft
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function clearAllAnswers() {
+  if (!confirm("คุณต้องการล้างคำตอบทั้งหมดเพื่อเริ่มทำใหม่ใช่หรือไม่?")) return;
+  userAnswers = {};
+  secondsLeft = 60 * 60;
+  localStorage.removeItem(STORAGE_KEY);
+  renderQuestions();
+  renderAnswerSheet();
+  updateProgressUI();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    if (!timerRunning) return;
+    if (secondsLeft > 0) {
+      secondsLeft--;
+      updateTimerDisplay();
+      if (secondsLeft % 10 === 0) saveProgress();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(secondsLeft / 60).toString().padStart(2, "0");
+  const s = (secondsLeft % 60).toString().padStart(2, "0");
+  document.getElementById("timerDisplay").textContent = `${m}:${s}`;
+}
+
+function toggleTimer() {
+  timerRunning = !timerRunning;
+  document.getElementById("timerBtn").textContent = timerRunning ? "หยุดเวลาชั่วคราว" : "▶️ เดินเวลาต่อ";
+}
+
+function submitExam() {
+  const count = Object.keys(userAnswers).length;
+  const name = document.getElementById("candidateName").value.trim() || "ไม่ระบุชื่อ";
+  const unanswered = [];
+  for (let i = 1; i <= 50; i++) {
+    if (!userAnswers[i]) unanswered.push(i);
+  }
+
+  let summary = `ผู้เข้าสอบ: ${name} | ตอบแล้ว ${count} จาก 50 ข้อ`;
+  if (unanswered.length > 0) {
+    summary += ` (ยังไม่ได้ตอบข้อที่: ${unanswered.join(", ")})`;
+  } else {
+    summary += ` (ตอบครบทุกข้อแล้ว!)`;
+  }
+  document.getElementById("modalSummaryText").textContent = summary;
+
+  // สร้างรหัสคำตอบสำหรับส่งตรวจ
+  const pairs = [];
+  for (let i = 1; i <= 50; i++) {
+    pairs.push(`${i}:${userAnswers[i] || "-"}`);
+  }
+  const payloadStr = `SET1-BEGINNER|${name}|${pairs.join(",")}`;
+  document.getElementById("answerCodeOutput").value = payloadStr;
+  document.getElementById("submitModal").classList.add("active");
+}
+
+function closeModal() {
+  document.getElementById("submitModal").classList.remove("active");
+}
+
+function copyAnswerCode() {
+  const box = document.getElementById("answerCodeOutput");
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    alert("คัดลอกรหัสคำตอบเรียบร้อยแล้ว! ส่งรหัสนี้ให้ผู้ตรวจเพื่อรับผลคะแนนและเฉลยได้เลยครับ");
+  });
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initExam);
+} else {
+  initExam();
+}
+</script>
+</body>
+</html>

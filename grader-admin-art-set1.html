@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[สำหรับผู้คุมสอบ] เฉลยละเอียดและระบบตรวจคะแนน - ชุดที่ 1 (ระดับเริ่มต้น 50 ข้อ)</title>
+  <style>
+    :root {
+      --primary: #0f766e;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --correct: #16a34a;
+      --wrong: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+    header {
+      background: linear-gradient(135deg, #115e59, #0d9488);
+      color: white;
+      padding: 24px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 1050px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .grader-box {
+      background: white;
+      border: 2px solid #0d9488;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+    .grader-box h2 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .grader-box textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { opacity: 0.92; }
+    .score-banner {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+    }
+    .quick-key-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    @media (max-width: 700px) {
+      .quick-key-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .key-cell {
+      text-align: center;
+      padding: 8px 4px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .key-cell strong {
+      color: var(--primary);
+      display: block;
+      font-size: 1.05rem;
+    }
+    .ans-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .ans-card.user-correct { border-left: 5px solid var(--correct); background: #f0fdf4; }
+    .ans-card.user-wrong { border-left: 5px solid var(--wrong); background: #fef2f2; }
+    .ans-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .correct-badge {
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+    .exp-text {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container" style="margin:0 auto;">
+    <h1>🔑 เฉลยละเอียดและระบบตรวจกระดาษคำตอบ (เก็บไว้สำหรับผู้คุมสอบ)</h1>
+    <p>ข้อสอบครูผู้ช่วย วิชาเอกภาษาอังกฤษ • ชุดที่ 1 : ระดับเริ่มต้น (Foundation & Core Basics) จำนวน 50 ข้อ</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="grader-box">
+    <h2>⚡ ระบบตรวจรหัสคำตอบอัตโนมัติ (Auto-Grader)</h2>
+    <p style="font-size:0.9rem; color:var(--muted);">นำรหัสคำตอบที่ผู้เข้าสอบกดคัดลอกจากหน้าข้อสอบ (เช่น <code>SET1-BEGINNER|ชื่อ|1:B,2:A,...</code>) มาวางที่นี่เพื่อตรวจคะแนนทันที:</p>
+    <textarea id="codeInput" placeholder="วางรหัสคำตอบของผู้เข้าสอบที่นี่..."></textarea>
+    <button class="btn" onclick="gradeSubmission()">🔍 ตรวจคำตอบและคำนวณคะแนน</button>
+    <div class="score-banner" id="scoreResultBox"></div>
+  </div>
+
+  <h2 style="margin-bottom:12px; font-size:1.15rem;">📌 ตารางเฉลยด่วน 50 ข้อ (Quick Answer Key)</h2>
+  <div class="quick-key-grid" id="quickKeyGrid"></div>
+
+  <h2 style="margin-bottom:12px; font-size:1.15rem;">📚 เฉลยพร้อมคำอธิบายละเอียดรายข้อ (Detailed Explanations)</h2>
+  <div id="detailedList"></div>
+</div>
+
+<script>
+const ANSWER_KEYS = [
+  // Part 1: 1-10
+  { id: 1, ans: "B", cat: "Conversation", exp: "<strong>B. What seems to be the matter</strong> (เกิดอะไรขึ้น / เป็นอะไรหรือเปล่า) เพราะมาลีเห็นสมศักดิ์ดูเหนื่อยล้า (exhausted) จึงถามไถ่อาการ ส่วน A ถามอาชีพ, C ถามความชอบชั้นเรียนใหม่, D ถามว่าเมื่อคืนจะไปไหน" },
+  { id: 2, ans: "A", cat: "Conversation", exp: "<strong>A. May I come in, please</strong> (ขออนุญาตเข้าห้องครับ/ค่ะ) เป็นสำนวนสุภาพมาตรฐานเมื่อนักเรียนมาสายและเคาะประตูขอเข้าห้องเรียน" },
+  { id: 3, ans: "B", cat: "Conversation", exp: "<strong>B. I'm afraid you'll have to pay a small fine</strong> (เกรงว่าคุณจะต้องจ่ายค่าปรับเล็กน้อย) เพราะหนังสือครบกำหนดส่ง (due) ตั้งแต่วันศุกร์ที่แล้ว และผู้เรียนถามต่อว่า <em>How much do I owe?</em> (ต้องจ่ายเท่าไหร่)" },
+  { id: 4, ans: "B", cat: "Conversation", exp: "<strong>B. it worked like a charm</strong> เป็นสำนวนแปลว่า 'มันได้ผลดีเยี่ยมมาก' สอดคล้องกับประโยคท้ายที่บอกว่านักเรียนชอบมาก (<em>The students loved it!</em>) ส่วน A=เสียเวลาเปล่า, C=ควบคุมไม่อยู่, D=แพงมาก" },
+  { id: 5, ans: "A", cat: "Conversation", exp: "<strong>A. Could I speak to the head of the English department</strong> (ขอสายหัวหน้ากลุ่มสาระภาษาอังกฤษหน่อยครับ/ค่ะ) สอดคล้องกับที่พนักงานต้อนรับตอบว่า <em>Hold the line, please. I'll put you through.</em> (ถือสายรอสักครู่ เดี๋ยวโอนสายให้)" },
+  { id: 6, ans: "C", cat: "Conversation", exp: "<strong>C. I'll give it a shot</strong> แปลว่า 'หนูจะลองตอบดูค่ะ/ครับ' (Give it a shot / Give it a try = ลองดู) สอดคล้องกับที่นักเรียนไม่แน่ใจแต่ลองตอบว่าเป็นเรื่องภาวะโลกร้อน" },
+  { id: 7, ans: "A", cat: "Conversation", exp: "<strong>A. Break a leg!</strong> เป็นสำนวนใช้เพื่อให้กำลังใจก่อนขึ้นแสดงหรือสาธิตการสอน แปลว่า 'ขอให้โชคดี!' ส่วน B=เปิดเผยความลับ, C=เข้านอน, D=กัดฟันสู้เรื่องยากลำบาก" },
+  { id: 8, ans: "A", cat: "Conversation", exp: "<strong>A. You can't miss it</strong> ใช้ในการบอกทาง แปลว่า 'หาเจอแน่นอน / ไม่หลงแน่นอน (สังเกตง่ายมาก)'" },
+  { id: 9, ans: "A", cat: "Conversation", exp: "<strong>A. I'd love to</strong> (อยากไปร่วมด้วยมากเลย) ใช้ตอบรับคำชวนอย่างสุภาพก่อนปฏิเสธด้วยเหตุผลว่าห่อข้าวมาจากบ้านแล้ว (<em>..., but I brought my own lunch box</em>)" },
+  { id: 10, ans: "B", cat: "Conversation", exp: "<strong>B. Could you say that again, please</strong> (ช่วยพูดซ้ำอีกครั้งได้ไหมครับ/ค่ะ) ใช้คู่กับ <em>I beg your pardon?</em> เมื่อฟังคำสั่งการบ้านไม่ทัน" },
+
+  // Part 2: 11-20
+  { id: 11, ans: "B", cat: "Vocabulary", exp: "<strong>B. encourage</strong> (ส่งเสริม / ให้กำลังใจ) โครงสร้าง <em>encourage someone to do something</em> สอดคล้องกับบริบทครูที่ดีส่งเสริมให้นักเรียนกล้าถามและแสดงความคิดเห็น (discourage=บั่นทอน, prevent=ป้องกัน, interrupt=ขัดจังหวะ)" },
+  { id: 12, ans: "C", cat: "Vocabulary", exp: "<strong>C. compulsory</strong> (บังคับ / จำเป็นต้องทำ) มีคำบอกใบ้ท้ายประโยคคือ <em>everyone must be present</em> (ทุกคนต้องเข้าร่วม) ส่วน optional และ voluntary แปลว่าตามความสมัครใจ, temporary แปลว่าชั่วคราว" },
+  { id: 13, ans: "A", cat: "Vocabulary", exp: "<strong>A. unclear</strong> (ไม่ชัดเจน / คลุมเครือ) มีความหมายตรงกับ <strong>ambiguous</strong> (กำกวม) ทำให้ผู้เรียนไม่รู้ว่าต้องทำอย่างไร" },
+  { id: 14, ans: "B", cat: "Vocabulary", exp: "<strong>B. expand</strong> (ขยาย / เพิ่มพูน) การอ่านนิทานภาษาอังกฤษสม่ำเสมอช่วยเพิ่มพูนคลังคำศัพท์ (expand vocabulary) ส่วน shrink/reduce แปลว่าลดลง" },
+  { id: 15, ans: "B", cat: "Vocabulary", exp: "<strong>B. put off</strong> เป็น Phrasal Verb ที่แปลว่า 'เลื่อนออกไป' ตรงกับคำว่า <strong>postpone</strong> ส่วน call off = ยกเลิก (cancel), look after = ดูแล, bring up = เลี้ยงดู/หยิบยกประเด็น" },
+  { id: 16, ans: "A", cat: "Vocabulary", exp: "<strong>A. acquire</strong> (ซึมซับ / ได้รับ / เรียนรู้ภาษาธรรมชาติ) คำว่า <em>Language Acquisition</em> เป็นคำศัพท์หลักทางภาษาศาสตร์และการสอนภาษา (inquire=สอบถาม, require=ต้องการ, admire=ชื่นชม)" },
+  { id: 17, ans: "B", cat: "Vocabulary", exp: "<strong>B. thorough</strong> (ละเอียดรอบคอบ / ถี่ถ้วน) สอดคล้องกับบริบทที่ตรวจเช็คทุกรายละเอียดของแผนการสอนอย่างระมัดระวัง (careless=สะเพร่า, reluctant=ลังเลไม่เต็มใจ, clumsy=ซุ่มซ่าม)" },
+  { id: 18, ans: "B", cat: "Vocabulary", exp: "<strong>B. switch off</strong> (ปิดเครื่อง) ปิดโทรศัพท์มือถือระหว่างการสอบเพื่อไม่ให้รบกวนผู้เข้าสอบคนอื่น" },
+  { id: 19, ans: "B", cat: "Vocabulary", exp: "<strong>B. harmful</strong> (เป็นอันตราย / มีผลเสีย) โจทย์ถามคำตรงข้าม (OPPOSITE) ของ <strong>beneficial</strong> (ซึ่งแปลว่า มีประโยชน์)" },
+  { id: 20, ans: "A", cat: "Vocabulary", exp: "<strong>A. come up with</strong> แปลว่า 'คิดหา (คำตอบ/แนวทางแก้ไข/ไอเดีย) ออก' (run out of = หมด, look down on = ดูถูก, keep away from = อยู่ให้ห่าง)" },
+
+  // Part 3: 21-35
+  { id: 21, ans: "D", cat: "Grammar", exp: "<strong>D. were</strong> กฎ Subject-Verb Agreement สำหรับ <em>Neither A nor B</em> กริยาต้องผันตามประธานตัวที่อยู่ใกล้กริยาที่สุด คือ <em>the students</em> (พหูพจน์) และมีคำบอกเวลาอดีต <em>yesterday</em> จึงใช้ <strong>were</strong>" },
+  { id: 22, ans: "B", cat: "Grammar", exp: "<strong>B. were working</strong> โครงสร้าง Past Continuous + Past Simple: เหตุการณ์ที่กำลังดำเนินอยู่ในอดีต (<em>While the students were working...</em>) แล้วมีอีกเหตุการณ์แทรกเข้ามา (<em>the principal walked...</em>)" },
+  { id: 23, ans: "C", cat: "Grammar", exp: "<strong>C. has been teaching</strong> มีคำว่า <em>since + จุดเริ่มต้นของเวลาในอดีต (2018)</em> แสดงถึงการกระทำที่ทำต่อเนื่องมาจนถึงปัจจุบัน ใช้ Present Perfect Continuous" },
+  { id: 24, ans: "A", cat: "Grammar", exp: "<strong>A. have</strong> โครงสร้าง If-Clause Type 1 (เรื่องที่เป็นไปได้ในอนาคต): <em>If + Present Simple (have), Main Clause (will + V.inf)</em>" },
+  { id: 25, ans: "C", cat: "Grammar", exp: "<strong>C. would have passed</strong> โครงสร้าง If-Clause Type 3 (ตรงข้ามกับความจริงในอดีต): <em>If + Past Perfect (had studied), Main Clause (would have + V.3)</em>" },
+  { id: 26, ans: "B", cat: "Grammar", exp: "<strong>B. be submitted</strong> ประธานคือ <em>All examination papers</em> (ข้อสอบถูกส่ง = Passive Voice) หลัง Modal Verb (<em>must</em>) ต้องตามด้วย <em>be + V.3 (be submitted)</em>" },
+  { id: 27, ans: "C", cat: "Grammar", exp: "<strong>C. whose</strong> เป็น Relative Pronoun แสดงความเป็นเจ้าของ วางหน้าคำนาม <em>mother</em> (เด็กชายผู้ซึ่งแม่ของเขาเป็นพยาบาลโรงเรียนของเรา)" },
+  { id: 28, ans: "C", cat: "Grammar", exp: "<strong>C. listening to</strong> คำกริยา <em>enjoy</em> ต้องตามด้วย Gerund (V.ing) เสมอ จึงใช้ <em>enjoy listening to</em>" },
+  { id: 29, ans: "A", cat: "Grammar", exp: "<strong>A. was</strong> คำว่า <em>Each of + คำนามพหูพจน์</em> ถือเป็นประธานเอกพจน์เสมอ จึงต้องใช้กริยาเอกพจน์ในรูป Passive Voice คือ <strong>was</strong> (was given)" },
+  { id: 30, ans: "B", cat: "Grammar", exp: "<strong>B. do you</strong> เรื่อง Question Tag: ในประโยคหลักมีคำว่า <strong>rarely</strong> ซึ่งมีความหมายเชิงปฏิเสธอยู่แล้ว ดังนั้นส่วน Tag ด้านหลังจึงต้องเป็นรูปบอกเล่า (<em>do you?</em>)" },
+  { id: 31, ans: "C", cat: "Grammar", exp: "<strong>C. with</strong> โครงสร้าง Collocation / Preposition ที่ถูกต้องคือ <em>be equipped with</em> (ติดตั้งไปด้วย / เพียบพร้อมไปด้วยอุปกรณ์...)" },
+  { id: 32, ans: "A", cat: "Grammar", exp: "<strong>A. check</strong> โครงสร้าง Causative Verb: <em>make + someone + V.infinitive (ไม่เติม to)</em> ดังน้ันจึงใช้ <em>made the students check</em>" },
+  { id: 33, ans: "C", cat: "Grammar", exp: "<strong>C. Despite</strong> แสดงความขัดแย้ง (ทั้งๆ ที่รถติดหนักแต่มาถึงก่อนเวลา) และตามด้วยคำนาม/วลี (<em>heavy traffic</em>) จึงใช้ <strong>Despite</strong> (หากใช้ Although ต้องตามด้วยประโยค S+V, หากใช้ Because of จะเป็นบอกเหตุผลซึ่งความหมายขัดกัน)" },
+  { id: 34, ans: "B", cat: "Grammar", exp: "<strong>B. easier</strong> การเปรียบเทียบขั้นกว่า (Comparative Degree) มีคำว่า <em>than</em> และคำว่า <em>much</em> ขยายหน้าขั้นกว่า คำว่า <em>easy</em> เปลี่ยน y เป็น i เติม -er เป็น <strong>easier</strong> (ห้ามใช้ more ซ้อนกับ easier)" },
+  { id: 35, ans: "C", cat: "Grammar", exp: "<strong>C. had stopped</strong> โครงสร้าง <em>By the time + Past Simple (arrived), Past Perfect (had + V.3)</em> เพื่อระบุว่าฝนได้หยุดตกเสร็จสิ้นไปก่อนที่รถบัสจะมาถึง" },
+
+  // Part 4: 36-43
+  { id: 36, ans: "B", cat: "Reading", exp: "<strong>B. Reading aloud to children plays a vital role in developing their language and literacy skills.</strong> ใจความหลักของบทความที่ 1 ระบุไว้ชัดเจนตั้งแต่ประโยคแรกและสรุปครอบคลุมประโยชน์ของการอ่านออกเสียงให้เด็กฟัง" },
+  { id: 37, ans: "B", cat: "Reading", exp: "<strong>B. They are exposed to vocabulary beyond daily conversation.</strong> ตรงกับประโยค <em>\"Moreover, storybooks introduce children to new vocabulary that they might not hear in everyday conversation.\"</em>" },
+  { id: 38, ans: "D", cat: "Reading", exp: "<strong>D. children</strong> ประโยคระบุว่า <em>\"Even after children learn to read on their own, continuing to read aloud to them...\"</em> คำว่า them จึงอ้างอิงถึง <strong>children</strong>" },
+  { id: 39, ans: "B", cat: "Reading", exp: "<strong>B. Make reading stories together a pleasant and engaging activity.</strong> ตรงกับประโยคสุดท้าย <em>\"...educators should make story time an enjoyable shared experience.\"</em>" },
+  { id: 40, ans: "B", cat: "Reading", exp: "<strong>B. To reduce plastic waste and promote environmental awareness among students</strong> ตรงกับประโยคแรกที่ระบุว่าจัดแคมเปญเพื่อสอนความรับผิดชอบต่อสิ่งแวดล้อมและลดขยะพลาสติก" },
+  { id: 41, ans: "C", cat: "Reading", exp: "<strong>C. Single-use water bottles and plastic wrappers</strong> ตรงกับประโยคที่ 2: <em>\"...mostly from single-use water bottles and plastic food wrappers.\"</em>" },
+  { id: 42, ans: "B", cat: "Reading", exp: "<strong>B. It is used to make compost for the school garden.</strong> ตรงกับประโยค: <em>\"...leftover food is collected in special green bins to be turned into compost for the school vegetable garden.\"</em>" },
+  { id: 43, ans: "A", cat: "Reading", exp: "<strong>A. Plastic waste decreased by over 70 percent.</strong> ตรงกับประโยคสุดท้าย: <em>\"Within just two months, the school reduced its plastic trash by more than seventy percent.\"</em>" },
+
+  // Part 5: 44-50
+  { id: 44, ans: "B", cat: "ELT Pedagogy", exp: "<strong>B. Skimming</strong> คือการอ่านแบบกวาดสายตาอย่างรวดเร็วเพื่อหาใจความสำคัญหรือภาพรวม (general idea / gist) ส่วน <em>Scanning</em> คือการอ่านเพื่อหาข้อมูลเฉพาะเจาะจง เช่น ตัวเลข ชื่อ วันเวลา" },
+  { id: 45, ans: "D", cat: "ELT Pedagogy", exp: "<strong>D. Production stage</strong> ในรูปแบบการสอนแบบ 3Ps (Presentation - Practice - Production) ขั้น <strong>Production</strong> คือขั้นที่ผู้เรียนนำภาษาไปใช้จริงอย่างอิสระและสร้างสรรค์ (เช่น Role-play หรือสถานการณ์จำลอง)" },
+  { id: 46, ans: "B", cat: "ELT Pedagogy", exp: "<strong>B. Emphasizing meaningful interaction and using authentic language in real-life contexts</strong> หัวใจสำคัญของการสอนแบบเพื่อการสื่อสาร (CLT) คือการเน้นให้ผู้เรียนสื่อสารอย่างมีความหมายในบริบทจริง" },
+  { id: 47, ans: "C", cat: "ELT Pedagogy", exp: "<strong>C. Listening and Reading</strong> ทักษะการรับสาร (<strong>Receptive Skills</strong>) ได้แก่ การฟังและการอ่าน ส่วนทักษะการส่งสาร (<strong>Productive Skills</strong>) ได้แก่ การพูดและการเขียน (Speaking and Writing)" },
+  { id: 48, ans: "B", cat: "ELT Pedagogy", exp: "<strong>B. Total Physical Response (TPR)</strong> คิดค้นโดย James Asher เป็นวิธีการสอนที่เชื่อมโยงคำสั่งทางภาษากับการเคลื่อนไหวร่างกาย เหมาะอย่างยิ่งสำหรับผู้เรียนระดับประถมศึกษาหรือผู้เริ่มต้น" },
+  { id: 49, ans: "A", cat: "ELT Pedagogy", exp: "<strong>A. Formative assessment</strong> (การประเมินเพื่อพัฒนาการเรียนรู้ระหว่างเรียน) ใช้ตรวจสอบความเข้าใจระหว่างภาคเรียนเพื่อปรับปรุงการสอน ส่วน <em>Summative assessment</em> คือการประเมินสรุปผลปลายภาคเรียน" },
+  { id: 50, ans: "C", cat: "ELT Pedagogy", exp: "<strong>C. C1 – C2</strong> ตามกรอบมาตรฐาน CEFR แบ่งเป็น 3 กลุ่มหลัก: <strong>A1–A2 (Basic User)</strong>, <strong>B1–B2 (Independent User)</strong>, และ <strong>C1–C2 (Proficient User)</strong>" }
+];
+
+function initKeyPage() {
+  const quickGrid = document.getElementById("quickKeyGrid");
+  quickGrid.innerHTML = ANSWER_KEYS.map(item => `
+    <div class="key-cell">
+      <span>ข้อ ${item.id}</span>
+      <strong>${item.ans}</strong>
+    </div>
+  `).join("");
+
+  renderDetailedList({});
+}
+
+function renderDetailedList(userMap) {
+  const container = document.getElementById("detailedList");
+  container.innerHTML = ANSWER_KEYS.map(item => {
+    const uAns = userMap[item.id];
+    let statusClass = "";
+    let userBadge = "";
+    if (uAns) {
+      const isOk = uAns === item.ans;
+      statusClass = isOk ? "user-correct" : "user-wrong";
+      userBadge = isOk
+        ? `<span style="color:#16a34a; margin-right:10px;">✔️ ผู้เข้าสอบตอบ: ${uAns} (ถูกต้อง)</span>`
+        : `<span style="color:#dc2626; margin-right:10px;">❌ ผู้เข้าสอบตอบ: ${uAns}</span>`;
+    }
+    return `
+      <div class="ans-card ${statusClass}">
+        <div class="ans-header">
+          <span>ข้อที่ ${item.id} <small style="color:#64748b; font-weight:normal;">(${item.cat})</small></span>
+          <div>
+            ${userBadge}
+            <span class="correct-badge">เฉลย: ข้อ ${item.ans}</span>
+          </div>
+        </div>
+        <div class="exp-text">${item.exp}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function gradeSubmission() {
+  const raw = document.getElementById("codeInput").value.trim();
+  if (!raw) {
+    alert("กรุณาวางรหัสคำตอบของผู้เข้าสอบก่อนครับ");
+    return;
+  }
+  const parts = raw.split("|");
+  const candidateName = parts.length >= 2 ? parts[1] : "ไม่ระบุชื่อ";
+  const ansPart = parts[parts.length - 1];
+
+  const userMap = {};
+  ansPart.split(",").forEach(pair => {
+    const [qNum, choice] = pair.split(":");
+    if (qNum && choice) {
+      userMap[parseInt(qNum, 10)] = choice.trim().toUpperCase();
+    }
+  });
+
+  let totalScore = 0;
+  const catScores = {
+    "Conversation": { score: 0, max: 10 },
+    "Vocabulary": { score: 0, max: 10 },
+    "Grammar": { score: 0, max: 15 },
+    "Reading": { score: 0, max: 8 },
+    "ELT Pedagogy": { score: 0, max: 7 }
+  };
+
+  ANSWER_KEYS.forEach(item => {
+    if (userMap[item.id] === item.ans) {
+      totalScore++;
+      catScores[item.cat].score++;
+    }
+  });
+
+  const percent = ((totalScore / 50) * 100).toFixed(1);
+  const passStatus = totalScore >= 30
+    ? `<span style="color:#16a34a; font-weight:700;">✅ ผ่านเกณฑ์มาตรฐาน 60% (พร้อมขยับขึ้นระดับกลาง!)</span>`
+    : `<span style="color:#dc2626; font-weight:700;">⚠️ ต่ำกว่าเกณฑ์ 60% (แนะนำให้ทบทวนพื้นฐานก่อนขึ้นระดับกลาง)</span>`;
+
+  const box = document.getElementById("scoreResultBox");
+  box.style.display = "block";
+  box.innerHTML = `
+    <h3 style="margin-bottom:6px;">📊 ผลการตรวจคะแนนของ: ${candidateName}</h3>
+    <p style="font-size:1.15rem; margin-bottom:8px;">คะแนนรวม: <strong>${totalScore} / 50 คะแนน (${percent}%)</strong> — ${passStatus}</p>
+    <ul style="margin-left:20px; font-size:0.92rem;">
+      <li>Part 1: Conversation (สนทนา): <strong>${catScores["Conversation"].score} / 10</strong></li>
+      <li>Part 2: Vocabulary (คำศัพท์): <strong>${catScores["Vocabulary"].score} / 10</strong></li>
+      <li>Part 3: Grammar & Structure (ไวยากรณ์): <strong>${catScores["Grammar"].score} / 15</strong></li>
+      <li>Part 4: Reading Comprehension (การอ่าน): <strong>${catScores["Reading"].score} / 8</strong></li>
+      <li>Part 5: ELT Methodology (การสอนภาษาอังกฤษ): <strong>${catScores["ELT Pedagogy"].score} / 7</strong></li>
+    </ul>
+  `;
+
+  renderDetailedList(userMap);
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initKeyPage);
+} else {
+  initKeyPage();
+}
+</script>
+</body>
+</html>
