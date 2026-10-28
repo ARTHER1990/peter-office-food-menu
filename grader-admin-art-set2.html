@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>[สำหรับผู้คุมสอบ] เฉลยละเอียดและระบบตรวจคะแนน - ชุดที่ 2 (ระดับกลาง 50 ข้อ)</title>
+  <style>
+    :root {
+      --primary: #0f766e;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --correct: #16a34a;
+      --wrong: #dc2626;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+    header {
+      background: linear-gradient(135deg, #115e59, #0d9488);
+      color: white;
+      padding: 24px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 1050px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+    .grader-box {
+      background: white;
+      border: 2px solid #0d9488;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+    }
+    .grader-box h2 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .grader-box textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: monospace;
+      margin: 10px 0;
+    }
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn:hover { opacity: 0.92; }
+    .score-banner {
+      display: none;
+      margin-top: 16px;
+      padding: 16px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+    }
+    .quick-key-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      background: white;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    @media (max-width: 700px) {
+      .quick-key-grid { grid-template-columns: repeat(5, 1fr); }
+    }
+    .key-cell {
+      text-align: center;
+      padding: 8px 4px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+    .key-cell strong {
+      color: var(--primary);
+      display: block;
+      font-size: 1.05rem;
+    }
+    .ans-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+    }
+    .ans-card.user-correct { border-left: 5px solid var(--correct); background: #f0fdf4; }
+    .ans-card.user-wrong { border-left: 5px solid var(--wrong); background: #fef2f2; }
+    .ans-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+    .correct-badge {
+      background: #dcfce7;
+      color: #166534;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+    .exp-text {
+      font-size: 0.95rem;
+      color: #334155;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+    }
+    .live-box {
+      background: #ffffff;
+      border: 2px solid #2563eb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+    }
+    .live-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .live-header h2 {
+      color: #1d4ed8;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+    .live-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin-top: 10px;
+    }
+    .live-table th, .live-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: left;
+    }
+    .live-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-weight: 700;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status-pill.submitted {
+      background: #dcfce7;
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container" style="margin:0 auto;">
+    <h1>🔑 เฉลยละเอียดและระบบตรวจกระดาษคำตอบ (เก็บไว้สำหรับผู้คุมสอบ)</h1>
+    <p>ข้อสอบครูผู้ช่วย วิชาเอกภาษาอังกฤษ • ชุดที่ 2 : ระดับกลาง (Intermediate & Analytical Skills) จำนวน 50 ข้อ</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="live-box">
+    <div class="live-header">
+      <h2><span class="pulse-dot"></span> 📡 กระดานเช็คความเคลื่อนไหวผู้เข้าสอบแบบเรียลไทม์ (Live Activity Monitor)</h2>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <span id="lastSyncTime" style="font-size:0.82rem; color:var(--muted);">กำลังซิงค์ข้อมูล...</span>
+        <button class="btn" style="background:#2563eb; padding:7px 14px; font-size:0.86rem;" onclick="fetchLiveSessions()">🔄 เช็คความเคลื่อนไหวเดี๋ยวนี้</button>
+      </div>
+    </div>
+    <p style="font-size:0.88rem; color:var(--muted);">แม้ผู้เข้าสอบจะไม่ได้ส่งรหัสคำตอบมาทาง LINE ทันทีที่มีคนกดเปิดลิงก์ข้อสอบหรือกดติ๊กคำตอบ ข้อมูลความคืบหน้าและคำตอบจะเด้งขึ้นมาในตารางนี้โดยอัตโนมัติ (อัปเดตทุก 8 วินาที)</p>
+    <div id="liveSessionsContainer" style="overflow-x:auto;">
+      <p style="padding:14px 0; color:var(--muted); font-size:0.9rem;">⏳ กำลังดึงข้อมูลผู้เข้าสอบจากระบบ Cloud...</p>
+    </div>
+  </div>
+
+  <div class="grader-box">
+    <h2>⚡ ระบบตรวจรหัสคำตอบอัตโนมัติ (Auto-Grader)</h2>
+    <p style="font-size:0.9rem; color:var(--muted);">นำรหัสคำตอบที่ผู้เข้าสอบกดคัดลอกจากหน้าข้อสอบ (เช่น <code>SET2-INTERMEDIATE|ชื่อ|1:B,2:A,...</code>) มาวางที่นี่เพื่อตรวจคะแนนทันที:</p>
+    <textarea id="codeInput" placeholder="วางรหัสคำตอบของผู้เข้าสอบที่นี่..."></textarea>
+    <button class="btn" onclick="gradeSubmission()">🔍 ตรวจคำตอบและคำนวณคะแนน</button>
+    <div class="score-banner" id="scoreResultBox"></div>
+  </div>
+
+  <h2 style="margin-bottom:12px; font-size:1.15rem;">📌 ตารางเฉลยด่วน 50 ข้อ (Quick Answer Key)</h2>
+  <div class="quick-key-grid" id="quickKeyGrid"></div>
+
+  <h2 style="margin-bottom:12px; font-size:1.15rem;">📚 เฉลยพร้อมคำอธิบายละเอียดรายข้อ (Detailed Explanations)</h2>
+  <div id="detailedList"></div>
+</div>
+
+<script>
+const ANSWER_KEYS = [
+  {
+    "id": 1,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. Is there anything I can take off your hands?</strong> (มีอะไรให้ฉันช่วยแบ่งเบางานไหม) เป็นสำนวนเสนอความช่วยเหลือเพื่อนร่วมงานที่กำลังหัวหมุน ส่วน A ตำหนิเรื่องเวลา, C ต่อว่าเรื่องบ่น, D พูดตัดกำลังใจ"
+  },
+  {
+    "id": 2,
+    "ans": "A",
+    "cat": "Conversation",
+    "exp": "<strong>A. You've really hit the nail on the head.</strong> เป็นสำนวนแปลว่า 'พูดได้ตรงประเด็นเป๊ะ / วิเคราะห์ปัญหาได้ถูกต้องที่สุด' สอดคล้องกับการเห็นพ้องต้องกัน ส่วน B แปลว่าเข้าใจผิด/กล่าวหาผิดคน, C แปลว่าเลิกงานเถอะ, D แปลว่าเรื่องอดีตผ่านไปแล้ว"
+  },
+  {
+    "id": 3,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. Would you happen to be available to observe my class next Tuesday?</strong> เป็นรูปประโยคขอความอนุเคราะห์ทางวิชาชีพที่สุภาพ นอบน้อม และเป็นทางการที่สุด (Indirect polite request)"
+  },
+  {
+    "id": 4,
+    "ans": "C",
+    "cat": "Conversation",
+    "exp": "<strong>C. He is attentive in class; we are gently encouraging him to participate at his own pace.</strong> เป็นการสื่อสารเชิงบวก (Constructive communication) กับผู้ปกครอง โดยชื่นชมความตั้งใจและให้ความมั่นใจว่าจะค่อยๆ ส่งเสริมการพูดตามจังหวะของผู้เรียน"
+  },
+  {
+    "id": 5,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. I really appreciate it, Wichai. I owe you one!</strong> สำนวน <em>I owe you one!</em> แปลว่า 'ฉันติดหนี้บุญคุณนายครั้งนึงนะ / วันหลังฉันช่วยคืนแน่นอน' ใช้แสดงความขอบคุณอย่างจริงใจเมื่อมีคนช่วยงานแทน"
+  },
+  {
+    "id": 6,
+    "ans": "A",
+    "cat": "Conversation",
+    "exp": "<strong>A. don't spill the beans!</strong> สำนวน <em>spill the beans</em> แปลว่า 'เปิดเผยความลับ / หลุดปากบอก' จึงเตือนว่าอย่าเพิ่งหลุดความลับงานเซอร์ไพรส์ ส่วน B แปลว่ากัดฟันทนยอมรับ, C อวยพรให้โชคดีก่อนแสดง"
+  },
+  {
+    "id": 7,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. cut back on</strong> เป็น Phrasal Verb แปลว่า 'ลด (ค่าใช้จ่าย/ปริมาณ)' สอดคล้องกับงบประมาณที่ถูกตัดทอน (ส่วน look down on = ดูถูก, run out of = หมด, catch up with = ไล่ตามทัน)"
+  },
+  {
+    "id": 8,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. I see your point regarding fluency, but students still need structural accuracy.</strong> การโต้แย้งอย่างมืออาชีพตามหลัก Diplomatic disagreement ต้องยอมรับมุมมองของอีกฝ่ายก่อน (I see your point...) แล้วจึงเสริมเหตุผลแย้งอย่างสุภาพ"
+  },
+  {
+    "id": 9,
+    "ans": "A",
+    "cat": "Conversation",
+    "exp": "<strong>A. Hang in there</strong> แปลว่า 'อดทนไว้นะ / สู้ๆ อย่ายอมแพ้' ใช้ให้กำลังใจคนที่กำลังท้อหรือกังวลก่อนการแข่งขัน"
+  },
+  {
+    "id": 10,
+    "ans": "B",
+    "cat": "Conversation",
+    "exp": "<strong>B. Would you like to leave a message?</strong> (คุณต้องการฝากข้อความไว้ไหมครับ/ค่ะ) เป็นมารยาทมาตรฐานในการรับโทรศัพท์สำนักงานเมื่อผู้รับสายติดภารกิจสอน"
+  },
+  {
+    "id": 11,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. facilitate</strong> (อำนวยความสะดวก / ส่งเสริมให้ง่ายขึ้น) บทบาทหลักของครูยุคใหม่คือ Learning Facilitator (ผู้อำนวยความสะดวกในการเรียนรู้) ไม่ใช่ผู้บรรยายทางเดียว"
+  },
+  {
+    "id": 12,
+    "ans": "C",
+    "cat": "Vocabulary",
+    "exp": "<strong>C. conduct</strong> Collocation ทางวิชาการที่ถูกต้องสำหรับงานวิจัยคือ <strong>conduct research / conduct an experiment</strong> (ไม่ใช้ make research หรือ create research)"
+  },
+  {
+    "id": 13,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. thorough and attentive</strong> คำว่า <strong>meticulous</strong> แปลว่า ละเอียดถี่ถ้วน พิถีพิถัน รอบคอบ ตรงกับคำว่า thorough"
+  },
+  {
+    "id": 14,
+    "ans": "A",
+    "cat": "Vocabulary",
+    "exp": "<strong>A. put up with</strong> แปลว่า 'อดทนต่อ / ทนรับได้' (tolerate) สอดคล้องกับบริบทที่ครูไม่สามารถทนกับเสียงคุยรบกวนได้อีกต่อไป (ส่วน look forward to = ตั้งตารอคอย)"
+  },
+  {
+    "id": 15,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. flexible</strong> โจทย์ถามคำตรงข้าม (**OPPOSITE**) ของ <strong>rigid</strong> (เข้มงวด/แข็งทื่อ/ไม่ยืดหยุ่น) คำตรงข้ามจึงคือ <strong>flexible</strong> (ยืดหยุ่น/ปรับตัวได้)"
+  },
+  {
+    "id": 16,
+    "ans": "A",
+    "cat": "Vocabulary",
+    "exp": "<strong>A. syllabus</strong> (ประมวลรายวิชา / แผนการสอนรายวิชา) คือเอกสารแจกแจงเนื้อหา เกณฑ์คะแนน และตารางสอนของวิชาใดวิชาหนึ่ง ส่วน <em>curriculum</em> คือหลักสูตรภาพรวมทั้งหมด"
+  },
+  {
+    "id": 17,
+    "ans": "A",
+    "cat": "Vocabulary",
+    "exp": "<strong>A. carry out</strong> แปลว่า 'ดำเนินการ / ปฏิบัติการ' (carry out an evaluation = ดำเนินการประเมินผล)"
+  },
+  {
+    "id": 18,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. practical and achievable</strong> คำว่า <strong>feasible</strong> แปลว่า 'เป็นไปได้จริง / ปฏิบัติได้จริง' (workable / viable)"
+  },
+  {
+    "id": 19,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. bridge</strong> สำนวนคู่กับช่องว่างความเหลื่อมล้ำคือ <strong>bridge the gap</strong> แปลว่า 'เชื่อมหรือลดช่องว่างความเหลื่อมล้ำ' ให้แคบลง"
+  },
+  {
+    "id": 20,
+    "ans": "B",
+    "cat": "Vocabulary",
+    "exp": "<strong>B. put off</strong> มีคำว่า <em>until further notice</em> (จนกว่าจะมีประกาศแจ้งใหม่) แสดงว่าเป็นการ 'เลื่อนออกไปชั่วคราว' จึงใช้ <strong>put off</strong> (ส่วน <em>call off</em> หมายถึงยกเลิกเด็ดขาด)"
+  },
+  {
+    "id": 21,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. had the invigilator finished</strong> โครงสร้าง Inversion หลังคำปฏิเสธกึ่งปฏิเสธ: <strong>Hardly had + S + V.3 ... when + Past Simple</strong> เมื่อขึ้นต้นด้วย Hardly ต้องสลับกริยาช่วย had มาไว้หน้าประธาน"
+  },
+  {
+    "id": 22,
+    "ans": "C",
+    "cat": "Grammar",
+    "exp": "<strong>C. be</strong> โครงสร้าง <strong>Subjunctive Mood</strong> หลังกริยาแนะนำ/สั่งการ (suggest, recommend, demand, insist) ตามด้วย <em>that + S + (should) + V.infinitive (V.0)</em> เสมอ จึงใช้ <strong>be</strong>"
+  },
+  {
+    "id": 23,
+    "ans": "A",
+    "cat": "Grammar",
+    "exp": "<strong>A. Having completed</strong> โครงสร้าง <strong>Perfect Participle Clause (Having + V.3)</strong> ใช้บอกเหตุการณ์ที่เกิดขึ้นและเสร็จสิ้นสมบูรณ์ก่อนอีกเหตุการณ์หนึ่ง (เมื่อเรียนจบคอร์สไวยากรณ์แล้ว จึงพร้อมสอบ)"
+  },
+  {
+    "id": 24,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. hadn't studied / wouldn't be using</strong> โครงสร้าง <strong>Mixed Conditional</strong>: เงื่อนไขในอดีต (Had + V.3 ส่งผลถึงปัจจุบัน) + ผลลัพธ์ในปัจจุบันที่มีคำว่า <em>today</em> (would + V.infinitive / would be V.ing)"
+  },
+  {
+    "id": 25,
+    "ans": "A",
+    "cat": "Grammar",
+    "exp": "<strong>A. which</strong> โครงสร้าง <strong>Non-defining Relative Clause</strong> (มีเครื่องหมายจุลภาค , คั่นหน้า-หลัง) อ้างถึงสิ่งของ/ห้องปฏิบัติการ <strong>ห้ามใช้ that เด็ดขาด</strong> ต้องใช้ <strong>which</strong>"
+  },
+  {
+    "id": 26,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. Had he been informed</strong> โครงสร้าง <strong>Inverted Conditional Type 3 (ลดรูป If)</strong> ในรูป Passive Voice: <em>Had + S + been + V.3</em> (ถ้าเขาได้รับการแจ้งเรื่อง...)"
+  },
+  {
+    "id": 27,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. patient</strong> หลักความขนาน (<strong>Parallelism</strong>): หน้า and เป็น Adjective (enthusiastic, knowledgeable) หลัง and ก็ต้องเป็น Adjective คือ <strong>patient</strong> (อดทน)"
+  },
+  {
+    "id": 28,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. repaired</strong> โครงสร้าง Causative Verb: <strong>have + something + V.3</strong> (ให้สิ่งของถูกซ่อมแซมโดยช่าง)"
+  },
+  {
+    "id": 29,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. who</strong> โครงสร้างประโยคเน้นความ (<strong>Cleft Sentence</strong>): <em>It was [Person] + who + Verb</em> (ครูมาลีคือผู้ริเริ่มโครงการ)"
+  },
+  {
+    "id": 30,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. to inform</strong> กริยา <strong>regret</strong> ตามด้วย <em>to + V.0</em> แปลว่า 'เสียใจ/เกรงว่าจะต้องแจ้งข่าวร้าย' (ถ้า <em>regret + V.ing</em> แปลว่าเสียใจกับสิ่งที่ได้ทำลงไปแล้วในอดีต)"
+  },
+  {
+    "id": 31,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. did the student win</strong> โครงสร้าง Inversion: <strong>Not only + กริยาช่วย (did) + ประธาน (the student) + กริยาแท้ (win) ..., but also...</strong>"
+  },
+  {
+    "id": 32,
+    "ans": "B",
+    "cat": "Grammar",
+    "exp": "<strong>B. must have forgotten</strong> โครงสร้าง Modal of Deduction ในอดีต: <strong>must have + V.3</strong> ใช้คาดเดาเหตุการณ์ในอดีตอย่างมั่นใจ (เธอต้องลืมเรื่องการเปลี่ยนตารางแน่ๆ)"
+  },
+  {
+    "id": 33,
+    "ans": "C",
+    "cat": "Grammar",
+    "exp": "<strong>C. was</strong> ผิดเพราะโครงสร้าง <strong>Neither A nor B</strong> กริยาต้องผันตามประธานตัวหลัง คือ <em>English teachers (พหูพจน์)</em> จึงต้องแก้จาก <em>was</em> เป็น <strong>were</strong>"
+  },
+  {
+    "id": 34,
+    "ans": "A",
+    "cat": "Grammar",
+    "exp": "<strong>A. Despite of</strong> ผิดเพราะคำว่า <strong>Despite</strong> เป็นบุพบทในตัว ไม่ต้องมี of (ต้องใช้ <strong>Despite the heavy rain</strong> หรือ <strong>In spite of the heavy rain</strong>)"
+  },
+  {
+    "id": 35,
+    "ans": "A",
+    "cat": "Grammar",
+    "exp": "<strong>A. which</strong> ผิดเพราะ Relative Pronoun ขยายคน (<em>The students</em>) ต้องใช้ <strong>who</strong> หรือ <strong>that</strong> ห้ามใช้ which กับคน"
+  },
+  {
+    "id": 36,
+    "ans": "C",
+    "cat": "Reading",
+    "exp": "<strong>C. AI should serve as a complementary tool alongside human teachers rather than a total replacement.</strong> บทความสรุปด้วยการสนับสนุนแบบ Blended approach คือใช้ AI ช่วยงานรูทีน แต่คงครูไว้เพื่อปฏิสัมพันธ์และทักษะมนุษย์"
+  },
+  {
+    "id": 37,
+    "ans": "C",
+    "cat": "Reading",
+    "exp": "<strong>C. Genuine human empathy and sociocultural nuance</strong> ในบทความระบุชัดเจนว่า: <em>\"they cannot replicate human empathy, cultural nuance, or the spontaneous conversational rapport...\"</em>"
+  },
+  {
+    "id": 38,
+    "ans": "B",
+    "cat": "Reading",
+    "exp": "<strong>B. a flawless universal cure-all solution</strong> คำว่า <strong>panacea</strong> แปลว่า ยาครอบจักรวาล / การแก้ปัญหาได้ทุกอย่างแบบเบ็ดเสร็จ เมื่อมีคำว่า <em>infallible</em> จึงหมายถึงทางออกที่ไม่มีวันผิดพลาด"
+  },
+  {
+    "id": 39,
+    "ans": "B",
+    "cat": "Reading",
+    "exp": "<strong>B. Balanced and forward-looking</strong> น้ำเสียงของผู้เขียนมีความเป็นกลางและมองไปข้างหน้า (ยอมรับประโยชน์ของ AI แต่ชี้ให้เห็นขีดจำกัดและเสนอทางออกร่วมกัน)"
+  },
+  {
+    "id": 40,
+    "ans": "B",
+    "cat": "Reading",
+    "exp": "<strong>B. It is a natural cognitive stage where learners absorb and internalize language before speaking.</strong> บทความระบุว่า Silent Period คือช่วงที่สมองกำลังประมวลผลภาษาและสร้างสมมติฐานทางภาษาภายใน เป็นกระบวนการธรรมชาติ"
+  },
+  {
+    "id": 41,
+    "ans": "B",
+    "cat": "Reading",
+    "exp": "<strong>B. The Affective Filter rises, creating anxiety and discouraging communication.</strong> ในบทความกล่าวว่า: <em>\"Forcing students into premature speech production can substantially elevate their Affective Filter, causing performance anxiety...\"</em>"
+  },
+  {
+    "id": 42,
+    "ans": "A",
+    "cat": "Reading",
+    "exp": "<strong>A. hesitation or unwillingness to speak</strong> คำว่า <strong>reticence</strong> แปลว่า ความเงียบ / การสงวนท่าที / ความลังเลที่จะพูด"
+  },
+  {
+    "id": 43,
+    "ans": "B",
+    "cat": "Reading",
+    "exp": "<strong>B. Receptive competence (listening and understanding) naturally precedes oral production.</strong> ประโยคสรุปท้ายบทความ: <em>\"receptive competence naturally precedes productive mastery.\"</em> ทักษะการรับสารต้องมาก่อนการผลิตคำพูดเสมอ"
+  },
+  {
+    "id": 44,
+    "ans": "B",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>B. slightly above the student's current level of competence (i + 1)</strong> ทฤษฎี Input Hypothesis ของ Krashen ระบุว่าภาษาที่นำมาสอนต้องสูงกว่าระดับปัจจุบันของผู้เรียนเพียง 1 ขั้น (i + 1) จึงจะเกิดการซึมซับภาษาได้ดีที่สุด"
+  },
+  {
+    "id": 45,
+    "ans": "C",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>C. Content and Language Integrated Learning (CLIL)</strong> คือแนวการสอนที่นำเนื้อหาวิชาอื่น (เช่น วิทยาศาสตร์ สังคม) มาบูรณาการเรียนรู้ผ่านภาษาอังกฤษไปพร้อมกันสองมิติ"
+  },
+  {
+    "id": 46,
+    "ans": "B",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>B. An activity with a clear real-world communicative outcome</strong> นิยามของ 'Task' ใน TBLT คือกิจกรรมที่มุ่งเป้าหมายการสื่อสารในโลกจริง มีผลลัพธ์ชัดเจน (ไม่ใช่แค่การทำแบบฝึกหัดเติมคำ)"
+  },
+  {
+    "id": 47,
+    "ans": "B",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>B. scaffolding</strong> (การเสริมสร้างโครงร้านการเรียนรู้) มาจากแนวคิดของ Vygotsky / Bruner คือการที่ครูให้ความช่วยเหลือชั่วคราวแล้วค่อยๆ ถอนความช่วยเหลือออกเมื่อผู้เรียนทำได้เอง"
+  },
+  {
+    "id": 48,
+    "ans": "B",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>B. Analytic Rubric</strong> คือเกณฑ์ประเมินที่แยกองค์ประกอบของทักษะออกเป็นรายด้าน (เช่น การออกเสียง, ความคล่อง, คำศัพท์) แล้วให้คะแนนแยกส่วน (ต่างจาก Holistic Rubric ที่ให้คะแนนรวมก้อนเดียว)"
+  },
+  {
+    "id": 49,
+    "ans": "A",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>A. Differentiated Instruction</strong> (การจัดการเรียนรู้ที่คำนึงถึงความแตกต่างระหว่างบุคคล) คือการออกแบบเนื้อหา กระบวนการ และชิ้นงานให้สอดคล้องกับความพร้อมและความถนัดของผู้เรียนแต่ละคน"
+  },
+  {
+    "id": 50,
+    "ans": "C",
+    "cat": "ELT Pedagogy",
+    "exp": "<strong>C. A low-anxiety, supportive classroom climate with high motivation and self-esteem</strong> ตามทฤษฎี Affective Filter ของ Krashen ตัวกรองทางอารมณ์จะต่ำลง (เปิดรับภาษาได้ดีที่สุด) เมื่อบรรยากาศในห้องเรียนมีความเครียดต่ำ ปลอดภัย และมีแรงจูงใจสูง"
+  }
+];
+
+const CLOUD_TOPIC = "kru_eng_art_tracker_2026_set2";
+const ADMIN_HISTORY_KEY = "kru_eng_admin_sessions_history_set2_v1";
+let savedSessions = {};
+
+function initKeyPage() {
+  const quickGrid = document.getElementById("quickKeyGrid");
+  quickGrid.innerHTML = ANSWER_KEYS.map(item => `
+    <div class="key-cell">
+      <span>ข้อ ${item.id}</span>
+      <strong>${item.ans}</strong>
+    </div>
+  `).join("");
+
+  try {
+    const localHist = localStorage.getItem(ADMIN_HISTORY_KEY);
+    if (localHist) savedSessions = JSON.parse(localHist) || {};
+  } catch (e) {}
+
+  renderDetailedList({});
+  renderLiveTable();
+  fetchLiveSessions();
+  setInterval(fetchLiveSessions, 8000);
+}
+
+function calcInstantScore(codeStr) {
+  if (!codeStr) return 0;
+  const parts = codeStr.split("|");
+  const ansPart = parts[parts.length - 1] || "";
+  const map = {};
+  ansPart.split(",").forEach(pair => {
+    const [q, c] = pair.split(":");
+    if (q && c) map[parseInt(q, 10)] = c.trim().toUpperCase();
+  });
+  let sc = 0;
+  ANSWER_KEYS.forEach(k => {
+    if (map[k.id] === k.ans) sc++;
+  });
+  return sc;
+}
+
+async function fetchLiveSessions() {
+  try {
+    const res = await fetch(`https://ntfy.sh/${CLOUD_TOPIC}/json?poll=1&since=all`);
+    if (res.ok) {
+      const text = await res.text();
+      const lines = text.trim().split("\n").filter(Boolean);
+      lines.forEach(line => {
+        try {
+          const env = JSON.parse(line);
+          if (env && env.message) {
+            const data = JSON.parse(env.message);
+            if (data && data.sessionId) {
+              savedSessions[data.sessionId] = data;
+            }
+          }
+        } catch (err) {}
+      });
+      localStorage.setItem(ADMIN_HISTORY_KEY, JSON.stringify(savedSessions));
+    }
+    const nowStr = new Date().toLocaleTimeString("th-TH");
+    document.getElementById("lastSyncTime").textContent = `อัปเดตล่าสุด: ${nowStr}`;
+    renderLiveTable();
+  } catch (e) {
+    document.getElementById("lastSyncTime").textContent = `โหมดออฟไลน์ (แสดงข้อมูลล่าสุดที่บันทึกไว้)`;
+    renderLiveTable();
+  }
+}
+
+function renderLiveTable() {
+  const container = document.getElementById("liveSessionsContainer");
+  const list = Object.values(savedSessions).sort((a, b) => {
+    return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
+  });
+
+  if (list.length === 0) {
+    container.innerHTML = `<p style="padding:14px 0; color:var(--muted); font-size:0.92rem;">📭 ยังไม่มีผู้เข้าสอบกดเปิดลิงก์ข้อสอบในขณะนี้ (เมื่อมีคนเปิดลิงก์ รายชื่อจะปรากฏที่นี่อัตโนมัติ)</p>`;
+    return;
+  }
+
+  let rows = list.map((s, idx) => {
+    const isSub = (s.event || "").includes("ส่งกระดาษคำตอบ");
+    const pillClass = isSub ? "status-pill submitted" : "status-pill";
+    const timeStr = s.updatedAt ? new Date(s.updatedAt).toLocaleString("th-TH") : "-";
+    const liveScore = calcInstantScore(s.code);
+    const safeCode = (s.code || "").replace(/'/g, "\\'");
+    return `
+      <tr>
+        <td><strong>${s.name || "ไม่ระบุชื่อ"}</strong><br><small style="color:var(--muted);">รหัสเครื่อง: ${s.sessionId} (${s.device || "Browser"})</small></td>
+        <td><span class="${pillClass}">${s.event || "เปิดข้อสอบ"}</span></td>
+        <td><strong>${s.answeredCount || 0} / 50 ข้อ</strong></td>
+        <td><strong style="color:#0f766e;">${liveScore} / 50 คะแนน</strong></td>
+        <td style="font-size:0.84rem; color:var(--muted);">${timeStr}</td>
+        <td>
+          <button class="btn" style="padding:6px 12px; font-size:0.82rem;" onclick="loadSessionToGrader('${safeCode}')">
+            🔍 ดูคำตอบรายข้อ
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <table class="live-table">
+      <thead>
+        <tr>
+          <th>ชื่อผู้เข้าสอบ / อุปกรณ์</th>
+          <th>สถานะล่าสุด</th>
+          <th>ทำไปแล้ว</th>
+          <th>คะแนนรวมตอนนี้</th>
+          <th>เวลาล่าสุด</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+function loadSessionToGrader(codeStr) {
+  document.getElementById("codeInput").value = codeStr;
+  gradeSubmission();
+  document.getElementById("scoreResultBox").scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function renderDetailedList(userMap) {
+  const container = document.getElementById("detailedList");
+  container.innerHTML = ANSWER_KEYS.map(item => {
+    const uAns = userMap[item.id];
+    let statusClass = "";
+    let userBadge = "";
+    if (uAns) {
+      const isOk = uAns === item.ans;
+      statusClass = isOk ? "user-correct" : "user-wrong";
+      userBadge = isOk
+        ? `<span style="color:#16a34a; margin-right:10px;">✔️ ผู้เข้าสอบตอบ: ${uAns} (ถูกต้อง)</span>`
+        : `<span style="color:#dc2626; margin-right:10px;">❌ ผู้เข้าสอบตอบ: ${uAns}</span>`;
+    }
+    return `
+      <div class="ans-card ${statusClass}">
+        <div class="ans-header">
+          <span>ข้อที่ ${item.id} <small style="color:#64748b; font-weight:normal;">(${item.cat})</small></span>
+          <div>
+            ${userBadge}
+            <span class="correct-badge">เฉลย: ข้อ ${item.ans}</span>
+          </div>
+        </div>
+        <div class="exp-text">${item.exp}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+function gradeSubmission() {
+  const raw = document.getElementById("codeInput").value.trim();
+  if (!raw) {
+    alert("กรุณาวางรหัสคำตอบของผู้เข้าสอบก่อนครับ");
+    return;
+  }
+  const parts = raw.split("|");
+  const candidateName = parts.length >= 2 ? parts[1] : "ไม่ระบุชื่อ";
+  const ansPart = parts[parts.length - 1];
+
+  const userMap = {};
+  ansPart.split(",").forEach(pair => {
+    const [qNum, choice] = pair.split(":");
+    if (qNum && choice) {
+      userMap[parseInt(qNum, 10)] = choice.trim().toUpperCase();
+    }
+  });
+
+  let totalScore = 0;
+  const catScores = {
+    "Conversation": { score: 0, max: 10 },
+    "Vocabulary": { score: 0, max: 10 },
+    "Grammar": { score: 0, max: 15 },
+    "Reading": { score: 0, max: 8 },
+    "ELT Pedagogy": { score: 0, max: 7 }
+  };
+
+  ANSWER_KEYS.forEach(item => {
+    if (userMap[item.id] === item.ans) {
+      totalScore++;
+      catScores[item.cat].score++;
+    }
+  });
+
+  const percent = ((totalScore / 50) * 100).toFixed(1);
+  const passStatus = totalScore >= 30
+    ? `<span style="color:#16a34a; font-weight:700;">✅ ผ่านเกณฑ์มาตรฐาน 60% (พร้อมขยับขึ้นระดับกลาง!)</span>`
+    : `<span style="color:#dc2626; font-weight:700;">⚠️ ต่ำกว่าเกณฑ์ 60% (แนะนำให้ทบทวนพื้นฐานก่อนขึ้นระดับกลาง)</span>`;
+
+  const box = document.getElementById("scoreResultBox");
+  box.style.display = "block";
+  box.innerHTML = `
+    <h3 style="margin-bottom:6px;">📊 ผลการตรวจคะแนนของ: ${candidateName}</h3>
+    <p style="font-size:1.15rem; margin-bottom:8px;">คะแนนรวม: <strong>${totalScore} / 50 คะแนน (${percent}%)</strong> — ${passStatus}</p>
+    <ul style="margin-left:20px; font-size:0.92rem;">
+      <li>Part 1: Conversation (สนทนา): <strong>${catScores["Conversation"].score} / 10</strong></li>
+      <li>Part 2: Vocabulary (คำศัพท์): <strong>${catScores["Vocabulary"].score} / 10</strong></li>
+      <li>Part 3: Grammar & Structure (ไวยากรณ์): <strong>${catScores["Grammar"].score} / 15</strong></li>
+      <li>Part 4: Reading Comprehension (การอ่าน): <strong>${catScores["Reading"].score} / 8</strong></li>
+      <li>Part 5: ELT Methodology (การสอนภาษาอังกฤษ): <strong>${catScores["ELT Pedagogy"].score} / 7</strong></li>
+    </ul>
+  `;
+
+  renderDetailedList(userMap);
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initKeyPage);
+} else {
+  initKeyPage();
+}
+</script>
+</body>
+</html>
