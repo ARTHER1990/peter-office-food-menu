@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>รายงานผลคะแนนสอบ: Yuttana — ครูผู้ช่วย เอกภาษาอังกฤษ ชุดที่ 1</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --primary: #4f46e5;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --info: #0284c7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Sarabun", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px 12px 60px;
+    }
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .header-card {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 24px 20px;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+      text-align: center;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-card::before {
+      content: "";
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 140px;
+      height: 140px;
+      background: rgba(99, 102, 241, 0.15);
+      border-radius: 50%;
+    }
+    .header-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .header-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+    .header-meta {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+    }
+
+    /* Score Box */
+    .score-summary-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    @media (min-width: 640px) {
+      .score-summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+    .total-score-card {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+      border-color: #bbf7d0;
+    }
+    .score-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .big-score {
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--success);
+      line-height: 1;
+      margin: 8px 0;
+    }
+    .score-percentage {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #15803d;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #dcfce7;
+      color: #166534;
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      border: 1px solid #86efac;
+    }
+
+    /* Category breakdown */
+    .cat-item {
+      margin-bottom: 14px;
+    }
+    .cat-item:last-child { margin-bottom: 0; }
+    .cat-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .progress-bar {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.6s ease;
+    }
+
+    /* Advice box */
+    .coach-box {
+      background: #fdf4ff;
+      border: 1px solid #f0abfc;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 24px;
+    }
+    .coach-box h3 {
+      font-size: 1.05rem;
+      color: #86198f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .coach-box ul {
+      padding-left: 20px;
+      font-size: 0.92rem;
+      color: #4a044e;
+    }
+    .coach-box li {
+      margin-bottom: 8px;
+    }
+
+    /* Filter tabs */
+    .filter-section {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .tab-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Question cards */
+    .q-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+    .q-card.is-wrong {
+      border-left: 5px solid var(--danger);
+    }
+    .q-card.is-correct {
+      border-left: 5px solid var(--success);
+    }
+    .q-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .q-tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: var(--muted);
+    }
+    .q-status-badge {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 10px;
+      border-radius: 999px;
+    }
+    .q-status-badge.correct {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .q-status-badge.wrong {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1e293b;
+    }
+    .opt-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .opt-box {
+      font-size: 0.9rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .opt-box.user-wrong {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #991b1b;
+      font-weight: 600;
+    }
+    .opt-box.correct-choice {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #166534;
+      font-weight: 700;
+    }
+    .exp-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      color: #92400e;
+      line-height: 1.5;
+    }
+    .passage-preview {
+      background: #f1f5f9;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      color: #334155;
+      margin-bottom: 10px;
+      line-height: 1.45;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .passage-preview strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <header class="header-card">
+    <span class="header-badge">📋 INDIVIDUAL SCORE REPORT</span>
+    <h1 class="header-title">รายงานผลการทดสอบจำลอง (Mock Exam)</h1>
+    <p class="header-meta">วิชาเอกภาษาอังกฤษ (ภาค ข) ชุดที่ 1 — ระดับพื้นฐาน (Foundation)</p>
+    <p style="margin-top:6px; font-weight:600; font-size:0.95rem; color:#e2e8f0;">
+      👤 ผู้เข้าสอบ: <span style="color:#38bdf8;">คุณยุทธนา (Yuttana)</span>
+    </p>
+  </header>
+
+  <!-- Summary Grid -->
+  <div class="score-summary-grid">
+    <!-- Big Score -->
+    <div class="card total-score-card">
+      <div class="score-label">คะแนนรวมที่ได้</div>
+      <div class="big-score">30 <span style="font-size:1.8rem; color:#94a3b8; font-weight:500;">/ 50</span></div>
+      <div class="score-percentage">คิดเป็น 60.0%</div>
+      <div class="status-pill">
+        <span>🎉</span> ผ่านเกณฑ์มาตรฐานการสอบ (60%)
+      </div>
+    </div>
+
+    <!-- Category Stats -->
+    <div class="card">
+      <h3 style="font-size:1.05rem; margin-bottom:14px; font-weight:700;">📊 สรุปคะแนนแยกรายหมวด</h3>
+      
+          <div class="cat-item">
+            <div class="cat-header">
+              <span>1. Conversation & Situational Dialogues</span>
+              <span style="color:#10b981; font-weight:700;">8/10 (80%)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:80%; background:#10b981;"></div>
+            </div>
+          </div>
+        
+          <div class="cat-item">
+            <div class="cat-header">
+              <span>2. Vocabulary & Word Usage</span>
+              <span style="color:#f59e0b; font-weight:700;">5/10 (50%)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:50%; background:#f59e0b;"></div>
+            </div>
+          </div>
+        
+          <div class="cat-item">
+            <div class="cat-header">
+              <span>3. Grammar & Sentence Structure</span>
+              <span style="color:#10b981; font-weight:700;">11/15 (73%)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:73%; background:#10b981;"></div>
+            </div>
+          </div>
+        
+          <div class="cat-item">
+            <div class="cat-header">
+              <span>4. Reading Comprehension</span>
+              <span style="color:#3b82f6; font-weight:700;">5/8 (63%)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:63%; background:#3b82f6;"></div>
+            </div>
+          </div>
+        
+          <div class="cat-item">
+            <div class="cat-header">
+              <span>5. ELT Methodology & Pedagogy</span>
+              <span style="color:#ef4444; font-weight:700;">1/7 (14%)</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:14%; background:#ef4444;"></div>
+            </div>
+          </div>
+        
+    </div>
+  </div>
+
+  <!-- Coach Advice -->
+  <div class="coach-box">
+    <h3>💡 บทวิเคราะห์ & เทคนิคเพิ่มคะแนนให้ถึง 40+</h3>
+    <ul>
+      <li><strong>จุดแข็งที่ทำได้ดีเยี่ยม:</strong> ทักษะการสนทนา (Conversation 80%) และไวยากรณ์ (Grammar 73%) ถือว่าพื้นฐานดีมาก ทำโจทย์โครงสร้างหลักได้แม่นยำ</li>
+      <li><strong>จุดที่ต้องติวด่วน (High Priority!):</strong> หมวดวิชาการสอน <strong>ELT Pedagogy (1/7 คะแนน)</strong> ซึ่งเป็นวิชาชีพครูเฉพาะทาง แนะนำให้เน้นจำ keyword สำคัญ เช่น:
+        <ul style="margin-top:4px; padding-left:18px;">
+          <li><strong>CLT:</strong> เน้นการสื่อสารจริงในชีวิตจริง (Authentic / Meaningful)</li>
+          <li><strong>TPR (James Asher):</strong> สั่งให้ทำท่าทางประกอบคำสั่ง (Body movement)</li>
+          <li><strong>3Ps:</strong> ขั้นนำไปใช้สร้างสรรค์ที่สุดคือ <em>Production</em></li>
+          <li><strong>Receptive Skills:</strong> รับสาร = ฟัง & อ่าน (Listening/Reading)</li>
+          <li><strong>Formative vs Summative:</strong> ประเมินระหว่างเรียน = <em>Formative</em> / ประเมินปลายภาค = <em>Summative</em></li>
+        </ul>
+      </li>
+      <li><strong>หมวดคำศัพท์ (Vocabulary):</strong> ทบทวนเรื่อง Phrasal Verbs และระวังคำสั่งที่ถาม <em>OPPOSITE</em> (คำตรงข้าม)</li>
+    </ul>
+  </div>
+
+  <!-- Filter Buttons -->
+  <div class="filter-section">
+    <button class="tab-btn active" onclick="filterQuestions('wrong', this)">🔍 ดูเฉพาะ 20 ข้อที่ตอบผิด</button>
+    <button class="tab-btn" onclick="filterQuestions('all', this)">📋 ดูทั้งหมด 50 ข้อ</button>
+    <button class="tab-btn" onclick="filterQuestions('correct', this)">✅ ดูข้อที่ตอบถูก (30 ข้อ)</button>
+  </div>
+
+  <!-- Questions List -->
+  <div id="questionsContainer">
+    
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 1 • Conversation</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: In the school staff room
+Malee: Hi, Somsak. You look exhausted today. _______________?
+Somsak: I stayed up late grading my students' essays last night.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. What do you do for a living</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. What seems to be the matter</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. How do you like your new class</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>D. Where were you going last night</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. What seems to be the matter</strong> (เกิดอะไรขึ้น / เป็นอะไรหรือเปล่า) เพราะมาลีเห็นสมศักดิ์ดูเหนื่อยล้า (exhausted) จึงถามไถ่อาการ ส่วน A ถามอาชีพ, C ถามความชอบชั้นเรียนใหม่, D ถามว่าเมื่อคืนจะไปไหน
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 2 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: A student is knocking on the classroom door 15 minutes after the class started.
+Student: Excuse me, Ms. Jane. _______________?
+Teacher: Yes, please come in, but try to be on time tomorrow.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. May I come in, please</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Shall we leave now</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Could you repeat that</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Would you mind opening the window</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. May I come in, please</strong> (ขออนุญาตเข้าห้องครับ/ค่ะ) เป็นสำนวนสุภาพมาตรฐานเมื่อนักเรียนมาสายและเคาะประตูขอเข้าห้องเรียน
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 3 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: At the library desk
+Student: I'd like to return these two English grammar books.
+Librarian: They were due last Friday. _______________.
+Student: Oh, I'm sorry. How much do I owe?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. You can borrow them for free</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. I'm afraid you'll have to pay a small fine</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. You should buy a new library card</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Please keep them as long as you want</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. I'm afraid you'll have to pay a small fine</strong> (เกรงว่าคุณจะต้องจ่ายค่าปรับเล็กน้อย) เพราะหนังสือครบกำหนดส่ง (due) ตั้งแต่วันศุกร์ที่แล้ว และผู้เรียนถามต่อว่า <em>How much do I owe?</em> (ต้องจ่ายเท่าไหร่)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 4 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: Two teachers are talking about a new teaching app.
+David: Have you tried using the new vocabulary quiz app with your Grade 7 students?
+Nicha: Yes, I tried it yesterday, and _______________. The students loved it!</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. it was a total waste of time</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. it worked like a charm</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. it got out of hand</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. it cost an arm and a leg</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. it worked like a charm</strong> เป็นสำนวนแปลว่า 'มันได้ผลดีเยี่ยมมาก' สอดคล้องกับประโยคท้ายที่บอกว่านักเรียนชอบมาก (<em>The students loved it!</em>) ส่วน A=เสียเวลาเปล่า, C=ควบคุมไม่อยู่, D=แพงมาก
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 5 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: On the telephone
+Receptionist: Good morning, Bright Star School. How may I help you?
+Caller: Good morning. _______________, please?
+Receptionist: Hold the line, please. I'll put you through.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. Could I speak to the head of the English department</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Who are you talking to right now</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Did you call me five minutes ago</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Would you like to leave a message</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. Could I speak to the head of the English department</strong> (ขอสายหัวหน้ากลุ่มสาระภาษาอังกฤษหน่อยครับ/ค่ะ) สอดคล้องกับที่พนักงานต้อนรับตอบว่า <em>Hold the line, please. I'll put you through.</em> (ถือสายรอสักครู่ เดี๋ยวโอนสายให้)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 6 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: In an English speaking class
+Teacher: Could anyone tell me the main idea of this paragraph?
+Student: I'm not completely sure, but _______________. Is it about global warming?
+Teacher: Spot on! Well done.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. I have no idea at all</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. I'd rather not say anything</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. I'll give it a shot</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. I couldn't care less</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. I'll give it a shot</strong> แปลว่า 'หนูจะลองตอบดูค่ะ/ครับ' (Give it a shot / Give it a try = ลองดู) สอดคล้องกับที่นักเรียนไม่แน่ใจแต่ลองตอบว่าเป็นเรื่องภาวะโลกร้อน
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 7 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: Pim is nervous before her teaching demonstration.
+Pim: My teaching demo starts in ten minutes. My hands are shaking!
+Kwan: Take a deep breath. You've prepared so well. _______________!</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. Break a leg</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Spill the beans</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Hit the sack</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Bite the bullet</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. Break a leg!</strong> เป็นสำนวนใช้เพื่อให้กำลังใจก่อนขึ้นแสดงหรือสาธิตการสอน แปลว่า 'ขอให้โชคดี!' ส่วน B=เปิดเผยความลับ, C=เข้านอน, D=กัดฟันสู้เรื่องยากลำบาก
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 8 • Conversation</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: Asking for directions at school
+Visitor: Excuse me, could you tell me how to get to the auditorium?
+Teacher: Sure. Walk straight down this hall and turn left. _______________.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. You can't miss it</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Don't mention it</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>C. It's out of the question</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. You're welcome</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. You can't miss it</strong> ใช้ในการบอกทาง แปลว่า 'หาเจอแน่นอน / ไม่หลงแน่นอน (สังเกตง่ายมาก)'
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 9 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: Inviting a colleague to lunch
+Mark: We're ordering Thai food for lunch today. Would you like to join us?
+Ploy: _______________, but I brought my own lunch box from home today.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. I'd love to</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Never mind</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Yes, definitely</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. That's a terrible idea</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. I'd love to</strong> (อยากไปร่วมด้วยมากเลย) ใช้ตอบรับคำชวนอย่างสุภาพก่อนปฏิเสธด้วยเหตุผลว่าห่อข้าวมาจากบ้านแล้ว (<em>..., but I brought my own lunch box</em>)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 10 • Conversation</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Situation: A student didn't hear the teacher's instruction clearly.
+Teacher: For homework, complete exercises 3 and 4 on page 42.
+Student: I beg your pardon? _______________?
+Teacher: Exercises 3 and 4 on page 42.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Why do we have so much homework</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Could you say that again, please</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. When will the exam take place</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. What does this word mean</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Could you say that again, please</strong> (ช่วยพูดซ้ำอีกครั้งได้ไหมครับ/ค่ะ) ใช้คู่กับ <em>I beg your pardon?</em> เมื่อฟังคำสั่งการบ้านไม่ทัน
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 11 • Vocabulary</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Good teachers always _______________ their students to ask questions and express their ideas freely in the classroom.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. discourage</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. encourage</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. prevent</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. interrupt</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. encourage</strong> (ส่งเสริม / ให้กำลังใจ) โครงสร้าง <em>encourage someone to do something</em> สอดคล้องกับบริบทครูที่ดีส่งเสริมให้นักเรียนกล้าถามและแสดงความคิดเห็น (discourage=บั่นทอน, prevent=ป้องกัน, interrupt=ขัดจังหวะ)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 12 • Vocabulary</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Attendance at the orientation workshop is _______________ for all newly appointed teachers; everyone must be present.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. optional</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. temporary</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. compulsory</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>D. voluntary</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. compulsory</strong> (บังคับ / จำเป็นต้องทำ) มีคำบอกใบ้ท้ายประโยคคือ <em>everyone must be present</em> (ทุกคนต้องเข้าร่วม) ส่วน optional และ voluntary แปลว่าตามความสมัครใจ, temporary แปลว่าชั่วคราว
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 13 • Vocabulary</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Because the instructions on the worksheet were **ambiguous**, many students did not know what to do.
+Which word is closest in meaning to **ambiguous**?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. unclear</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. simple</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. accurate</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. polite</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. unclear</strong> (ไม่ชัดเจน / คลุมเครือ) มีความหมายตรงกับ <strong>ambiguous</strong> (กำกวม) ทำให้ผู้เรียนไม่รู้ว่าต้องทำอย่างไร
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 14 • Vocabulary</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Reading English storybooks regularly helps learners _______________ their vocabulary naturally over time.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box user-wrong">
+                  <span>A. shrink</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. expand</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. reduce</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. ignore</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. expand</strong> (ขยาย / เพิ่มพูน) การอ่านนิทานภาษาอังกฤษสม่ำเสมอช่วยเพิ่มพูนคลังคำศัพท์ (expand vocabulary) ส่วน shrink/reduce แปลว่าลดลง
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 15 • Vocabulary</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">The school principal decided to **postpone** the sports day until next month due to heavy rain.
+The word **postpone** means to _______________.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. call off</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. put off</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. look after</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. bring up</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. put off</strong> เป็น Phrasal Verb ที่แปลว่า 'เลื่อนออกไป' ตรงกับคำว่า <strong>postpone</strong> ส่วน call off = ยกเลิก (cancel), look after = ดูแล, bring up = เลี้ยงดู/หยิบยกประเด็น
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 16 • Vocabulary</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Children usually _______________ a second language faster when they have plenty of opportunities to use it in daily life.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. acquire</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. inquire</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>C. require</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. admire</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. acquire</strong> (ซึมซับ / ได้รับ / เรียนรู้ภาษาธรรมชาติ) คำว่า <em>Language Acquisition</em> เป็นคำศัพท์หลักทางภาษาศาสตร์และการสอนภาษา (inquire=สอบถาม, require=ต้องการ, admire=ชื่นชม)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 17 • Vocabulary</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Ms. Suda is a very _______________ teacher; she always checks every detail of the lesson plan carefully before class.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. careless</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. thorough</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. reluctant</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. clumsy</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. thorough</strong> (ละเอียดรอบคอบ / ถี่ถ้วน) สอดคล้องกับบริบทที่ตรวจเช็คทุกรายละเอียดของแผนการสอนอย่างระมัดระวัง (careless=สะเพร่า, reluctant=ลังเลไม่เต็มใจ, clumsy=ซุ่มซ่าม)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 18 • Vocabulary</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Please _______________ your mobile phones during the examination to avoid disturbing other candidates.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. turn on</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. switch off</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. look for</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. take after</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. switch off</strong> (ปิดเครื่อง) ปิดโทรศัพท์มือถือระหว่างการสอบเพื่อไม่ให้รบกวนผู้เข้าสอบคนอื่น
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 19 • Vocabulary</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Regular physical exercise is **beneficial** to both mental and physical health.
+Which word is the OPPOSITE of **beneficial**?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. helpful</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. harmful</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>C. useful</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. valuable</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. harmful</strong> (เป็นอันตราย / มีผลเสีย) โจทย์ถามคำตรงข้าม (OPPOSITE) ของ <strong>beneficial</strong> (ซึ่งแปลว่า มีประโยชน์)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 20 • Vocabulary</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">The students worked together in small groups to _______________ a solution to the environmental problem in their community.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. come up with</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>B. run out of</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. look down on</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. keep away from</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. come up with</strong> แปลว่า 'คิดหา (คำตอบ/แนวทางแก้ไข/ไอเดีย) ออก' (run out of = หมด, look down on = ดูถูก, keep away from = อยู่ให้ห่าง)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 21 • Grammar</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Neither the teacher nor the students _______________ aware of the schedule change yesterday.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box user-wrong">
+                  <span>A. is</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. are</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. was</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>D. were</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>D. were</strong> กฎ Subject-Verb Agreement สำหรับ <em>Neither A nor B</em> กริยาต้องผันตามประธานตัวที่อยู่ใกล้กริยาที่สุด คือ <em>the students</em> (พหูพจน์) และมีคำบอกเวลาอดีต <em>yesterday</em> จึงใช้ <strong>were</strong>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 22 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">While the students _______________ in groups, the principal walked into the classroom to observe the lesson.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. work</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. were working</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. have worked</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. will work</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. were working</strong> โครงสร้าง Past Continuous + Past Simple: เหตุการณ์ที่กำลังดำเนินอยู่ในอดีต (<em>While the students were working...</em>) แล้วมีอีกเหตุการณ์แทรกเข้ามา (<em>the principal walked...</em>)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 23 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Mr. Wichai _______________ English at this secondary school since he graduated from university in 2018.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. teaches</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. taught</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. has been teaching</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. is teaching</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. has been teaching</strong> มีคำว่า <em>since + จุดเริ่มต้นของเวลาในอดีต (2018)</em> แสดงถึงการกระทำที่ทำต่อเนื่องมาจนถึงปัจจุบัน ใช้ Present Perfect Continuous
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 24 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">If I _______________ enough time this weekend, I will prepare some extra flashcards for my primary students.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. have</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. had</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. would have</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. had had</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. have</strong> โครงสร้าง If-Clause Type 1 (เรื่องที่เป็นไปได้ในอนาคต): <em>If + Present Simple (have), Main Clause (will + V.inf)</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 25 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">If she had studied harder for the proficiency test, she _______________ it on her first attempt.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. will pass</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. would pass</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. would have passed</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. passed</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. would have passed</strong> โครงสร้าง If-Clause Type 3 (ตรงข้ามกับความจริงในอดีต): <em>If + Past Perfect (had studied), Main Clause (would have + V.3)</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 26 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">All examination papers must _______________ to the academic office before 4:00 p.m. on Friday.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. submit</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. be submitted</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. submitting</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. have submitted</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. be submitted</strong> ประธานคือ <em>All examination papers</em> (ข้อสอบถูกส่ง = Passive Voice) หลัง Modal Verb (<em>must</em>) ต้องตามด้วย <em>be + V.3 (be submitted)</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 27 • Grammar</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">The young boy _______________ mother is our school nurse won first prize in the English storytelling competition.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. who</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>B. whom</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. whose</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. which</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. whose</strong> เป็น Relative Pronoun แสดงความเป็นเจ้าของ วางหน้าคำนาม <em>mother</em> (เด็กชายผู้ซึ่งแม่ของเขาเป็นพยาบาลโรงเรียนของเรา)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 28 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Many students enjoy _______________ English songs because it helps them improve their pronunciation.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. listen to</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. to listen to</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. listening to</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. listened to</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. listening to</strong> คำกริยา <em>enjoy</em> ต้องตามด้วย Gerund (V.ing) เสมอ จึงใช้ <em>enjoy listening to</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 29 • Grammar</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Each of the participants in the English camp _______________ given a certificate of completion at the end of the program.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. was</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. were</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>C. have</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. are</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. was</strong> คำว่า <em>Each of + คำนามพหูพจน์</em> ถือเป็นประธานเอกพจน์เสมอ จึงต้องใช้กริยาเอกพจน์ในรูป Passive Voice คือ <strong>was</strong> (was given)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 30 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">You rarely forget to bring your teaching materials to class, _______________?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. don't you</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. do you</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. didn't you</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. aren't you</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. do you</strong> เรื่อง Question Tag: ในประโยคหลักมีคำว่า <strong>rarely</strong> ซึ่งมีความหมายเชิงปฏิเสธอยู่แล้ว ดังนั้นส่วน Tag ด้านหลังจึงต้องเป็นรูปบอกเล่า (<em>do you?</em>)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 31 • Grammar</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">The new language laboratory is equipped _______________ thirty computers and high-speed internet.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. by</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. in</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. with</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>D. for</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. with</strong> โครงสร้าง Collocation / Preposition ที่ถูกต้องคือ <em>be equipped with</em> (ติดตั้งไปด้วย / เพียบพร้อมไปด้วยอุปกรณ์...)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 32 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">The teacher made the students _______________ their essays again because there were too many spelling mistakes.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. check</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. to check</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. checking</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. checked</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. check</strong> โครงสร้าง Causative Verb: <em>make + someone + V.infinitive (ไม่เติม to)</em> ดังน้ันจึงใช้ <em>made the students check</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 33 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">_______________ heavy traffic in the morning, Ms. Naree arrived at school twenty minutes before the bell rang.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Because of</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Although</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. Despite</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. However</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. Despite</strong> แสดงความขัดแย้ง (ทั้งๆ ที่รถติดหนักแต่มาถึงก่อนเวลา) และตามด้วยคำนาม/วลี (<em>heavy traffic</em>) จึงใช้ <strong>Despite</strong> (หากใช้ Although ต้องตามด้วยประโยค S+V, หากใช้ Because of จะเป็นบอกเหตุผลซึ่งความหมายขัดกัน)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 34 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">This grammar exercise is much _______________ than the one we did last week.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. easy</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. easier</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. easiest</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. more easier</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. easier</strong> การเปรียบเทียบขั้นกว่า (Comparative Degree) มีคำว่า <em>than</em> และคำว่า <em>much</em> ขยายหน้าขั้นกว่า คำว่า <em>easy</em> เปลี่ยน y เป็น i เติม -er เป็น <strong>easier</strong> (ห้ามใช้ more ซ้อนกับ easier)
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 35 • Grammar</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">By the time the school bus arrived at the museum, the rain _______________ completely.</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. stops</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. has stopped</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. had stopped</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. was stopping</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. had stopped</strong> โครงสร้าง <em>By the time + Past Simple (arrived), Past Perfect (had + V.3)</em> เพื่อระบุว่าฝนได้หยุดตกเสร็จสิ้นไปก่อนที่รถบัสจะมาถึง
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 36 • Reading</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+            <div class="passage-preview">
+              <strong>📖 Passage 1 (Questions 36–39)</strong>
+              <div>Reading aloud to young children is one of the most effective ways to build early literacy skills. When teachers or parents read stories with expressive voices, children learn how words sound and how sentences flow. Moreover, storybooks introduce children to new vocabulary that they might not hear in everyday conversation. Even after children learn to read on their own, continuing to read aloud to them helps strengthen their listening comprehension and sparks their imagination. Instead of treating reading solely as a test of decoding words, educators should make story time an enjoyable shared experience.</div>
+            </div>
+          
+
+          <div class="q-text">What is the main idea of Passage 1?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Children should stop listening to stories once they can read by themselves.</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Reading aloud to children plays a vital role in developing their language and literacy skills.</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Everyday conversation contains more difficult vocabulary than storybooks.</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Teachers should test students' spelling after every storybook session.</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Reading aloud to children plays a vital role in developing their language and literacy skills.</strong> ใจความหลักของบทความที่ 1 ระบุไว้ชัดเจนตั้งแต่ประโยคแรกและสรุปครอบคลุมประโยชน์ของการอ่านออกเสียงให้เด็กฟัง
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 37 • Reading</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">According to the passage, how do children benefit from storybooks?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. They memorize grammar rules without needing a teacher.</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. They are exposed to vocabulary beyond daily conversation.</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. They no longer need to practice listening skills in class.</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>D. They learn how to write long academic essays immediately.</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. They are exposed to vocabulary beyond daily conversation.</strong> ตรงกับประโยค <em>"Moreover, storybooks introduce children to new vocabulary that they might not hear in everyday conversation."</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 38 • Reading</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">What does the word "them" in the sentence "...continuing to read aloud to them helps strengthen..." refer to?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. teachers</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. parents</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. storybooks</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>D. children</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>D. children</strong> ประโยคระบุว่า <em>"Even after children learn to read on their own, continuing to read aloud to them..."</em> คำว่า them จึงอ้างอิงถึง <strong>children</strong>
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 39 • Reading</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">What does the author suggest educators should do?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box user-wrong">
+                  <span>A. Focus only on testing how fast students decode words.</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Make reading stories together a pleasant and engaging activity.</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Avoid using expressive voices when reading in class.</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Assign students to read silently at all times.</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Make reading stories together a pleasant and engaging activity.</strong> ตรงกับประโยคสุดท้าย <em>"...educators should make story time an enjoyable shared experience."</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 40 • Reading</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+            <div class="passage-preview">
+              <strong>📖 Passage 2 (Questions 40–43)</strong>
+              <div>Sunlight Elementary School recently launched a "Zero-Waste Lunch" campaign to teach students about environmental responsibility. Prior to the campaign, the school cafeteria generated over forty large bags of plastic waste every week, mostly from single-use water bottles and plastic food wrappers. Under the new initiative, students are encouraged to bring reusable water bottles and cloth lunch bags. In addition, leftover food is collected in special green bins to be turned into compost for the school vegetable garden. Within just two months, the school reduced its plastic trash by more than seventy percent.</div>
+            </div>
+          
+
+          <div class="q-text">Why did Sunlight Elementary School start the "Zero-Waste Lunch" campaign?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. To raise money for building a new school cafeteria</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. To reduce plastic waste and promote environmental awareness among students</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. To replace all hot lunches with cold sandwiches</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. To close down the school vegetable garden</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. To reduce plastic waste and promote environmental awareness among students</strong> ตรงกับประโยคแรกที่ระบุว่าจัดแคมเปญเพื่อสอนความรับผิดชอบต่อสิ่งแวดล้อมและลดขยะพลาสติก
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 41 • Reading</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">What was the main source of waste in the cafeteria before the campaign?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Old textbooks and notebook paper</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Glass bottles and metal cans</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. Single-use water bottles and plastic wrappers</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Cloth bags and reusable containers</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. Single-use water bottles and plastic wrappers</strong> ตรงกับประโยคที่ 2: <em>"...mostly from single-use water bottles and plastic food wrappers."</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 42 • Reading</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">What happens to the leftover food under the new campaign?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box user-wrong">
+                  <span>A. It is thrown into plastic bags with other trash.</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. It is used to make compost for the school garden.</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. It is sold to local supermarkets.</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. It is burned behind the cafeteria every Friday.</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. It is used to make compost for the school garden.</strong> ตรงกับประโยค: <em>"...leftover food is collected in special green bins to be turned into compost for the school vegetable garden."</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 43 • Reading</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">How successful was the campaign after two months?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. Plastic waste decreased by over 70 percent.</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. Cafeteria waste increased to forty bags a day.</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Students stopped bringing water to school.</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Only ten percent of students joined the program.</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. Plastic waste decreased by over 70 percent.</strong> ตรงกับประโยคสุดท้าย: <em>"Within just two months, the school reduced its plastic trash by more than seventy percent."</em>
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 44 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">When a teacher asks students to read a short article quickly just to find the general idea or gist without worrying about every unknown word, which reading skill is being practiced?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box user-wrong">
+                  <span>A. Scanning</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Skimming</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Proofreading</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Intensive reading</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Skimming</strong> คือการอ่านแบบกวาดสายตาอย่างรวดเร็วเพื่อหาใจความสำคัญหรือภาพรวม (general idea / gist) ส่วน <em>Scanning</em> คือการอ่านเพื่อหาข้อมูลเฉพาะเจาะจง เช่น ตัวเลข ชื่อ วันเวลา
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 45 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">In the classic **PPP (Presentation – Practice – Production)** lesson framework, in which stage do students use the target language freely and creatively in role-plays or real-life tasks with minimal teacher control?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Warm-up stage</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>B. Presentation stage</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Practice stage</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>D. Production stage</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>D. Production stage</strong> ในรูปแบบการสอนแบบ 3Ps (Presentation - Practice - Production) ขั้น <strong>Production</strong> คือขั้นที่ผู้เรียนนำภาษาไปใช้จริงอย่างอิสระและสร้างสรรค์ (เช่น Role-play หรือสถานการณ์จำลอง)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 46 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Which of the following is a key characteristic of **Communicative Language Teaching (CLT)**?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Memorizing long lists of vocabulary and translating texts word for word</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Emphasizing meaningful interaction and using authentic language in real-life contexts</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Prohibiting students from speaking until their grammar is 100% error-free</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>D. Explaining all grammar rules exclusively in the students' native language</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Emphasizing meaningful interaction and using authentic language in real-life contexts</strong> หัวใจสำคัญของการสอนแบบเพื่อการสื่อสาร (CLT) คือการเน้นให้ผู้เรียนสื่อสารอย่างมีความหมายในบริบทจริง
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 47 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">Which pair of language skills is categorized as **Receptive Skills**?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Speaking and Writing</span>
+                  
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>B. Listening and Speaking</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. Listening and Reading</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Reading and Writing</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. Listening and Reading</strong> ทักษะการรับสาร (<strong>Receptive Skills</strong>) ได้แก่ การฟังและการอ่าน ส่วนทักษะการส่งสาร (<strong>Productive Skills</strong>) ได้แก่ การพูดและการเขียน (Speaking and Writing)
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 48 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">A primary school English teacher says, "Stand up, touch your nose, and jump three times!" and the students physically perform the actions. Which teaching method is the teacher using?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. Grammar-Translation Method (GTM)</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>B. Total Physical Response (TPR)</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>C. Audio-Lingual Method (ALM)</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Silent Way</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>B. Total Physical Response (TPR)</strong> คิดค้นโดย James Asher เป็นวิธีการสอนที่เชื่อมโยงคำสั่งทางภาษากับการเคลื่อนไหวร่างกาย เหมาะอย่างยิ่งสำหรับผู้เรียนระดับประถมศึกษาหรือผู้เริ่มต้น
+          </div>
+        </div>
+      
+        <div class="q-card is-wrong" data-status="wrong">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 49 • ELT Pedagogy</span>
+            <span class="q-status-badge wrong">
+              ❌ ตอบผิด
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">During a semester, a teacher uses exit tickets, classroom observations, and short quizzes to check students' understanding and adjust future lessons. What type of assessment is this?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box correct-choice">
+                  <span>A. Formative assessment</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box user-wrong">
+                  <span>B. Summative assessment</span>
+                  <span style='font-size:0.8rem; color:#991b1b;'>คำตอบที่คุณเลือก ❌</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>C. Standardized national testing</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. Placement testing</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>A. Formative assessment</strong> (การประเมินเพื่อพัฒนาการเรียนรู้ระหว่างเรียน) ใช้ตรวจสอบความเข้าใจระหว่างภาคเรียนเพื่อปรับปรุงการสอน ส่วน <em>Summative assessment</em> คือการประเมินสรุปผลปลายภาคเรียน
+          </div>
+        </div>
+      
+        <div class="q-card is-correct" data-status="correct">
+          <div class="q-title-row">
+            <span class="q-tag">ข้อที่ 50 • ELT Pedagogy</span>
+            <span class="q-status-badge correct">
+              ✅ ตอบถูก
+            </span>
+          </div>
+
+          
+
+          <div class="q-text">According to the **CEFR (Common European Framework of Reference for Languages)**, which level represents a **Proficient User** of English?</div>
+
+          <div class="opt-list">
+            
+                <div class="opt-box ">
+                  <span>A. A1 – A2</span>
+                  
+                </div>
+              
+                <div class="opt-box ">
+                  <span>B. B1 – B2</span>
+                  
+                </div>
+              
+                <div class="opt-box correct-choice">
+                  <span>C. C1 – C2</span>
+                  <span style='font-size:0.8rem; color:#166534;'>เฉลยที่ถูกต้อง ✅</span>
+                </div>
+              
+                <div class="opt-box ">
+                  <span>D. D1 – D2</span>
+                  
+                </div>
+              
+          </div>
+
+          <div class="exp-box">
+            <strong>💡 คำอธิบายเฉลย:</strong> <strong>C. C1 – C2</strong> ตามกรอบมาตรฐาน CEFR แบ่งเป็น 3 กลุ่มหลัก: <strong>A1–A2 (Basic User)</strong>, <strong>B1–B2 (Independent User)</strong>, และ <strong>C1–C2 (Proficient User)</strong>
+          </div>
+        </div>
+      
+  </div>
+</div>
+
+<script>
+function filterQuestions(type, btn) {
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+
+  const cards = document.querySelectorAll(".q-card");
+  cards.forEach(card => {
+    const status = card.getAttribute("data-status");
+    if (type === "all") {
+      card.style.display = "block";
+    } else if (type === "wrong") {
+      card.style.display = (status === "wrong") ? "block" : "none";
+    } else if (type === "correct") {
+      card.style.display = (status === "correct") ? "block" : "none";
+    }
+  });
+}
+
+// Initial filter: Show only wrong questions
+filterQuestions("wrong", document.querySelector(".tab-btn"));
+</script>
+</body>
+</html>
