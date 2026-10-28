@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข้อสอบครูผู้ช่วย วิชาเอกภาษาอังกฤษ (ชุดที่ 1: ระดับเริ่มต้น 50 ข้อ)</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #dbeafe;
+      --accent: #0284c7;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      accent-color: var(--primary);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #1d4ed8);
+      color: white;
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .title-group h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .title-group p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin-top: 2px;
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge-pill {
+      background: rgba(255,255,255,0.18);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
+    }
+
+    .timer-box {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.15s ease;
+    }
+    .btn-white { background: white; color: var(--primary); }
+    .btn-white:hover { background: #eff6ff; }
+    .btn-success { background: #22c55e; color: white; }
+    .btn-success:hover { background: #16a34a; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f1f5f9; }
+
+    .container {
+      max-width: 1200px;
+      margin: 24px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .container { grid-template-columns: 1fr; }
+      .sidebar { position: static !important; }
+    }
+
+    .candidate-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .candidate-card input {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      min-width: 260px;
+    }
+
+    .section-banner {
+      background: #eff6ff;
+      border-left: 5px solid var(--primary);
+      padding: 14px 18px;
+      border-radius: 8px;
+      margin: 24px 0 16px;
+    }
+    .section-banner h2 {
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    .section-banner p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .passage-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      padding: 18px 20px;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 0.96rem;
+      line-height: 1.75;
+    }
+    .passage-box h4 {
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: border-color 0.2s;
+    }
+    .question-card.answered {
+      border-left: 4px solid var(--primary);
+    }
+
+    .q-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 10px;
+    }
+    .q-num {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      height: fit-content;
+      white-space: nowrap;
+    }
+    .q-text {
+      font-size: 1rem;
+      font-weight: 600;
+      flex: 1;
+      white-space: pre-line;
+    }
+
+    .options-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-size: 0.95rem;
+    }
+    .option-label:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+    .option-label:has(input:checked) {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+    .option-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 100px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .sidebar h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .grid-sheet {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .sheet-cell {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 4px;
+      text-align: center;
+      font-size: 0.8rem;
+      cursor: pointer;
+      background: #f8fafc;
+      transition: all 0.15s;
+    }
+    .sheet-cell:hover {
+      border-color: var(--primary);
+    }
+    .sheet-cell.done {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.active { display: flex; }
+    .modal-box {
+      background: white;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+    }
+    .modal-box h3 {
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .code-area {
+      width: 100%;
+      height: 110px;
+      padding: 12px;
+      font-family: monospace;
+      font-size: 0.88rem;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 12px 0;
+      resize: none;
+    }
+
+    @media print {
+      header, .sidebar, .btn, .modal-backdrop { display: none !important; }
+      .container { display: block; max-width: 100%; margin: 0; }
+      .question-card { break-inside: avoid; border: 1px solid #ccc; margin-bottom: 12px; padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="title-group">
+      <h1>📝 แบบทดสอบวิชาเอกภาษาอังกฤษ (การสอบแข่งขันเพื่อบรรจุและแต่งตั้งบุคคลเข้ารับราชการเป็นข้าราชการครูและบุคลากรทางการศึกษา ตำแหน่งครูผู้ช่วย)</h1>
+      <p>ชุดที่ 2 : ระดับกลาง (Intermediate) (Foundation & Core Basics) • จำนวน 50 ข้อ (4 ตัวเลือก A, B, C, D) • เวลาแนะนำ 60 นาที</p>
+    </div>
+    <div class="status-bar">
+      <div class="badge-pill" id="progressText">ทำแล้ว 0 / 50 ข้อ</div>
+      <div class="timer-box">⏱️ <span id="timerDisplay">60:00</span></div>
+      <button class="btn btn-white" onclick="toggleTimer()" id="timerBtn">หยุดเวลาชั่วคราว</button>
+      <button class="btn btn-white" onclick="window.print()">🖨️ พิมพ์เป็นกระดาษ</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <main>
+    <div class="candidate-card">
+      <div>
+        <label style="font-weight:700; display:block; margin-bottom:4px;">👤 ชื่อ-นามสกุล ผู้เข้าสอบ (Candidate Name):</label>
+        <input type="text" id="candidateName" placeholder="กรอกชื่อของคุณก่อนเริ่มทำข้อสอบ..." oninput="saveProgress()">
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-outline" onclick="clearAllAnswers()">🔄 ล้างคำตอบทั้งหมด</button>
+        <button class="btn btn-success" onclick="submitExam()">✅ ส่งกระดาษคำตอบ (สร้างรหัสส่งตรวจ)</button>
+      </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+  </main>
+
+  <aside class="sidebar">
+    <h3>
+      <span>📋 กระดาษคำตอบ (Answer Sheet)</span>
+      <span id="sideCount" style="font-size:0.85rem; color:var(--muted);">0/50</span>
+    </h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:12px;">คลิกที่หมายเลขข้อเพื่อข้ามไปยังข้อนั้นได้ทันที ระบบบันทึกคำตอบอัตโนมัติ</p>
+    <div class="grid-sheet" id="answerSheetGrid"></div>
+    <button class="btn btn-success" style="width:100%; padding:12px; font-size:1rem;" onclick="submitExam()">
+      📩 ส่งกระดาษคำตอบ
+    </button>
+  </aside>
+</div>
+
+<!-- Modal สำหรับส่งรหัสคำตอบให้ผู้ตรวจ -->
+<div class="modal-backdrop" id="submitModal">
+  <div class="modal-box">
+    <h3>🎉 สรุปกระดาษคำตอบของคุณ</h3>
+    <p id="modalSummaryText" style="font-size:0.92rem; color:var(--muted);"></p>
+    <p style="font-size:0.88rem; margin-top:8px; font-weight:600;">คัดลอกรหัสคำตอบด้านล่างนี้ส่งให้ผู้คุมสอบเพื่อตรวจคะแนนและรับเฉลยละเอียด:</p>
+    <textarea class="code-area" id="answerCodeOutput" readonly></textarea>
+    <div style="display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;">
+      <button class="btn btn-outline" onclick="closeModal()">กลับไปทบทวน</button>
+      <button class="btn btn-success" onclick="copyAnswerCode()">📋 คัดลอกรหัสคำตอบ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const EXAM_DATA = [
+  {
+    "id": 1,
+    "part": "Part 1: Situational Dialogues & Expressions (ข้อ 1–10)",
+    "partDesc": "สำนวนและการสื่อสารในสถานการณ์วิชาชีพครูและการทำงานร่วมกัน (ระดับ B2)",
+    "q": "A teacher is feeling overwhelmed by heavy administrative paperwork before accreditation. Her colleague notices and wants to offer practical help. What should the colleague say?",
+    "options": [
+      "A. You should have managed your time better.",
+      "B. Is there anything I can take off your hands?",
+      "C. Why do you always complain about paperwork?",
+      "D. Paperwork is part of being a teacher, you know."
+    ]
+  },
+  {
+    "id": 2,
+    "q": "During an English department meeting, Ajarn Suda proposes a new communicative activity that perfectly addresses students' hesitation to speak. The department head agrees completely. What would the head say?",
+    "options": [
+      "A. You've really hit the nail on the head.",
+      "B. You're barking up the wrong tree.",
+      "C. Let's call it a day then.",
+      "D. It's water under the bridge."
+    ]
+  },
+  {
+    "id": 3,
+    "q": "A teacher wants to politely ask a supervisor to observe her classroom next Tuesday. Which of the following is the most professional and polite request?",
+    "options": [
+      "A. You have to come observe my class next Tuesday.",
+      "B. Would you happen to be available to observe my class next Tuesday?",
+      "C. Can you come to my class next Tuesday or not?",
+      "D. I want you to inspect my lesson next Tuesday."
+    ]
+  },
+  {
+    "id": 4,
+    "q": "At a parent-teacher conference, a parent is concerned that her son is very quiet in English class. How should the teacher respond reassuringly and professionally?",
+    "options": [
+      "A. He never speaks because his English is very poor.",
+      "B. Don't worry, he is just lazy and will improve later.",
+      "C. He is attentive in class; we are gently encouraging him to participate at his own pace.",
+      "D. You should scold him at home so he talks more."
+    ]
+  },
+  {
+    "id": 5,
+    "q": "Kru Wichai kindly agrees to cover Kru Danai's afternoon class due to an emergency doctor appointment. How does Kru Danai express sincere gratitude?",
+    "options": [
+      "A. It's about time you helped me.",
+      "B. I really appreciate it, Wichai. I owe you one!",
+      "C. You don't have to teach well, just stay there.",
+      "D. Make sure you don't leave the students alone."
+    ]
+  },
+  {
+    "id": 6,
+    "q": "Two teachers are planning a surprise retirement party for the school director. One teacher reminds the other not to reveal the secret. What idiom should she use?",
+    "options": [
+      "A. Whatever you do, don't spill the beans!",
+      "B. Let's bite the bullet and tell him.",
+      "C. Break a leg at the party!",
+      "D. You should burn the midnight oil."
+    ]
+  },
+  {
+    "id": 7,
+    "q": "The school budget for the annual English Camp has been reduced. The planning committee needs to decrease spending on souvenirs. Which phrase fits best?\n\"Due to budget constraints, we have to __________ our expenses on gift bags.\"",
+    "options": [
+      "A. look down on",
+      "B. cut back on",
+      "C. run out of",
+      "D. catch up with"
+    ]
+  },
+  {
+    "id": 8,
+    "q": "During a curriculum review meeting, Teacher A disagrees with Teacher B's proposal to remove grammar quizzes entirely. How should Teacher A express polite disagreement?",
+    "options": [
+      "A. That makes no sense at all.",
+      "B. I see your point regarding fluency, but students still need structural accuracy.",
+      "C. Your proposal is completely outdated.",
+      "D. I refuse to listen to this idea."
+    ]
+  },
+  {
+    "id": 9,
+    "q": "A student is feeling nervous and wants to give up before the provincial English speech contest. His teacher says: \"You've prepared thoroughly. __________, you can do this!\"",
+    "options": [
+      "A. Hang in there",
+      "B. Never mind",
+      "C. Call it off",
+      "D. Out of the blue"
+    ]
+  },
+  {
+    "id": 10,
+    "q": "Secretary: \"Good morning, Ban Nong Khai School. May I help you?\"\nCaller: \"May I speak with Teacher Arther, please?\"\nSecretary: \"I'm afraid he is teaching right now. __________?\"",
+    "options": [
+      "A. Why don't you call someone else",
+      "B. Would you like to leave a message",
+      "C. Do you know where he is",
+      "D. Can you wait for two hours"
+    ]
+  },
+  {
+    "id": 11,
+    "part": "Part 2: Advanced Vocabulary & Phrasal Verbs (ข้อ 11–20)",
+    "partDesc": "คลังคำศัพท์วิชาการ (Academic Vocabulary), Collocations, Phrasal Verbs และคำศัพท์สับสน",
+    "q": "In modern student-centered classrooms, the primary role of the teacher is not to lecture, but to __________ learning and critical thinking.",
+    "options": [
+      "A. complicate",
+      "B. facilitate",
+      "C. restrict",
+      "D. postpone"
+    ]
+  },
+  {
+    "id": 12,
+    "q": "Before implementing the new bilingual reading program, the academic department decided to __________ extensive research on its effectiveness.",
+    "options": [
+      "A. make",
+      "B. do",
+      "C. conduct",
+      "D. create"
+    ]
+  },
+  {
+    "id": 13,
+    "q": "Choose the word closest in meaning to the underlined word:\n\"The teacher was **meticulous** in preparing the lesson plans, checking every learning objective and worksheet carefully.\"",
+    "options": [
+      "A. careless",
+      "B. thorough and attentive",
+      "C. hesitant",
+      "D. indifferent"
+    ]
+  },
+  {
+    "id": 14,
+    "q": "The teacher explained that she could no longer __________ students chatting loudly while others were giving their oral presentations.",
+    "options": [
+      "A. put up with",
+      "B. look forward to",
+      "C. get along with",
+      "D. run out of"
+    ]
+  },
+  {
+    "id": 15,
+    "q": "Choose the word **OPPOSITE** in meaning to the underlined word:\n\"An effective classroom policy should be fair and adaptable, rather than overly **rigid**.\"",
+    "options": [
+      "A. strict",
+      "B. flexible",
+      "C. demanding",
+      "D. severe"
+    ]
+  },
+  {
+    "id": 16,
+    "q": "While a **curriculum** covers the overall educational program and philosophy of an entire school or nation, a __________ is a document detailing specific topics and assessment schedules for a particular subject.",
+    "options": [
+      "A. syllabus",
+      "B. dissertation",
+      "C. transcript",
+      "D. prospectus"
+    ]
+  },
+  {
+    "id": 17,
+    "q": "The school director instructed the academic committee to __________ a comprehensive evaluation of English teaching materials.",
+    "options": [
+      "A. carry out",
+      "B. bring down",
+      "C. give away",
+      "D. take after"
+    ]
+  },
+  {
+    "id": 18,
+    "q": "Choose the word closest in meaning to **feasible**:\n\"The committee agreed that holding an online English workshop was a **feasible** alternative during the flood crisis.\"",
+    "options": [
+      "A. impossible",
+      "B. practical and achievable",
+      "C. unprofitable",
+      "D. destructive"
+    ]
+  },
+  {
+    "id": 19,
+    "q": "The Ministry of Education initiated the digital classroom project to help __________ the educational gap between urban and rural schools.",
+    "options": [
+      "A. widen",
+      "B. bridge",
+      "C. dig",
+      "D. separate"
+    ]
+  },
+  {
+    "id": 20,
+    "q": "Due to the severe tropical storm warning, the school administration decided to __________ tomorrow's sports day until further notice.",
+    "options": [
+      "A. call off",
+      "B. put off",
+      "C. turn on",
+      "D. look into"
+    ]
+  },
+  {
+    "id": 21,
+    "part": "Part 3: Grammar, Sentence Structure & Error Identification (ข้อ 21–35)",
+    "partDesc": "โครงสร้างไวยากรณ์ขั้นสูง: Inversion, Subjunctive, Participle Clauses และ Error Identification",
+    "q": "Hardly __________ the examination instructions when the bell signaled the start of the test.",
+    "options": [
+      "A. the invigilator had finished",
+      "B. had the invigilator finished",
+      "C. did the invigilator finish",
+      "D. was the invigilator finishing"
+    ]
+  },
+  {
+    "id": 22,
+    "q": "The school board recommended that each classroom teacher __________ present at the morning assembly on Monday.",
+    "options": [
+      "A. is",
+      "B. was",
+      "C. be",
+      "D. will be"
+    ]
+  },
+  {
+    "id": 23,
+    "q": "__________ the comprehensive grammar module, the students were ready to take the mock certification test.",
+    "options": [
+      "A. Having completed",
+      "B. Completed",
+      "C. To complete",
+      "D. On completing"
+    ]
+  },
+  {
+    "id": 24,
+    "q": "If Teacher Prasert __________ computer-assisted language software during his master's studies, he __________ modern multimedia tools so easily in class today.",
+    "options": [
+      "A. had not studied / wouldn't use",
+      "B. hadn't studied / wouldn't be using",
+      "C. didn't study / won't use",
+      "D. hasn't studied / wouldn't have used"
+    ]
+  },
+  {
+    "id": 25,
+    "q": "The new language laboratory, __________ was generously funded by the alumni association, features state-of-the-art pronunciation software.",
+    "options": [
+      "A. which",
+      "B. that",
+      "C. where",
+      "D. what"
+    ]
+  },
+  {
+    "id": 26,
+    "q": "__________ about the rescheduled faculty meeting, he would not have missed the important curriculum briefing.",
+    "options": [
+      "A. Had he informed",
+      "B. Had he been informed",
+      "C. If he were informed",
+      "D. If he informed"
+    ]
+  },
+  {
+    "id": 27,
+    "q": "Outstanding educators are known for being enthusiastic, knowledgeable, and __________.",
+    "options": [
+      "A. have great patience",
+      "B. patient",
+      "C. with patience",
+      "D. patiently"
+    ]
+  },
+  {
+    "id": 28,
+    "q": "The school principal had the faulty air-conditioning units in the language center __________ before summer school started.",
+    "options": [
+      "A. repair",
+      "B. repaired",
+      "C. repairing",
+      "D. to repair"
+    ]
+  },
+  {
+    "id": 29,
+    "q": "It was Kru Malee __________ introduced the digital storytelling project to the provincial school competition.",
+    "options": [
+      "A. which",
+      "B. who",
+      "C. whom",
+      "D. whose"
+    ]
+  },
+  {
+    "id": 30,
+    "q": "We regret __________ all candidates that the interview results will be announced next Monday instead of today.",
+    "options": [
+      "A. informing",
+      "B. to inform",
+      "C. inform",
+      "D. having informed"
+    ]
+  },
+  {
+    "id": 31,
+    "q": "Not only __________ first prize in the national English debate competition, but she also earned a full university scholarship.",
+    "options": [
+      "A. student won",
+      "B. did the student win",
+      "C. the student won",
+      "D. won the student"
+    ]
+  },
+  {
+    "id": 32,
+    "q": "Kru Suda is still not at the staff meeting, and her mobile phone is switched off. She __________ about the change in schedule.",
+    "options": [
+      "A. must forget",
+      "B. must have forgotten",
+      "C. should have forgotten",
+      "D. ought to forget"
+    ]
+  },
+  {
+    "id": 33,
+    "q": "**Error Identification:** Identify the underlined part that is grammatically INCORRECT:\n\"Neither the (A) **head of department** nor the (B) **English teachers** (C) **was** aware of the changes in the national (D) **testing schedule**.\"",
+    "options": [
+      "A. head of department",
+      "B. English teachers",
+      "C. was",
+      "D. testing schedule"
+    ]
+  },
+  {
+    "id": 34,
+    "q": "**Error Identification:** Identify the underlined part that is grammatically INCORRECT:\n\"Despite of (A) **the heavy rain** yesterday morning, all the candidates (B) **arrived** on time to take (C) **their** teacher licensure (D) **examination**.\"",
+    "options": [
+      "A. Despite of",
+      "B. arrived",
+      "C. their",
+      "D. examination"
+    ]
+  },
+  {
+    "id": 35,
+    "q": "**Error Identification:** Identify the underlined part that is grammatically INCORRECT:\n\"The students (A) **which** scored highest on the reading assessment (B) **were** awarded certificates (C) **by** the provincial (D) **governor**.\"",
+    "options": [
+      "A. which",
+      "B. were",
+      "C. by",
+      "D. governor"
+    ]
+  },
+  {
+    "id": 36,
+    "part": "Part 4: Reading Comprehension (ข้อ 36–43)",
+    "partDesc": "การอ่านทำความเข้าใจบทความวิชาการทางการศึกษา และทฤษฎีการเรียนรู้ภาษา",
+    "passageTitle": "Passage 1: AI Integration in English Language Classrooms",
+    "passageText": "The integration of Artificial Intelligence (AI) in English language education has fundamentally reshaped pedagogical practices. Automated speech recognition tools provide instant phonetic feedback, while generative language models offer personalized grammar explanations tailored to individual proficiency levels. However, educational researchers caution against viewing technology as an infallible panacea. Language acquisition is inherently a social and cultural enterprise. While algorithms can efficiently analyze syntactic accuracy and generate vocabulary drills, they cannot replicate human empathy, cultural nuance, or the spontaneous conversational rapport that a dedicated teacher fosters. Consequently, progressive educators advocate for a blended approach where AI handles routine diagnostic tasks, freeing teachers to focus on meaningful interpersonal communication and critical thinking.",
+    "q": "What is the primary message of the passage regarding AI in language education?",
+    "options": [
+      "A. AI will completely replace English language teachers within the next decade.",
+      "B. AI tools are ineffective and should be excluded from language classrooms.",
+      "C. AI should serve as a complementary tool alongside human teachers rather than a total replacement.",
+      "D. Grammar drills are the only useful application of educational technology."
+    ]
+  },
+  {
+    "id": 37,
+    "passageTitle": "Passage 1: AI Integration in English Language Classrooms",
+    "q": "According to the passage, which of the following is something AI tools CANNOT provide?",
+    "options": [
+      "A. Immediate feedback on pronunciation and phonetics",
+      "B. Customized grammar explanations for individual students",
+      "C. Genuine human empathy and sociocultural nuance",
+      "D. Automated vocabulary exercises"
+    ]
+  },
+  {
+    "id": 38,
+    "passageTitle": "Passage 1: AI Integration in English Language Classrooms",
+    "q": "In line 4, the phrase **\"an infallible panacea\"** most nearly means:",
+    "options": [
+      "A. a temporary classroom problem",
+      "B. a flawless universal cure-all solution",
+      "C. an expensive commercial software",
+      "D. an outdated teaching philosophy"
+    ]
+  },
+  {
+    "id": 39,
+    "passageTitle": "Passage 1: AI Integration in English Language Classrooms",
+    "q": "What tone does the author adopt toward the future of language teaching with AI?",
+    "options": [
+      "A. Cynical and hostile",
+      "B. Balanced and forward-looking",
+      "C. Overly alarmist",
+      "D. Indifferent and unconcerned"
+    ]
+  },
+  {
+    "id": 40,
+    "passageTitle": "Passage 2: The Silent Period in Second Language Acquisition",
+    "passageText": "In the field of Second Language Acquisition (SLA), linguist Stephen Krashen popularized the concept of the **\"Silent Period.\"** When learners—especially young children—are first introduced to a new language, they often produce very little oral output. Traditional pedagogies frequently misdiagnosed this reticence as cognitive deficiency, defiance, or lack of comprehension. Modern SLA research, however, reveals that during this phase, learners are actively processing comprehensible input, constructing internal linguistic hypotheses, and acquiring phonological patterns. Forcing students into premature speech production can substantially elevate their **Affective Filter**, causing performance anxiety and long-term reluctance to communicate. Patient educators recognize that receptive competence naturally precedes productive mastery.",
+    "q": "What is the main finding regarding the \"Silent Period\" in SLA?",
+    "options": [
+      "A. Students in the silent period are unwilling to learn and should be disciplined.",
+      "B. It is a natural cognitive stage where learners absorb and internalize language before speaking.",
+      "C. It indicates that the learner has severe auditory learning disabilities.",
+      "D. Teachers must immediately force students to speak to break the silence."
+    ]
+  },
+  {
+    "id": 41,
+    "passageTitle": "Passage 2: The Silent Period in Second Language Acquisition",
+    "q": "What negative consequence occurs when teachers force learners to speak prematurely?",
+    "options": [
+      "A. Students will forget their native language.",
+      "B. The Affective Filter rises, creating anxiety and discouraging communication.",
+      "C. The school curriculum becomes too difficult to manage.",
+      "D. Students will speak English with a native accent."
+    ]
+  },
+  {
+    "id": 42,
+    "passageTitle": "Passage 2: The Silent Period in Second Language Acquisition",
+    "q": "The word **\"reticence\"** in paragraph 1 is closest in meaning to:",
+    "options": [
+      "A. hesitation or unwillingness to speak",
+      "B. great excitement and eagerness",
+      "C. physical exhaustion",
+      "D. violent disobedience"
+    ]
+  },
+  {
+    "id": 43,
+    "passageTitle": "Passage 2: The Silent Period in Second Language Acquisition",
+    "q": "Which pedagogical principle is directly supported by the passage?",
+    "options": [
+      "A. Productive skills must always be taught before receptive skills.",
+      "B. Receptive competence (listening and understanding) naturally precedes oral production.",
+      "C. Grammar translation is superior to natural language acquisition.",
+      "D. Silent reading is completely useless in second language learning."
+    ]
+  },
+  {
+    "id": 44,
+    "part": "Part 5: ELT Methodology & Assessment (ข้อ 44–50)",
+    "partDesc": "ทฤษฎีการสอนภาษาอังกฤษเชิงวิชาชีพครู (CLT, TBLT, Krashen, CLIL, และการประเมินตามสภาพจริง)",
+    "q": "According to Stephen Krashen's **Input Hypothesis (i + 1)**, for optimal language acquisition to take place, the linguistic input provided by the teacher should be:",
+    "options": [
+      "A. identical to the student's existing competence (i)",
+      "B. slightly above the student's current level of competence (i + 1)",
+      "C. significantly advanced to challenge the students rigorously (i + 5)",
+      "D. strictly restricted to grammar rules memorized from textbooks"
+    ]
+  },
+  {
+    "id": 45,
+    "q": "An English teacher coordinates with the science teacher to teach a unit on photosynthesis entirely in English. Students learn both biological facts and English scientific terminology simultaneously. This pedagogical approach is known as:",
+    "options": [
+      "A. The Direct Method",
+      "B. Audio-Lingual Method (ALM)",
+      "C. Content and Language Integrated Learning (CLIL)",
+      "D. Grammar-Translation Method (GTM)"
+    ]
+  },
+  {
+    "id": 46,
+    "q": "In **Task-Based Language Teaching (TBLT)**, what defines a genuine \"task\"?",
+    "options": [
+      "A. Filling in blanks in isolated grammar sentences",
+      "B. An activity with a clear real-world communicative outcome (e.g., booking a flight or designing a tour itinerary)",
+      "C. Repeating choral drills after the teacher's model",
+      "D. Translating an ancient literary poem word for word into Thai"
+    ]
+  },
+  {
+    "id": 47,
+    "q": "A teacher models how to write a formal email, provides sentence frames, guides students in pair-writing, and gradually withdraws assistance until students write independently. This temporary instructional support is known in Vygotskian pedagogy as:",
+    "options": [
+      "A. fossilization",
+      "B. scaffolding",
+      "C. memorization",
+      "D. code-switching"
+    ]
+  },
+  {
+    "id": 48,
+    "q": "When assessing an oral presentation, a teacher uses a scoring grid that evaluates Pronunciation, Fluency, Vocabulary, and Content on separate 4-point scales. What kind of assessment tool is this?",
+    "options": [
+      "A. Holistic Rubric",
+      "B. Analytic Rubric",
+      "C. Norm-referenced standardized test",
+      "D. Placement multiple-choice test"
+    ]
+  },
+  {
+    "id": 49,
+    "q": "In an inclusive classroom, a teacher adjusts content, activities, and product expectations based on students' varying readiness levels, learning profiles, and interests. This instructional strategy is termed:",
+    "options": [
+      "A. Differentiated Instruction",
+      "B. Rote Learning",
+      "C. Standardized Drill Practice",
+      "D. One-Size-Fits-All Approach"
+    ]
+  },
+  {
+    "id": 50,
+    "q": "According to Krashen's **Affective Filter Hypothesis**, what environmental factor most effectively facilitates second language acquisition?",
+    "options": [
+      "A. Strict public punishment for every grammatical error",
+      "B. High-stakes daily quizzes that induce intense pressure",
+      "C. A low-anxiety, supportive classroom climate with high motivation and self-esteem",
+      "D. Eliminating all student-to-student interaction"
+    ]
+  }
+];
+
+const STORAGE_KEY = "kru_eng_exam_set2_intermediate_v1";
+const CLOUD_TOPIC = "kru_eng_art_tracker_2026_set2";
+let userAnswers = {};
+let secondsLeft = 60 * 60;
+let timerRunning = true;
+let timerInterval = null;
+let sessionId = "";
+let syncTimeout = null;
+
+function getDeviceName() {
+  const ua = navigator.userAgent || "";
+  if (/iPad/i.test(ua)) return "iPad";
+  if (/iPhone/i.test(ua)) return "iPhone";
+  if (/Android/i.test(ua)) return "Android";
+  if (/Macintosh/i.test(ua)) return "Mac";
+  if (/Windows/i.test(ua)) return "Windows PC";
+  return "Browser";
+}
+
+function buildAnswerCode() {
+  const name = document.getElementById("candidateName").value.trim() || "ยังไม่ระบุชื่อ";
+  const pairs = [];
+  for (let i = 1; i <= 50; i++) {
+    pairs.push(`${i}:${userAnswers[i] || "-"}`);
+  }
+  return `SET2-INTERMEDIATE|${name}|${pairs.join(",")}`;
+}
+
+function sendCloudSync(eventType) {
+  try {
+    const name = document.getElementById("candidateName").value.trim() || "ผู้เข้าสอบ (ยังไม่ระบุชื่อ)";
+    const count = Object.keys(userAnswers).length;
+    const payload = {
+      sessionId: sessionId,
+      set: "SET2-INTERMEDIATE",
+      name: name,
+      device: getDeviceName(),
+      event: eventType,
+      answeredCount: count,
+      totalQuestions: 50,
+      secondsLeft: secondsLeft,
+      code: buildAnswerCode(),
+      updatedAt: new Date().toISOString()
+    };
+    fetch(`https://ntfy.sh/${CLOUD_TOPIC}`, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+function scheduleCloudSync(eventType) {
+  if (syncTimeout) clearTimeout(syncTimeout);
+  syncTimeout = setTimeout(() => {
+    sendCloudSync(eventType);
+  }, 2000);
+}
+
+function initExam() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      userAnswers = parsed.answers || {};
+      sessionId = parsed.sessionId || "";
+      if (parsed.name) document.getElementById("candidateName").value = parsed.name;
+      if (typeof parsed.secondsLeft === "number" && parsed.secondsLeft > 0) {
+        secondsLeft = parsed.secondsLeft;
+      }
+    } catch (e) {}
+  }
+  if (!sessionId) {
+    sessionId = "S_" + Math.random().toString(36).substring(2, 9).toUpperCase();
+  }
+
+  renderQuestions();
+  renderAnswerSheet();
+  updateProgressUI();
+  saveProgress();
+  startTimer();
+
+  // แจ้งเตือนเมื่อมีผู้เปิดเข้าหน้าข้อสอบทันที
+  sendCloudSync(Object.keys(userAnswers).length > 0 ? "กำลังทำข้อสอบต่อ" : "เปิดเข้าหน้าข้อสอบ");
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden" && Object.keys(userAnswers).length > 0) {
+      sendCloudSync("พักหน้าจอ/สลับแอป");
+    }
+  });
+}
+
+function renderQuestions() {
+  const container = document.getElementById("questionsContainer");
+  let html = "";
+
+  EXAM_DATA.forEach((item) => {
+    if (item.part) {
+      html += `
+        <div class="section-banner">
+          <h2>${item.part}</h2>
+          <p>${item.partDesc || ""}</p>
+        </div>
+      `;
+    }
+    if (item.passageTitle) {
+      html += `
+        <div class="passage-box">
+          <h4>📖 ${item.passageTitle}</h4>
+          <div>${item.passageText}</div>
+        </div>
+      `;
+    }
+
+    const selected = userAnswers[item.id] || "";
+    html += `
+      <div class="question-card ${selected ? "answered" : ""}" id="q-card-${item.id}">
+        <div class="q-header">
+          <span class="q-num">ข้อที่ ${item.id}</span>
+          <div class="q-text">${item.q}</div>
+        </div>
+        <div class="options-list">
+          ${item.options.map((opt) => {
+            const letter = opt.charAt(0);
+            const isChecked = selected === letter ? "checked" : "";
+            return `
+              <label class="option-label">
+                <input type="radio" name="q_${item.id}" value="${letter}" ${isChecked}
+                  onchange="selectOption(${item.id}, '${letter}')">
+                <span>${opt}</span>
+              </label>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function renderAnswerSheet() {
+  const grid = document.getElementById("answerSheetGrid");
+  let html = "";
+  for (let i = 1; i <= 50; i++) {
+    const ans = userAnswers[i] || "-";
+    const doneClass = userAnswers[i] ? "done" : "";
+    html += `
+      <div class="sheet-cell ${doneClass}" id="sheet-cell-${i}" onclick="scrollToQuestion(${i})">
+        <div>${i}</div>
+        <div id="sheet-val-${i}">${ans}</div>
+      </div>
+    `;
+  }
+  grid.innerHTML = html;
+}
+
+function selectOption(qId, letter) {
+  userAnswers[qId] = letter;
+  const card = document.getElementById(`q-card-${qId}`);
+  if (card) card.classList.add("answered");
+
+  const cell = document.getElementById(`sheet-cell-${qId}`);
+  const val = document.getElementById(`sheet-val-${qId}`);
+  if (cell) cell.classList.add("done");
+  if (val) val.textContent = letter;
+
+  updateProgressUI();
+  saveProgress();
+  scheduleCloudSync("กำลังทำข้อสอบ");
+}
+
+function updateProgressUI() {
+  const count = Object.keys(userAnswers).length;
+  document.getElementById("progressText").textContent = `ทำแล้ว ${count} / 50 ข้อ`;
+  document.getElementById("sideCount").textContent = `${count}/50`;
+}
+
+function scrollToQuestion(qId) {
+  const el = document.getElementById(`q-card-${qId}`);
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function saveProgress() {
+  const payload = {
+    sessionId: sessionId,
+    name: document.getElementById("candidateName").value,
+    answers: userAnswers,
+    secondsLeft: secondsLeft
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function clearAllAnswers() {
+  if (!confirm("คุณต้องการล้างคำตอบทั้งหมดเพื่อเริ่มทำใหม่ใช่หรือไม่?")) return;
+  userAnswers = {};
+  secondsLeft = 60 * 60;
+  localStorage.removeItem(STORAGE_KEY);
+  renderQuestions();
+  renderAnswerSheet();
+  updateProgressUI();
+}
+
+function startTimer() {
+  updateTimerDisplay();
+  timerInterval = setInterval(() => {
+    if (!timerRunning) return;
+    if (secondsLeft > 0) {
+      secondsLeft--;
+      updateTimerDisplay();
+      if (secondsLeft % 10 === 0) saveProgress();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(secondsLeft / 60).toString().padStart(2, "0");
+  const s = (secondsLeft % 60).toString().padStart(2, "0");
+  document.getElementById("timerDisplay").textContent = `${m}:${s}`;
+}
+
+function toggleTimer() {
+  timerRunning = !timerRunning;
+  document.getElementById("timerBtn").textContent = timerRunning ? "หยุดเวลาชั่วคราว" : "▶️ เดินเวลาต่อ";
+}
+
+function submitExam() {
+  const count = Object.keys(userAnswers).length;
+  const name = document.getElementById("candidateName").value.trim() || "ไม่ระบุชื่อ";
+  const unanswered = [];
+  for (let i = 1; i <= 50; i++) {
+    if (!userAnswers[i]) unanswered.push(i);
+  }
+
+  let summary = `ผู้เข้าสอบ: ${name} | ตอบแล้ว ${count} จาก 50 ข้อ`;
+  if (unanswered.length > 0) {
+    summary += ` (ยังไม่ได้ตอบข้อที่: ${unanswered.join(", ")})`;
+  } else {
+    summary += ` (ตอบครบทุกข้อแล้ว!)`;
+  }
+  document.getElementById("modalSummaryText").textContent = summary;
+
+  // สร้างรหัสคำตอบสำหรับส่งตรวจ
+  const pairs = [];
+  for (let i = 1; i <= 50; i++) {
+    pairs.push(`${i}:${userAnswers[i] || "-"}`);
+  }
+  const payloadStr = `SET2-INTERMEDIATE|${name}|${pairs.join(",")}`;
+  document.getElementById("answerCodeOutput").value = payloadStr;
+  document.getElementById("submitModal").classList.add("active");
+  sendCloudSync("ส่งกระดาษคำตอบแล้ว ✅");
+}
+
+function closeModal() {
+  document.getElementById("submitModal").classList.remove("active");
+}
+
+function copyAnswerCode() {
+  const box = document.getElementById("answerCodeOutput");
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    alert("คัดลอกรหัสคำตอบเรียบร้อยแล้ว! ส่งรหัสนี้ให้ผู้ตรวจเพื่อรับผลคะแนนและเฉลยได้เลยครับ");
+  });
+}
+
+if (document.readyState === "loading") {
+  window.addEventListener("DOMContentLoaded", initExam);
+} else {
+  initExam();
+}
+</script>
+</body>
+</html>
